@@ -1,0 +1,6 @@
+"2","VM Memory (GB) >0 and VM Memory (GB) <=2"
+"4","VM Memory (GB) >2 and VM Memory (GB) <=4"
+"8","VM Memory (GB) >4 and VM Memory (GB) <=8"
+"32","VM Memory (GB) >8 and VM Memory (GB) <=32"
+"64","VM Memory (GB) >32 and VM Memory (GB) <=64"
+">64","VM Memory (GB) >64"
