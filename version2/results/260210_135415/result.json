@@ -1,0 +1,2230 @@
+{
+    "run_params": {
+        "T_max": 23,
+        "usage_target": "max_avg_core_usage",
+        "spot_buffer_ratio": 0.25,
+        "objective": "server",
+        "E_idle": 100,
+        "E_cpu": 300,
+        "E_mig": 50,
+        "M_on": 6,
+        "M_off": 6,
+        "dataset": {
+            "max_vCPU": 4.0,
+            "num_rows": 216,
+            "num_on_demand_vms": 4,
+            "num_spot_vms": 2,
+            "num_batch_jobs": 3
+        },
+        "num_servers": 5,
+        "random_seed": 42
+    },
+    "gurobi_params": {
+        "CliqueCuts": 1,
+        "Cuts": -1,
+        "MIPFocus": 0,
+        "Heuristics": 0.05,
+        "CutPasses": -1,
+        "Method": -1,
+        "TimeLimit": null,
+        "Threads": 0
+    },
+    "summary": {
+        "status": 2,
+        "runtime": 0.2455,
+        "sol_count": 3,
+        "has_solution": true,
+        "obj_val": 2.0,
+        "is_mip": true,
+        "obj_bound": 2.0,
+        "mip_gap": 0.0,
+        "node_count": 1
+    },
+    "servers_kpi": {
+        "per_server": {
+            "0": {
+                "used_flag": true,
+                "on_fraction": 1.0,
+                "on_transitions": 0,
+                "off_transitions": 0,
+                "num_cycles_on": 0,
+                "requested_load_peak": 6.5,
+                "requested_load_avg_on": 4.25,
+                "actual_load_peak": 0.9959,
+                "actual_load_avg_on": 0.9238,
+                "overbooking_ratio_peak": 6.5,
+                "overbooking_ratio_avg_on": 4.25,
+                "utilization_peak": 0.9959,
+                "utilization_avg_on": 0.9238,
+                "idle_on_fraction": 0.0
+            },
+            "1": {
+                "used_flag": false
+            },
+            "2": {
+                "used_flag": false
+            },
+            "3": {
+                "used_flag": false
+            },
+            "4": {
+                "used_flag": true,
+                "on_fraction": 0.625,
+                "on_transitions": 1,
+                "off_transitions": 1,
+                "num_cycles_on": 1,
+                "requested_load_peak": 1.5,
+                "requested_load_avg_on": 0.8,
+                "actual_load_peak": 0.254,
+                "actual_load_avg_on": 0.1171,
+                "overbooking_ratio_peak": 1.5,
+                "overbooking_ratio_avg_on": 0.8,
+                "utilization_peak": 0.254,
+                "utilization_avg_on": 0.1171,
+                "idle_on_fraction": 0.0667
+            }
+        },
+        "overall": {
+            "num_servers_total": 5,
+            "num_servers_used": 2,
+            "avg_on_fraction_across_servers": 0.8125,
+            "peak_overbooking_across_servers": 6.5,
+            "avg_overbooking_on_across_servers": 2.525,
+            "peak_utilization_across_servers": 0.9959,
+            "avg_utilization_on_across_servers": 0.5205
+        }
+    },
+    "on_demand": {
+        "VMs": {
+            "0": {
+                "a_j": 0,
+                "d_j": 23,
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "usage": [0.1048, 0.1047, 0.1048, 0.1048, 0.1059, 0.1048, 0.1001, 0.1002, 0.0992, 0.0991, 0.1051, 0.1048, 0.1052, 0.1127, 0.1049, 0.1053, 0.1051, 0.3136, 0.3133, 0.3136, 0.3132, 0.3125, 0.1057, 0.1056]
+                },
+                "migrations": [
+                    {
+                        "t": 1,
+                        "from": 0,
+                        "to": 4
+                    },
+                    {
+                        "t": 2,
+                        "from": 4,
+                        "to": 0
+                    }
+                ],
+                "migration_count": 2
+            },
+            "1": {
+                "a_j": 0,
+                "d_j": 23,
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0],
+                    "usage": [0.0483, 0.2262, 0.4039, 0.0934, 0.1639, 0.0944, 0.0936, 0.0848, 0.1001, 0.0956, 0.0981, 0.1051, 0.0968, 0.1087, 0.1134, 0.1128, 0.114, 0.1115, 0.1068, 0.1074, 0.3861, 0.3702, 0.0879, 0.0903]
+                },
+                "migrations": [
+                    {
+                        "t": 19,
+                        "from": 0,
+                        "to": 4
+                    },
+                    {
+                        "t": 20,
+                        "from": 4,
+                        "to": 0
+                    }
+                ],
+                "migration_count": 2
+            },
+            "2": {
+                "a_j": 0,
+                "d_j": 23,
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "usage": [0.0402, 0.3192, 0.1875, 0.2685, 0.3752, 0.3978, 0.4348, 0.457, 0.4252, 0.0579, 0.0138, 0.0569, 0.0169, 0.0255, 0.4413, 0.0129, 0.0184, 0.0127, 0.0107, 0.4161, 0.0328, 0.0127, 0.0691, 0.0172]
+                },
+                "migrations": [],
+                "migration_count": 0
+            },
+            "3": {
+                "a_j": 0,
+                "d_j": 23,
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "usage": [0.1674, 0.1526, 0.1432, 0.129, 0.1148, 0.0858, 0.0778, 0.0711, 0.0719, 0.0729, 0.0867, 0.1352, 0.1767, 0.2339, 0.2575, 0.2572, 0.2854, 0.3876, 0.2359, 0.187, 0.1591, 0.1429, 0.1186, 0.1116]
+                },
+                "migrations": [],
+                "migration_count": 0
+            }
+        },
+        "total_migrations": 4
+    },
+    "spot": {
+        "VMs": {
+            "0": {
+                "a_k": 0,
+                "d_k": 23,
+                "required_vCPU": 0.5,
+                "total_workloads": 18,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null, 0, 0, null, 0, null, null, null],
+                    "workload": [0, 9, 10, 7, 5, 1, 3, 13, 15, 11, 12, 8, 16, 14, 17, null, null, 6, 4, null, 2, null, null, null],
+                    "usage": [0.0122, 0.0269, 0.009, 0.0128, 0.0101, 0.0265, 0.0119, 0.0129, 0.0142, 0.0124, 0.0127, 0.0119, 0.0116, 0.0128, 0.0464, null, null, 0.0116, 0.0074, null, 0.0117, null, null, null]
+                },
+                "preemptions": [
+                    {
+                        "t": 2,
+                        "reason": "server_change",
+                        "gap": null,
+                        "server": {
+                            "from": 0,
+                            "to": 4
+                        }
+                    },
+                    {
+                        "t": 3,
+                        "reason": "server_change",
+                        "gap": null,
+                        "server": {
+                            "from": 4,
+                            "to": 0
+                        }
+                    },
+                    {
+                        "t": 17,
+                        "reason": "idle_gap",
+                        "gap": {
+                            "start": 15,
+                            "end": 16
+                        },
+                        "server": {
+                            "from": 0,
+                            "to": 0
+                        }
+                    },
+                    {
+                        "t": 20,
+                        "reason": "idle_gap",
+                        "gap": {
+                            "start": 19,
+                            "end": 19
+                        },
+                        "server": {
+                            "from": 0,
+                            "to": 0
+                        }
+                    }
+                ],
+                "preemption_count": 4
+            },
+            "1": {
+                "a_k": 0,
+                "d_k": 23,
+                "required_vCPU": 0.5,
+                "total_workloads": 18,
+                "timeline": {
+                    "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                    "server": [0, 0, 0, 0, 0, 0, 0, 0, null, 4, 0, 0, 0, 0, null, null, 0, null, null, null, 0, 0, 0, 0],
+                    "workload": [0, 4, 3, 9, 7, 10, 16, 1, null, 5, 12, 17, 6, 8, null, null, 2, null, null, null, 14, 11, 13, 15],
+                    "usage": [0.0903, 0.0741, 0.0764, 0.08, 0.0762, 0.0856, 0.0897, 0.0769, null, 0.0763, 0.0957, 0.0935, 0.0769, 0.1194, null, null, 0.0775, null, null, null, 0.0753, 0.0835, 0.0801, 0.0829]
+                },
+                "preemptions": [
+                    {
+                        "t": 9,
+                        "reason": "idle_gap",
+                        "gap": {
+                            "start": 8,
+                            "end": 8
+                        },
+                        "server": {
+                            "from": 0,
+                            "to": 4
+                        }
+                    },
+                    {
+                        "t": 10,
+                        "reason": "server_change",
+                        "gap": null,
+                        "server": {
+                            "from": 4,
+                            "to": 0
+                        }
+                    },
+                    {
+                        "t": 16,
+                        "reason": "idle_gap",
+                        "gap": {
+                            "start": 14,
+                            "end": 15
+                        },
+                        "server": {
+                            "from": 0,
+                            "to": 0
+                        }
+                    },
+                    {
+                        "t": 20,
+                        "reason": "idle_gap",
+                        "gap": {
+                            "start": 17,
+                            "end": 19
+                        },
+                        "server": {
+                            "from": 0,
+                            "to": 0
+                        }
+                    }
+                ],
+                "preemption_count": 4
+            }
+        },
+        "total_preemptions": 8,
+        "total_workloads": 36,
+        "preemption_per_workload": 0.2222
+    },
+    "batch": {
+        "jobs": {
+            "0": {
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 0, 1, 1, 1, 3, 3, 3, 4, 5, 6, 7, 7, 9, 10, 10, 10, 13, 13, 15, 15, 17, 17, 22],
+                    "server": [4, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "workload": [15, 23, 0, 14, 16, 12, 18, 20, 4, 17, 7, 5, 11, 6, 1, 2, 9, 13, 19, 3, 21, 10, 22, 8],
+                    "usage": [0.0566, 0.0588, 0.064, 0.0621, 0.0563, 0.0668, 0.0573, 0.0893, 0.0978, 0.061, 0.0695, 0.0668, 0.0695, 0.0694, 0.0549, 0.0675, 0.073, 0.058, 0.0575, 0.0687, 0.06, 0.0675, 0.0603, 0.0674]
+                }
+            },
+            "1": {
+                "required_vCPU": 1.0,
+                "timeline": {
+                    "t": [0, 0, 4, 4, 5, 6, 7, 8, 9, 9, 9, 11, 11, 12, 12, 13, 15, 15, 16, 18, 22, 23, 23, 23],
+                    "server": [0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    "workload": [11, 21, 4, 20, 0, 7, 9, 14, 5, 16, 22, 1, 13, 6, 23, 3, 2, 19, 18, 17, 15, 8, 10, 12],
+                    "usage": [0.1486, 0.1404, 0.137, 0.1562, 0.1309, 0.1186, 0.1246, 0.2063, 0.1298, 0.1765, 0.1838, 0.1262, 0.223, 0.1232, 0.1246, 0.125, 0.1284, 0.1603, 0.1895, 0.1812, 0.2163, 0.1573, 0.1724, 0.189]
+                }
+            },
+            "2": {
+                "required_vCPU": 0.5,
+                "timeline": {
+                    "t": [0, 0, 0, 1, 2, 2, 3, 3, 5, 6, 6, 7, 8, 10, 12, 16, 18, 19, 20, 21, 21, 21, 22, 23],
+                    "server": [0, 0, 4, 4, 0, 4, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4],
+                    "workload": [0, 2, 9, 12, 1, 6, 4, 16, 11, 20, 22, 3, 15, 21, 7, 5, 10, 8, 14, 13, 17, 18, 19, 23],
+                    "usage": [0.0719, 0.0774, 0.0757, 0.0707, 0.0779, 0.0734, 0.1112, 0.0718, 0.0719, 0.0694, 0.071, 0.0766, 0.0694, 0.0991, 0.0761, 0.0996, 0.073, 0.0728, 0.0682, 0.0792, 0.083, 0.0698, 0.0688, 0.072]
+                }
+            }
+        },
+        "jobs_running_per_time": {
+            "0": 3,
+            "1": 2,
+            "2": 1,
+            "3": 2,
+            "4": 2,
+            "5": 3,
+            "6": 3,
+            "7": 3,
+            "8": 2,
+            "9": 2,
+            "10": 2,
+            "11": 1,
+            "12": 2,
+            "13": 2,
+            "14": 0,
+            "15": 2,
+            "16": 2,
+            "17": 1,
+            "18": 2,
+            "19": 1,
+            "20": 1,
+            "21": 1,
+            "22": 3,
+            "23": 2
+        },
+        "parallel_workload_ratio": 1.5319,
+        "total_workloads": 72,
+        "parallel_workloads": 47
+    },
+    "servers": {
+        "capacity": 1.0,
+        "servers": {
+            "0": {
+                "used_flag": true,
+                "timeseries": [
+                    {
+                        "t": 0,
+                        "u": 1,
+                        "actual_load": 0.9602,
+                        "requested_load": 6.5,
+                        "overbooking_ratio": 6.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1048
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0483
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0402
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1674
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 0,
+                                "requested": 0.5,
+                                "usage": 0.0122
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 0,
+                                "requested": 0.5,
+                                "usage": 0.0903
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 23,
+                                "requested": 0.5,
+                                "usage": 0.0588
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 11,
+                                "requested": 1.0,
+                                "usage": 0.1486
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 21,
+                                "requested": 1.0,
+                                "usage": 0.1404
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 0,
+                                "requested": 0.5,
+                                "usage": 0.0719
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 2,
+                                "requested": 0.5,
+                                "usage": 0.0774
+                            }
+                        ]
+                    },
+                    {
+                        "t": 1,
+                        "u": 1,
+                        "actual_load": 0.9814,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2262
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3192
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1526
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 9,
+                                "requested": 0.5,
+                                "usage": 0.0269
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 4,
+                                "requested": 0.5,
+                                "usage": 0.0741
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 0,
+                                "requested": 0.5,
+                                "usage": 0.064
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 14,
+                                "requested": 0.5,
+                                "usage": 0.0621
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 16,
+                                "requested": 0.5,
+                                "usage": 0.0563
+                            }
+                        ]
+                    },
+                    {
+                        "t": 2,
+                        "u": 1,
+                        "actual_load": 0.9937,
+                        "requested_load": 3.0,
+                        "overbooking_ratio": 3.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1048
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.4039
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1875
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1432
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 3,
+                                "requested": 0.5,
+                                "usage": 0.0764
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 1,
+                                "requested": 0.5,
+                                "usage": 0.0779
+                            }
+                        ]
+                    },
+                    {
+                        "t": 3,
+                        "u": 1,
+                        "actual_load": 0.9558,
+                        "requested_load": 4.5,
+                        "overbooking_ratio": 4.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1048
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0934
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2685
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.129
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 7,
+                                "requested": 0.5,
+                                "usage": 0.0128
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 9,
+                                "requested": 0.5,
+                                "usage": 0.08
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 12,
+                                "requested": 0.5,
+                                "usage": 0.0668
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 20,
+                                "requested": 0.5,
+                                "usage": 0.0893
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 4,
+                                "requested": 0.5,
+                                "usage": 0.1112
+                            }
+                        ]
+                    },
+                    {
+                        "t": 4,
+                        "u": 1,
+                        "actual_load": 0.9831,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1059
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1639
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3752
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1148
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 5,
+                                "requested": 0.5,
+                                "usage": 0.0101
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 7,
+                                "requested": 0.5,
+                                "usage": 0.0762
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 4,
+                                "requested": 1.0,
+                                "usage": 0.137
+                            }
+                        ]
+                    },
+                    {
+                        "t": 5,
+                        "u": 1,
+                        "actual_load": 0.9868,
+                        "requested_load": 4.5,
+                        "overbooking_ratio": 4.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1048
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0944
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3978
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0858
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 1,
+                                "requested": 0.5,
+                                "usage": 0.0265
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 10,
+                                "requested": 0.5,
+                                "usage": 0.0856
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 17,
+                                "requested": 0.5,
+                                "usage": 0.061
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 0,
+                                "requested": 1.0,
+                                "usage": 0.1309
+                            }
+                        ]
+                    },
+                    {
+                        "t": 6,
+                        "u": 1,
+                        "actual_load": 0.9959,
+                        "requested_load": 4.5,
+                        "overbooking_ratio": 4.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1001
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0936
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.4348
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0778
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 3,
+                                "requested": 0.5,
+                                "usage": 0.0119
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 16,
+                                "requested": 0.5,
+                                "usage": 0.0897
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 7,
+                                "requested": 0.5,
+                                "usage": 0.0695
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 7,
+                                "requested": 1.0,
+                                "usage": 0.1186
+                            }
+                        ]
+                    },
+                    {
+                        "t": 7,
+                        "u": 1,
+                        "actual_load": 0.9944,
+                        "requested_load": 4.5,
+                        "overbooking_ratio": 4.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1002
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0848
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.457
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0711
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 13,
+                                "requested": 0.5,
+                                "usage": 0.0129
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 1,
+                                "requested": 0.5,
+                                "usage": 0.0769
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 5,
+                                "requested": 0.5,
+                                "usage": 0.0668
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 9,
+                                "requested": 1.0,
+                                "usage": 0.1246
+                            }
+                        ]
+                    },
+                    {
+                        "t": 8,
+                        "u": 1,
+                        "actual_load": 0.9862,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0992
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1001
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.4252
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0719
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 15,
+                                "requested": 0.5,
+                                "usage": 0.0142
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 14,
+                                "requested": 1.0,
+                                "usage": 0.2063
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 15,
+                                "requested": 0.5,
+                                "usage": 0.0694
+                            }
+                        ]
+                    },
+                    {
+                        "t": 9,
+                        "u": 1,
+                        "actual_load": 0.8973,
+                        "requested_load": 6.0,
+                        "overbooking_ratio": 6.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0991
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0956
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0579
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0729
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 11,
+                                "requested": 0.5,
+                                "usage": 0.0124
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 6,
+                                "requested": 0.5,
+                                "usage": 0.0694
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 5,
+                                "requested": 1.0,
+                                "usage": 0.1298
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 16,
+                                "requested": 1.0,
+                                "usage": 0.1765
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 22,
+                                "requested": 1.0,
+                                "usage": 0.1838
+                            }
+                        ]
+                    },
+                    {
+                        "t": 10,
+                        "u": 1,
+                        "actual_load": 0.7065,
+                        "requested_load": 5.0,
+                        "overbooking_ratio": 5.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1051
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0981
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0138
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0867
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 12,
+                                "requested": 0.5,
+                                "usage": 0.0127
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 12,
+                                "requested": 0.5,
+                                "usage": 0.0957
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 1,
+                                "requested": 0.5,
+                                "usage": 0.0549
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 2,
+                                "requested": 0.5,
+                                "usage": 0.0675
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 9,
+                                "requested": 0.5,
+                                "usage": 0.073
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 21,
+                                "requested": 0.5,
+                                "usage": 0.0991
+                            }
+                        ]
+                    },
+                    {
+                        "t": 11,
+                        "u": 1,
+                        "actual_load": 0.8566,
+                        "requested_load": 5.0,
+                        "overbooking_ratio": 5.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1048
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1051
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0569
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1352
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 8,
+                                "requested": 0.5,
+                                "usage": 0.0119
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 17,
+                                "requested": 0.5,
+                                "usage": 0.0935
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 1,
+                                "requested": 1.0,
+                                "usage": 0.1262
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 13,
+                                "requested": 1.0,
+                                "usage": 0.223
+                            }
+                        ]
+                    },
+                    {
+                        "t": 12,
+                        "u": 1,
+                        "actual_load": 0.808,
+                        "requested_load": 5.5,
+                        "overbooking_ratio": 5.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1052
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0968
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0169
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1767
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 16,
+                                "requested": 0.5,
+                                "usage": 0.0116
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 6,
+                                "requested": 0.5,
+                                "usage": 0.0769
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 6,
+                                "requested": 1.0,
+                                "usage": 0.1232
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 23,
+                                "requested": 1.0,
+                                "usage": 0.1246
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 7,
+                                "requested": 0.5,
+                                "usage": 0.0761
+                            }
+                        ]
+                    },
+                    {
+                        "t": 13,
+                        "u": 1,
+                        "actual_load": 0.8534,
+                        "requested_load": 5.0,
+                        "overbooking_ratio": 5.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1127
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1087
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0255
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2339
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 14,
+                                "requested": 0.5,
+                                "usage": 0.0128
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 8,
+                                "requested": 0.5,
+                                "usage": 0.1194
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 13,
+                                "requested": 0.5,
+                                "usage": 0.058
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 19,
+                                "requested": 0.5,
+                                "usage": 0.0575
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 3,
+                                "requested": 1.0,
+                                "usage": 0.125
+                            }
+                        ]
+                    },
+                    {
+                        "t": 14,
+                        "u": 1,
+                        "actual_load": 0.9634,
+                        "requested_load": 2.5,
+                        "overbooking_ratio": 2.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1049
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1134
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.4413
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2575
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 17,
+                                "requested": 0.5,
+                                "usage": 0.0464
+                            }
+                        ]
+                    },
+                    {
+                        "t": 15,
+                        "u": 1,
+                        "actual_load": 0.9056,
+                        "requested_load": 5.0,
+                        "overbooking_ratio": 5.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1053
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1128
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0129
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2572
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 3,
+                                "requested": 0.5,
+                                "usage": 0.0687
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 21,
+                                "requested": 0.5,
+                                "usage": 0.06
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 2,
+                                "requested": 1.0,
+                                "usage": 0.1284
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 19,
+                                "requested": 1.0,
+                                "usage": 0.1603
+                            }
+                        ]
+                    },
+                    {
+                        "t": 16,
+                        "u": 1,
+                        "actual_load": 0.8895,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1051
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.114
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0184
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2854
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 2,
+                                "requested": 0.5,
+                                "usage": 0.0775
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 18,
+                                "requested": 1.0,
+                                "usage": 0.1895
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 5,
+                                "requested": 0.5,
+                                "usage": 0.0996
+                            }
+                        ]
+                    },
+                    {
+                        "t": 17,
+                        "u": 1,
+                        "actual_load": 0.9648,
+                        "requested_load": 3.5,
+                        "overbooking_ratio": 3.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3136
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1115
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0127
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3876
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 6,
+                                "requested": 0.5,
+                                "usage": 0.0116
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 10,
+                                "requested": 0.5,
+                                "usage": 0.0675
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 22,
+                                "requested": 0.5,
+                                "usage": 0.0603
+                            }
+                        ]
+                    },
+                    {
+                        "t": 18,
+                        "u": 1,
+                        "actual_load": 0.9284,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3133
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1068
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0107
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.2359
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 4,
+                                "requested": 0.5,
+                                "usage": 0.0074
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 17,
+                                "requested": 1.0,
+                                "usage": 0.1812
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 10,
+                                "requested": 0.5,
+                                "usage": 0.073
+                            }
+                        ]
+                    },
+                    {
+                        "t": 19,
+                        "u": 1,
+                        "actual_load": 0.9895,
+                        "requested_load": 2.0,
+                        "overbooking_ratio": 2.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3136
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.4161
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.187
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 8,
+                                "requested": 0.5,
+                                "usage": 0.0728
+                            }
+                        ]
+                    },
+                    {
+                        "t": 20,
+                        "u": 1,
+                        "actual_load": 0.9783,
+                        "requested_load": 3.0,
+                        "overbooking_ratio": 3.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3132
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3861
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0328
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1591
+                            },
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 2,
+                                "requested": 0.5,
+                                "usage": 0.0117
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 14,
+                                "requested": 0.5,
+                                "usage": 0.0753
+                            }
+                        ]
+                    },
+                    {
+                        "t": 21,
+                        "u": 1,
+                        "actual_load": 0.9218,
+                        "requested_load": 2.5,
+                        "overbooking_ratio": 2.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3125
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.3702
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0127
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1429
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 11,
+                                "requested": 0.5,
+                                "usage": 0.0835
+                            }
+                        ]
+                    },
+                    {
+                        "t": 22,
+                        "u": 1,
+                        "actual_load": 0.745,
+                        "requested_load": 4.0,
+                        "overbooking_ratio": 4.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1057
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0879
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0691
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1186
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 13,
+                                "requested": 0.5,
+                                "usage": 0.0801
+                            },
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 8,
+                                "requested": 0.5,
+                                "usage": 0.0674
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 15,
+                                "requested": 1.0,
+                                "usage": 0.2163
+                            }
+                        ]
+                    },
+                    {
+                        "t": 23,
+                        "u": 1,
+                        "actual_load": 0.9261,
+                        "requested_load": 5.5,
+                        "overbooking_ratio": 5.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1056
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0903
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 2,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.0172
+                            },
+                            {
+                                "type": "on_demand",
+                                "id": 3,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1116
+                            },
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 15,
+                                "requested": 0.5,
+                                "usage": 0.0829
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 8,
+                                "requested": 1.0,
+                                "usage": 0.1573
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 10,
+                                "requested": 1.0,
+                                "usage": 0.1724
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 12,
+                                "requested": 1.0,
+                                "usage": 0.189
+                            }
+                        ]
+                    }
+                ]
+            },
+            "1": {
+                "used_flag": false
+            },
+            "2": {
+                "used_flag": false
+            },
+            "3": {
+                "used_flag": false
+            },
+            "4": {
+                "used_flag": true,
+                "timeseries": [
+                    {
+                        "t": 0,
+                        "u": 1,
+                        "actual_load": 0.1323,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 15,
+                                "requested": 0.5,
+                                "usage": 0.0566
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 9,
+                                "requested": 0.5,
+                                "usage": 0.0757
+                            }
+                        ]
+                    },
+                    {
+                        "t": 1,
+                        "u": 1,
+                        "actual_load": 0.1754,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 0,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1047
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 12,
+                                "requested": 0.5,
+                                "usage": 0.0707
+                            }
+                        ]
+                    },
+                    {
+                        "t": 2,
+                        "u": 1,
+                        "actual_load": 0.0823,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "spot",
+                                "id": 0,
+                                "workload": 10,
+                                "requested": 0.5,
+                                "usage": 0.009
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 6,
+                                "requested": 0.5,
+                                "usage": 0.0734
+                            }
+                        ]
+                    },
+                    {
+                        "t": 3,
+                        "u": 1,
+                        "actual_load": 0.1291,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 18,
+                                "requested": 0.5,
+                                "usage": 0.0573
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 16,
+                                "requested": 0.5,
+                                "usage": 0.0718
+                            }
+                        ]
+                    },
+                    {
+                        "t": 4,
+                        "u": 1,
+                        "actual_load": 0.254,
+                        "requested_load": 1.5,
+                        "overbooking_ratio": 1.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 4,
+                                "requested": 0.5,
+                                "usage": 0.0978
+                            },
+                            {
+                                "type": "batch",
+                                "id": 1,
+                                "workload": 20,
+                                "requested": 1.0,
+                                "usage": 0.1562
+                            }
+                        ]
+                    },
+                    {
+                        "t": 5,
+                        "u": 1,
+                        "actual_load": 0.0719,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 11,
+                                "requested": 0.5,
+                                "usage": 0.0719
+                            }
+                        ]
+                    },
+                    {
+                        "t": 6,
+                        "u": 1,
+                        "actual_load": 0.1404,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 20,
+                                "requested": 0.5,
+                                "usage": 0.0694
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 22,
+                                "requested": 0.5,
+                                "usage": 0.071
+                            }
+                        ]
+                    },
+                    {
+                        "t": 7,
+                        "u": 1,
+                        "actual_load": 0.1461,
+                        "requested_load": 1.0,
+                        "overbooking_ratio": 1.0,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 0,
+                                "workload": 11,
+                                "requested": 0.5,
+                                "usage": 0.0695
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 3,
+                                "requested": 0.5,
+                                "usage": 0.0766
+                            }
+                        ]
+                    },
+                    {
+                        "t": 8,
+                        "u": 1,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 9,
+                        "u": 1,
+                        "actual_load": 0.0763,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "spot",
+                                "id": 1,
+                                "workload": 5,
+                                "requested": 0.5,
+                                "usage": 0.0763
+                            }
+                        ]
+                    },
+                    {
+                        "t": 10,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 11,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 12,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 13,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 14,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 15,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 16,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 17,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 18,
+                        "u": 0,
+                        "actual_load": 0.0,
+                        "requested_load": 0.0,
+                        "overbooking_ratio": 0.0,
+                        "contrib": []
+                    },
+                    {
+                        "t": 19,
+                        "u": 1,
+                        "actual_load": 0.1074,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "on_demand",
+                                "id": 1,
+                                "workload": null,
+                                "requested": 0.5,
+                                "usage": 0.1074
+                            }
+                        ]
+                    },
+                    {
+                        "t": 20,
+                        "u": 1,
+                        "actual_load": 0.0682,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 14,
+                                "requested": 0.5,
+                                "usage": 0.0682
+                            }
+                        ]
+                    },
+                    {
+                        "t": 21,
+                        "u": 1,
+                        "actual_load": 0.232,
+                        "requested_load": 1.5,
+                        "overbooking_ratio": 1.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 13,
+                                "requested": 0.5,
+                                "usage": 0.0792
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 17,
+                                "requested": 0.5,
+                                "usage": 0.083
+                            },
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 18,
+                                "requested": 0.5,
+                                "usage": 0.0698
+                            }
+                        ]
+                    },
+                    {
+                        "t": 22,
+                        "u": 1,
+                        "actual_load": 0.0688,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 19,
+                                "requested": 0.5,
+                                "usage": 0.0688
+                            }
+                        ]
+                    },
+                    {
+                        "t": 23,
+                        "u": 1,
+                        "actual_load": 0.072,
+                        "requested_load": 0.5,
+                        "overbooking_ratio": 0.5,
+                        "contrib": [
+                            {
+                                "type": "batch",
+                                "id": 2,
+                                "workload": 23,
+                                "requested": 0.5,
+                                "usage": 0.072
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

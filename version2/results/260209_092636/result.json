@@ -1,0 +1,3750 @@
+{
+  "run_timestamp": "2026-02-09T09:26:36.892868",
+  "run_params": {
+    "T_max": 23,
+    "usage_target": "max_avg_core_usage",
+    "spot_buffer_ratio": 0.25,
+    "objective": "server",
+    "E_idle": 100,
+    "E_cpu": 300,
+    "E_mig": 50,
+    "M_on": 6,
+    "M_off": 6,
+    "dataset": {
+      "path": "sample_vm_data.csv",
+      "normalized_by_max_vCPU": 4.0,
+      "num_rows": 216
+    },
+    "random_seed": 42
+  },
+  "gurobi_params": {},
+  "summary": {
+    "status": 2,
+    "runtime": 0.2731,
+    "sol_count": 3,
+    "has_solution": true,
+    "obj_val": 2.0,
+    "is_mip": true,
+    "obj_bound": 2.0,
+    "mip_gap": 0.0,
+    "node_count": 1
+  },
+  "servers_kpi": {
+    "per_server": {
+      "0": {
+        "used_flag": true,
+        "on_fraction": 1.0,
+        "on_transitions": 0,
+        "off_transitions": 0,
+        "num_cycles_on": 0,
+        "requested_load_peak": 6.5,
+        "requested_load_avg_on": 4.25,
+        "actual_load_peak": 0.9959,
+        "actual_load_avg_on": 0.9238,
+        "overbooking_ratio_peak": 6.5,
+        "overbooking_ratio_avg_on": 4.25,
+        "utilization_peak": 0.9959,
+        "utilization_avg_on": 0.9238,
+        "idle_on_fraction": 0.0
+      },
+      "1": {
+        "used_flag": false
+      },
+      "2": {
+        "used_flag": false
+      },
+      "3": {
+        "used_flag": false
+      },
+      "4": {
+        "used_flag": true,
+        "on_fraction": 0.625,
+        "on_transitions": 1,
+        "off_transitions": 1,
+        "num_cycles_on": 1,
+        "requested_load_peak": 1.5,
+        "requested_load_avg_on": 0.8,
+        "actual_load_peak": 0.254,
+        "actual_load_avg_on": 0.1171,
+        "overbooking_ratio_peak": 1.5,
+        "overbooking_ratio_avg_on": 0.8,
+        "utilization_peak": 0.254,
+        "utilization_avg_on": 0.1171,
+        "idle_on_fraction": 0.0667
+      }
+    },
+    "overall": {
+      "num_servers_total": 5,
+      "num_servers_used": 2,
+      "avg_on_fraction_across_servers": 0.8125,
+      "peak_overbooking_across_servers": 6.5,
+      "avg_overbooking_on_across_servers": 2.525,
+      "peak_utilization_across_servers": 0.9959,
+      "avg_utilization_on_across_servers": 0.5205
+    }
+  },
+  "sets": {
+    "num_servers": 5,
+    "num_on_demand_vms": 4,
+    "num_spot_vms": 2,
+    "num_batch_jobs": 3,
+    "T_max": 23
+  },
+  "on_demand": {
+    "vms": {
+      "0": {
+        "a_j": 0,
+        "d_j": 23,
+        "required_vCPU": 0.5,
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "usage": 0.1048
+          },
+          {
+            "t": 1,
+            "server": 4,
+            "usage": 0.1047
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "usage": 0.1048
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "usage": 0.1048
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "usage": 0.1059
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "usage": 0.1048
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "usage": 0.1001
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "usage": 0.1002
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "usage": 0.0992
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "usage": 0.0991
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "usage": 0.1051
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "usage": 0.1048
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "usage": 0.1052
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "usage": 0.1127
+          },
+          {
+            "t": 14,
+            "server": 0,
+            "usage": 0.1049
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "usage": 0.1053
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "usage": 0.1051
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "usage": 0.3136
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "usage": 0.3133
+          },
+          {
+            "t": 19,
+            "server": 0,
+            "usage": 0.3136
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "usage": 0.3132
+          },
+          {
+            "t": 21,
+            "server": 0,
+            "usage": 0.3125
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "usage": 0.1057
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "usage": 0.1056
+          }
+        ],
+        "migrations": [
+          {
+            "t": 1,
+            "from": 0,
+            "to": 4
+          },
+          {
+            "t": 2,
+            "from": 4,
+            "to": 0
+          }
+        ],
+        "migration_count": 2
+      },
+      "1": {
+        "a_j": 0,
+        "d_j": 23,
+        "required_vCPU": 0.5,
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "usage": 0.0483
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "usage": 0.2262
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "usage": 0.4039
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "usage": 0.0934
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "usage": 0.1639
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "usage": 0.0944
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "usage": 0.0936
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "usage": 0.0848
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "usage": 0.1001
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "usage": 0.0956
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "usage": 0.0981
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "usage": 0.1051
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "usage": 0.0968
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "usage": 0.1087
+          },
+          {
+            "t": 14,
+            "server": 0,
+            "usage": 0.1134
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "usage": 0.1128
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "usage": 0.114
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "usage": 0.1115
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "usage": 0.1068
+          },
+          {
+            "t": 19,
+            "server": 4,
+            "usage": 0.1074
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "usage": 0.3861
+          },
+          {
+            "t": 21,
+            "server": 0,
+            "usage": 0.3702
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "usage": 0.0879
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "usage": 0.0903
+          }
+        ],
+        "migrations": [
+          {
+            "t": 19,
+            "from": 0,
+            "to": 4
+          },
+          {
+            "t": 20,
+            "from": 4,
+            "to": 0
+          }
+        ],
+        "migration_count": 2
+      },
+      "2": {
+        "a_j": 0,
+        "d_j": 23,
+        "required_vCPU": 0.5,
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "usage": 0.0402
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "usage": 0.3192
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "usage": 0.1875
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "usage": 0.2685
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "usage": 0.3752
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "usage": 0.3978
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "usage": 0.4348
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "usage": 0.457
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "usage": 0.4252
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "usage": 0.0579
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "usage": 0.0138
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "usage": 0.0569
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "usage": 0.0169
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "usage": 0.0255
+          },
+          {
+            "t": 14,
+            "server": 0,
+            "usage": 0.4413
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "usage": 0.0129
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "usage": 0.0184
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "usage": 0.0127
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "usage": 0.0107
+          },
+          {
+            "t": 19,
+            "server": 0,
+            "usage": 0.4161
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "usage": 0.0328
+          },
+          {
+            "t": 21,
+            "server": 0,
+            "usage": 0.0127
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "usage": 0.0691
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "usage": 0.0172
+          }
+        ],
+        "migrations": [],
+        "migration_count": 0
+      },
+      "3": {
+        "a_j": 0,
+        "d_j": 23,
+        "required_vCPU": 0.5,
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "usage": 0.1674
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "usage": 0.1526
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "usage": 0.1432
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "usage": 0.129
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "usage": 0.1148
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "usage": 0.0858
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "usage": 0.0778
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "usage": 0.0711
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "usage": 0.0719
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "usage": 0.0729
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "usage": 0.0867
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "usage": 0.1352
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "usage": 0.1767
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "usage": 0.2339
+          },
+          {
+            "t": 14,
+            "server": 0,
+            "usage": 0.2575
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "usage": 0.2572
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "usage": 0.2854
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "usage": 0.3876
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "usage": 0.2359
+          },
+          {
+            "t": 19,
+            "server": 0,
+            "usage": 0.187
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "usage": 0.1591
+          },
+          {
+            "t": 21,
+            "server": 0,
+            "usage": 0.1429
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "usage": 0.1186
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "usage": 0.1116
+          }
+        ],
+        "migrations": [],
+        "migration_count": 0
+      }
+    },
+    "total_migrations": 4
+  },
+  "spot": {
+    "vms": {
+      "0": {
+        "a_k": 0,
+        "d_k": 23,
+        "required_vCPU": 0.5,
+        "total_workloads": 18,
+        "workload_map": {
+          "0": {
+            "t": 0,
+            "server": 0
+          },
+          "1": {
+            "t": 5,
+            "server": 0
+          },
+          "2": {
+            "t": 20,
+            "server": 0
+          },
+          "3": {
+            "t": 6,
+            "server": 0
+          },
+          "4": {
+            "t": 18,
+            "server": 0
+          },
+          "5": {
+            "t": 4,
+            "server": 0
+          },
+          "6": {
+            "t": 17,
+            "server": 0
+          },
+          "7": {
+            "t": 3,
+            "server": 0
+          },
+          "8": {
+            "t": 11,
+            "server": 0
+          },
+          "9": {
+            "t": 1,
+            "server": 0
+          },
+          "10": {
+            "t": 2,
+            "server": 4
+          },
+          "11": {
+            "t": 9,
+            "server": 0
+          },
+          "12": {
+            "t": 10,
+            "server": 0
+          },
+          "13": {
+            "t": 7,
+            "server": 0
+          },
+          "14": {
+            "t": 13,
+            "server": 0
+          },
+          "15": {
+            "t": 8,
+            "server": 0
+          },
+          "16": {
+            "t": 12,
+            "server": 0
+          },
+          "17": {
+            "t": 14,
+            "server": 0
+          }
+        },
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 0,
+            "usage": 0.0122
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "workload": 9,
+            "usage": 0.0269
+          },
+          {
+            "t": 2,
+            "server": 4,
+            "workload": 10,
+            "usage": 0.009
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "workload": 7,
+            "usage": 0.0128
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "workload": 5,
+            "usage": 0.0101
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "workload": 1,
+            "usage": 0.0265
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "workload": 3,
+            "usage": 0.0119
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "workload": 13,
+            "usage": 0.0129
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "workload": 15,
+            "usage": 0.0142
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "workload": 11,
+            "usage": 0.0124
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 12,
+            "usage": 0.0127
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "workload": 8,
+            "usage": 0.0119
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "workload": 16,
+            "usage": 0.0116
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "workload": 14,
+            "usage": 0.0128
+          },
+          {
+            "t": 14,
+            "server": 0,
+            "workload": 17,
+            "usage": 0.0464
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "workload": 6,
+            "usage": 0.0116
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "workload": 4,
+            "usage": 0.0074
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "workload": 2,
+            "usage": 0.0117
+          }
+        ],
+        "preemptions": [
+          {
+            "t": 2,
+            "reason": "server_change",
+            "from": 0,
+            "to": 4
+          },
+          {
+            "t": 3,
+            "reason": "server_change",
+            "from": 4,
+            "to": 0
+          },
+          {
+            "t": 17,
+            "reason": "idle_gap",
+            "gap": {
+              "start": 15,
+              "end": 16
+            },
+            "resume": {
+              "server": 0
+            }
+          },
+          {
+            "t": 20,
+            "reason": "idle_gap",
+            "gap": {
+              "start": 19,
+              "end": 19
+            },
+            "resume": {
+              "server": 0
+            }
+          }
+        ],
+        "preemption_count": 4
+      },
+      "1": {
+        "a_k": 0,
+        "d_k": 23,
+        "required_vCPU": 0.5,
+        "total_workloads": 18,
+        "workload_map": {
+          "0": {
+            "t": 0,
+            "server": 0
+          },
+          "1": {
+            "t": 7,
+            "server": 0
+          },
+          "2": {
+            "t": 16,
+            "server": 0
+          },
+          "3": {
+            "t": 2,
+            "server": 0
+          },
+          "4": {
+            "t": 1,
+            "server": 0
+          },
+          "5": {
+            "t": 9,
+            "server": 4
+          },
+          "6": {
+            "t": 12,
+            "server": 0
+          },
+          "7": {
+            "t": 4,
+            "server": 0
+          },
+          "8": {
+            "t": 13,
+            "server": 0
+          },
+          "9": {
+            "t": 3,
+            "server": 0
+          },
+          "10": {
+            "t": 5,
+            "server": 0
+          },
+          "11": {
+            "t": 21,
+            "server": 0
+          },
+          "12": {
+            "t": 10,
+            "server": 0
+          },
+          "13": {
+            "t": 22,
+            "server": 0
+          },
+          "14": {
+            "t": 20,
+            "server": 0
+          },
+          "15": {
+            "t": 23,
+            "server": 0
+          },
+          "16": {
+            "t": 6,
+            "server": 0
+          },
+          "17": {
+            "t": 11,
+            "server": 0
+          }
+        },
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 0,
+            "usage": 0.0903
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "workload": 4,
+            "usage": 0.0741
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "workload": 3,
+            "usage": 0.0764
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "workload": 9,
+            "usage": 0.08
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "workload": 7,
+            "usage": 0.0762
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "workload": 10,
+            "usage": 0.0856
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "workload": 16,
+            "usage": 0.0897
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "workload": 1,
+            "usage": 0.0769
+          },
+          {
+            "t": 9,
+            "server": 4,
+            "workload": 5,
+            "usage": 0.0763
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 12,
+            "usage": 0.0957
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "workload": 17,
+            "usage": 0.0935
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "workload": 6,
+            "usage": 0.0769
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "workload": 8,
+            "usage": 0.1194
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "workload": 2,
+            "usage": 0.0775
+          },
+          {
+            "t": 20,
+            "server": 0,
+            "workload": 14,
+            "usage": 0.0753
+          },
+          {
+            "t": 21,
+            "server": 0,
+            "workload": 11,
+            "usage": 0.0835
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "workload": 13,
+            "usage": 0.0801
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "workload": 15,
+            "usage": 0.0829
+          }
+        ],
+        "preemptions": [
+          {
+            "t": 9,
+            "reason": "idle_gap",
+            "gap": {
+              "start": 8,
+              "end": 8
+            },
+            "resume": {
+              "server": 4
+            }
+          },
+          {
+            "t": 10,
+            "reason": "server_change",
+            "from": 4,
+            "to": 0
+          },
+          {
+            "t": 16,
+            "reason": "idle_gap",
+            "gap": {
+              "start": 14,
+              "end": 15
+            },
+            "resume": {
+              "server": 0
+            }
+          },
+          {
+            "t": 20,
+            "reason": "idle_gap",
+            "gap": {
+              "start": 17,
+              "end": 19
+            },
+            "resume": {
+              "server": 0
+            }
+          }
+        ],
+        "preemption_count": 4
+      }
+    },
+    "total_preemptions": 8,
+    "total_workloads": 36,
+    "preemption_per_workload": 0.2222
+  },
+  "batch": {
+    "jobs": {
+      "0": {
+        "required_vCPU": 0.5,
+        "workload_map": {
+          "0": {
+            "t": 1,
+            "server": 0
+          },
+          "1": {
+            "t": 10,
+            "server": 0
+          },
+          "2": {
+            "t": 10,
+            "server": 0
+          },
+          "3": {
+            "t": 15,
+            "server": 0
+          },
+          "4": {
+            "t": 4,
+            "server": 4
+          },
+          "5": {
+            "t": 7,
+            "server": 0
+          },
+          "6": {
+            "t": 9,
+            "server": 0
+          },
+          "7": {
+            "t": 6,
+            "server": 0
+          },
+          "8": {
+            "t": 22,
+            "server": 0
+          },
+          "9": {
+            "t": 10,
+            "server": 0
+          },
+          "10": {
+            "t": 17,
+            "server": 0
+          },
+          "11": {
+            "t": 7,
+            "server": 4
+          },
+          "12": {
+            "t": 3,
+            "server": 0
+          },
+          "13": {
+            "t": 13,
+            "server": 0
+          },
+          "14": {
+            "t": 1,
+            "server": 0
+          },
+          "15": {
+            "t": 0,
+            "server": 4
+          },
+          "16": {
+            "t": 1,
+            "server": 0
+          },
+          "17": {
+            "t": 5,
+            "server": 0
+          },
+          "18": {
+            "t": 3,
+            "server": 4
+          },
+          "19": {
+            "t": 13,
+            "server": 0
+          },
+          "20": {
+            "t": 3,
+            "server": 0
+          },
+          "21": {
+            "t": 15,
+            "server": 0
+          },
+          "22": {
+            "t": 17,
+            "server": 0
+          },
+          "23": {
+            "t": 0,
+            "server": 0
+          }
+        },
+        "timeline": [
+          {
+            "t": 0,
+            "server": 4,
+            "workload": 15,
+            "usage": 0.0566
+          },
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 23,
+            "usage": 0.0588
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "workload": 0,
+            "usage": 0.064
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "workload": 14,
+            "usage": 0.0621
+          },
+          {
+            "t": 1,
+            "server": 0,
+            "workload": 16,
+            "usage": 0.0563
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "workload": 12,
+            "usage": 0.0668
+          },
+          {
+            "t": 3,
+            "server": 4,
+            "workload": 18,
+            "usage": 0.0573
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "workload": 20,
+            "usage": 0.0893
+          },
+          {
+            "t": 4,
+            "server": 4,
+            "workload": 4,
+            "usage": 0.0978
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "workload": 17,
+            "usage": 0.061
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "workload": 7,
+            "usage": 0.0695
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "workload": 5,
+            "usage": 0.0668
+          },
+          {
+            "t": 7,
+            "server": 4,
+            "workload": 11,
+            "usage": 0.0695
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "workload": 6,
+            "usage": 0.0694
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 1,
+            "usage": 0.0549
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 2,
+            "usage": 0.0675
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 9,
+            "usage": 0.073
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "workload": 13,
+            "usage": 0.058
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "workload": 19,
+            "usage": 0.0575
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "workload": 3,
+            "usage": 0.0687
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "workload": 21,
+            "usage": 0.06
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "workload": 10,
+            "usage": 0.0675
+          },
+          {
+            "t": 17,
+            "server": 0,
+            "workload": 22,
+            "usage": 0.0603
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "workload": 8,
+            "usage": 0.0674
+          }
+        ]
+      },
+      "1": {
+        "required_vCPU": 1.0,
+        "workload_map": {
+          "0": {
+            "t": 5,
+            "server": 0
+          },
+          "1": {
+            "t": 11,
+            "server": 0
+          },
+          "2": {
+            "t": 15,
+            "server": 0
+          },
+          "3": {
+            "t": 13,
+            "server": 0
+          },
+          "4": {
+            "t": 4,
+            "server": 0
+          },
+          "5": {
+            "t": 9,
+            "server": 0
+          },
+          "6": {
+            "t": 12,
+            "server": 0
+          },
+          "7": {
+            "t": 6,
+            "server": 0
+          },
+          "8": {
+            "t": 23,
+            "server": 0
+          },
+          "9": {
+            "t": 7,
+            "server": 0
+          },
+          "10": {
+            "t": 23,
+            "server": 0
+          },
+          "11": {
+            "t": 0,
+            "server": 0
+          },
+          "12": {
+            "t": 23,
+            "server": 0
+          },
+          "13": {
+            "t": 11,
+            "server": 0
+          },
+          "14": {
+            "t": 8,
+            "server": 0
+          },
+          "15": {
+            "t": 22,
+            "server": 0
+          },
+          "16": {
+            "t": 9,
+            "server": 0
+          },
+          "17": {
+            "t": 18,
+            "server": 0
+          },
+          "18": {
+            "t": 16,
+            "server": 0
+          },
+          "19": {
+            "t": 15,
+            "server": 0
+          },
+          "20": {
+            "t": 4,
+            "server": 4
+          },
+          "21": {
+            "t": 0,
+            "server": 0
+          },
+          "22": {
+            "t": 9,
+            "server": 0
+          },
+          "23": {
+            "t": 12,
+            "server": 0
+          }
+        },
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 11,
+            "usage": 0.1486
+          },
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 21,
+            "usage": 0.1404
+          },
+          {
+            "t": 4,
+            "server": 0,
+            "workload": 4,
+            "usage": 0.137
+          },
+          {
+            "t": 4,
+            "server": 4,
+            "workload": 20,
+            "usage": 0.1562
+          },
+          {
+            "t": 5,
+            "server": 0,
+            "workload": 0,
+            "usage": 0.1309
+          },
+          {
+            "t": 6,
+            "server": 0,
+            "workload": 7,
+            "usage": 0.1186
+          },
+          {
+            "t": 7,
+            "server": 0,
+            "workload": 9,
+            "usage": 0.1246
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "workload": 14,
+            "usage": 0.2063
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "workload": 5,
+            "usage": 0.1298
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "workload": 16,
+            "usage": 0.1765
+          },
+          {
+            "t": 9,
+            "server": 0,
+            "workload": 22,
+            "usage": 0.1838
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "workload": 1,
+            "usage": 0.1262
+          },
+          {
+            "t": 11,
+            "server": 0,
+            "workload": 13,
+            "usage": 0.223
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "workload": 6,
+            "usage": 0.1232
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "workload": 23,
+            "usage": 0.1246
+          },
+          {
+            "t": 13,
+            "server": 0,
+            "workload": 3,
+            "usage": 0.125
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "workload": 2,
+            "usage": 0.1284
+          },
+          {
+            "t": 15,
+            "server": 0,
+            "workload": 19,
+            "usage": 0.1603
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "workload": 18,
+            "usage": 0.1895
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "workload": 17,
+            "usage": 0.1812
+          },
+          {
+            "t": 22,
+            "server": 0,
+            "workload": 15,
+            "usage": 0.2163
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "workload": 8,
+            "usage": 0.1573
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "workload": 10,
+            "usage": 0.1724
+          },
+          {
+            "t": 23,
+            "server": 0,
+            "workload": 12,
+            "usage": 0.189
+          }
+        ]
+      },
+      "2": {
+        "required_vCPU": 0.5,
+        "workload_map": {
+          "0": {
+            "t": 0,
+            "server": 0
+          },
+          "1": {
+            "t": 2,
+            "server": 0
+          },
+          "2": {
+            "t": 0,
+            "server": 0
+          },
+          "3": {
+            "t": 7,
+            "server": 4
+          },
+          "4": {
+            "t": 3,
+            "server": 0
+          },
+          "5": {
+            "t": 16,
+            "server": 0
+          },
+          "6": {
+            "t": 2,
+            "server": 4
+          },
+          "7": {
+            "t": 12,
+            "server": 0
+          },
+          "8": {
+            "t": 19,
+            "server": 0
+          },
+          "9": {
+            "t": 0,
+            "server": 4
+          },
+          "10": {
+            "t": 18,
+            "server": 0
+          },
+          "11": {
+            "t": 5,
+            "server": 4
+          },
+          "12": {
+            "t": 1,
+            "server": 4
+          },
+          "13": {
+            "t": 21,
+            "server": 4
+          },
+          "14": {
+            "t": 20,
+            "server": 4
+          },
+          "15": {
+            "t": 8,
+            "server": 0
+          },
+          "16": {
+            "t": 3,
+            "server": 4
+          },
+          "17": {
+            "t": 21,
+            "server": 4
+          },
+          "18": {
+            "t": 21,
+            "server": 4
+          },
+          "19": {
+            "t": 22,
+            "server": 4
+          },
+          "20": {
+            "t": 6,
+            "server": 4
+          },
+          "21": {
+            "t": 10,
+            "server": 0
+          },
+          "22": {
+            "t": 6,
+            "server": 4
+          },
+          "23": {
+            "t": 23,
+            "server": 4
+          }
+        },
+        "timeline": [
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 0,
+            "usage": 0.0719
+          },
+          {
+            "t": 0,
+            "server": 0,
+            "workload": 2,
+            "usage": 0.0774
+          },
+          {
+            "t": 0,
+            "server": 4,
+            "workload": 9,
+            "usage": 0.0757
+          },
+          {
+            "t": 1,
+            "server": 4,
+            "workload": 12,
+            "usage": 0.0707
+          },
+          {
+            "t": 2,
+            "server": 0,
+            "workload": 1,
+            "usage": 0.0779
+          },
+          {
+            "t": 2,
+            "server": 4,
+            "workload": 6,
+            "usage": 0.0734
+          },
+          {
+            "t": 3,
+            "server": 0,
+            "workload": 4,
+            "usage": 0.1112
+          },
+          {
+            "t": 3,
+            "server": 4,
+            "workload": 16,
+            "usage": 0.0718
+          },
+          {
+            "t": 5,
+            "server": 4,
+            "workload": 11,
+            "usage": 0.0719
+          },
+          {
+            "t": 6,
+            "server": 4,
+            "workload": 20,
+            "usage": 0.0694
+          },
+          {
+            "t": 6,
+            "server": 4,
+            "workload": 22,
+            "usage": 0.071
+          },
+          {
+            "t": 7,
+            "server": 4,
+            "workload": 3,
+            "usage": 0.0766
+          },
+          {
+            "t": 8,
+            "server": 0,
+            "workload": 15,
+            "usage": 0.0694
+          },
+          {
+            "t": 10,
+            "server": 0,
+            "workload": 21,
+            "usage": 0.0991
+          },
+          {
+            "t": 12,
+            "server": 0,
+            "workload": 7,
+            "usage": 0.0761
+          },
+          {
+            "t": 16,
+            "server": 0,
+            "workload": 5,
+            "usage": 0.0996
+          },
+          {
+            "t": 18,
+            "server": 0,
+            "workload": 10,
+            "usage": 0.073
+          },
+          {
+            "t": 19,
+            "server": 0,
+            "workload": 8,
+            "usage": 0.0728
+          },
+          {
+            "t": 20,
+            "server": 4,
+            "workload": 14,
+            "usage": 0.0682
+          },
+          {
+            "t": 21,
+            "server": 4,
+            "workload": 13,
+            "usage": 0.0792
+          },
+          {
+            "t": 21,
+            "server": 4,
+            "workload": 17,
+            "usage": 0.083
+          },
+          {
+            "t": 21,
+            "server": 4,
+            "workload": 18,
+            "usage": 0.0698
+          },
+          {
+            "t": 22,
+            "server": 4,
+            "workload": 19,
+            "usage": 0.0688
+          },
+          {
+            "t": 23,
+            "server": 4,
+            "workload": 23,
+            "usage": 0.072
+          }
+        ]
+      }
+    },
+    "jobs_running_per_time": {
+      "0": 3,
+      "1": 2,
+      "2": 1,
+      "3": 2,
+      "4": 2,
+      "5": 3,
+      "6": 3,
+      "7": 3,
+      "8": 2,
+      "9": 2,
+      "10": 2,
+      "11": 1,
+      "12": 2,
+      "13": 2,
+      "14": 0,
+      "15": 2,
+      "16": 2,
+      "17": 1,
+      "18": 2,
+      "19": 1,
+      "20": 1,
+      "21": 1,
+      "22": 3,
+      "23": 2
+    },
+    "parallel_workload_ratio": 0.6528,
+    "total_workloads": 72,
+    "parallel_workloads": 47
+  },
+  "servers": {
+    "capacity": 1.0,
+    "servers": {
+      "0": {
+        "used_flag": true,
+        "timeseries": [
+          {
+            "t": 0,
+            "u": 1,
+            "actual_load": 0.9602,
+            "requested_load": 6.5,
+            "overbooking_ratio": 6.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1048
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0483
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0402
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1674
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 0,
+                "requested": 0.5,
+                "usage": 0.0122
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 0,
+                "requested": 0.5,
+                "usage": 0.0903
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 23,
+                "requested": 0.5,
+                "usage": 0.0588
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 11,
+                "requested": 1.0,
+                "usage": 0.1486
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 21,
+                "requested": 1.0,
+                "usage": 0.1404
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 0,
+                "requested": 0.5,
+                "usage": 0.0719
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 2,
+                "requested": 0.5,
+                "usage": 0.0774
+              }
+            ]
+          },
+          {
+            "t": 1,
+            "u": 1,
+            "actual_load": 0.9814,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2262
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3192
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1526
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 9,
+                "requested": 0.5,
+                "usage": 0.0269
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 4,
+                "requested": 0.5,
+                "usage": 0.0741
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 0,
+                "requested": 0.5,
+                "usage": 0.064
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 14,
+                "requested": 0.5,
+                "usage": 0.0621
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 16,
+                "requested": 0.5,
+                "usage": 0.0563
+              }
+            ]
+          },
+          {
+            "t": 2,
+            "u": 1,
+            "actual_load": 0.9937,
+            "requested_load": 3.0,
+            "overbooking_ratio": 3.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1048
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.4039
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1875
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1432
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 3,
+                "requested": 0.5,
+                "usage": 0.0764
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 1,
+                "requested": 0.5,
+                "usage": 0.0779
+              }
+            ]
+          },
+          {
+            "t": 3,
+            "u": 1,
+            "actual_load": 0.9558,
+            "requested_load": 4.5,
+            "overbooking_ratio": 4.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1048
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0934
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2685
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.129
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 7,
+                "requested": 0.5,
+                "usage": 0.0128
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 9,
+                "requested": 0.5,
+                "usage": 0.08
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 12,
+                "requested": 0.5,
+                "usage": 0.0668
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 20,
+                "requested": 0.5,
+                "usage": 0.0893
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 4,
+                "requested": 0.5,
+                "usage": 0.1112
+              }
+            ]
+          },
+          {
+            "t": 4,
+            "u": 1,
+            "actual_load": 0.9831,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1059
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1639
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3752
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1148
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 5,
+                "requested": 0.5,
+                "usage": 0.0101
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 7,
+                "requested": 0.5,
+                "usage": 0.0762
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 4,
+                "requested": 1.0,
+                "usage": 0.137
+              }
+            ]
+          },
+          {
+            "t": 5,
+            "u": 1,
+            "actual_load": 0.9868,
+            "requested_load": 4.5,
+            "overbooking_ratio": 4.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1048
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0944
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3978
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0858
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 1,
+                "requested": 0.5,
+                "usage": 0.0265
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 10,
+                "requested": 0.5,
+                "usage": 0.0856
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 17,
+                "requested": 0.5,
+                "usage": 0.061
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 0,
+                "requested": 1.0,
+                "usage": 0.1309
+              }
+            ]
+          },
+          {
+            "t": 6,
+            "u": 1,
+            "actual_load": 0.9959,
+            "requested_load": 4.5,
+            "overbooking_ratio": 4.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1001
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0936
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.4348
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0778
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 3,
+                "requested": 0.5,
+                "usage": 0.0119
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 16,
+                "requested": 0.5,
+                "usage": 0.0897
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 7,
+                "requested": 0.5,
+                "usage": 0.0695
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 7,
+                "requested": 1.0,
+                "usage": 0.1186
+              }
+            ]
+          },
+          {
+            "t": 7,
+            "u": 1,
+            "actual_load": 0.9944,
+            "requested_load": 4.5,
+            "overbooking_ratio": 4.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1002
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0848
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.457
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0711
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 13,
+                "requested": 0.5,
+                "usage": 0.0129
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 1,
+                "requested": 0.5,
+                "usage": 0.0769
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 5,
+                "requested": 0.5,
+                "usage": 0.0668
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 9,
+                "requested": 1.0,
+                "usage": 0.1246
+              }
+            ]
+          },
+          {
+            "t": 8,
+            "u": 1,
+            "actual_load": 0.9862,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0992
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1001
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.4252
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0719
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 15,
+                "requested": 0.5,
+                "usage": 0.0142
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 14,
+                "requested": 1.0,
+                "usage": 0.2063
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 15,
+                "requested": 0.5,
+                "usage": 0.0694
+              }
+            ]
+          },
+          {
+            "t": 9,
+            "u": 1,
+            "actual_load": 0.8973,
+            "requested_load": 6.0,
+            "overbooking_ratio": 6.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0991
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0956
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0579
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0729
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 11,
+                "requested": 0.5,
+                "usage": 0.0124
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 6,
+                "requested": 0.5,
+                "usage": 0.0694
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 5,
+                "requested": 1.0,
+                "usage": 0.1298
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 16,
+                "requested": 1.0,
+                "usage": 0.1765
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 22,
+                "requested": 1.0,
+                "usage": 0.1838
+              }
+            ]
+          },
+          {
+            "t": 10,
+            "u": 1,
+            "actual_load": 0.7065,
+            "requested_load": 5.0,
+            "overbooking_ratio": 5.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1051
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0981
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0138
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0867
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 12,
+                "requested": 0.5,
+                "usage": 0.0127
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 12,
+                "requested": 0.5,
+                "usage": 0.0957
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 1,
+                "requested": 0.5,
+                "usage": 0.0549
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 2,
+                "requested": 0.5,
+                "usage": 0.0675
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 9,
+                "requested": 0.5,
+                "usage": 0.073
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 21,
+                "requested": 0.5,
+                "usage": 0.0991
+              }
+            ]
+          },
+          {
+            "t": 11,
+            "u": 1,
+            "actual_load": 0.8566,
+            "requested_load": 5.0,
+            "overbooking_ratio": 5.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1048
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1051
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0569
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1352
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 8,
+                "requested": 0.5,
+                "usage": 0.0119
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 17,
+                "requested": 0.5,
+                "usage": 0.0935
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 1,
+                "requested": 1.0,
+                "usage": 0.1262
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 13,
+                "requested": 1.0,
+                "usage": 0.223
+              }
+            ]
+          },
+          {
+            "t": 12,
+            "u": 1,
+            "actual_load": 0.808,
+            "requested_load": 5.5,
+            "overbooking_ratio": 5.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1052
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0968
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0169
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1767
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 16,
+                "requested": 0.5,
+                "usage": 0.0116
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 6,
+                "requested": 0.5,
+                "usage": 0.0769
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 6,
+                "requested": 1.0,
+                "usage": 0.1232
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 23,
+                "requested": 1.0,
+                "usage": 0.1246
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 7,
+                "requested": 0.5,
+                "usage": 0.0761
+              }
+            ]
+          },
+          {
+            "t": 13,
+            "u": 1,
+            "actual_load": 0.8534,
+            "requested_load": 5.0,
+            "overbooking_ratio": 5.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1127
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1087
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0255
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2339
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 14,
+                "requested": 0.5,
+                "usage": 0.0128
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 8,
+                "requested": 0.5,
+                "usage": 0.1194
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 13,
+                "requested": 0.5,
+                "usage": 0.058
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 19,
+                "requested": 0.5,
+                "usage": 0.0575
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 3,
+                "requested": 1.0,
+                "usage": 0.125
+              }
+            ]
+          },
+          {
+            "t": 14,
+            "u": 1,
+            "actual_load": 0.9634,
+            "requested_load": 2.5,
+            "overbooking_ratio": 2.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1049
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1134
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.4413
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2575
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 17,
+                "requested": 0.5,
+                "usage": 0.0464
+              }
+            ]
+          },
+          {
+            "t": 15,
+            "u": 1,
+            "actual_load": 0.9056,
+            "requested_load": 5.0,
+            "overbooking_ratio": 5.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1053
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1128
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0129
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2572
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 3,
+                "requested": 0.5,
+                "usage": 0.0687
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 21,
+                "requested": 0.5,
+                "usage": 0.06
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 2,
+                "requested": 1.0,
+                "usage": 0.1284
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 19,
+                "requested": 1.0,
+                "usage": 0.1603
+              }
+            ]
+          },
+          {
+            "t": 16,
+            "u": 1,
+            "actual_load": 0.8895,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1051
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.114
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0184
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2854
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 2,
+                "requested": 0.5,
+                "usage": 0.0775
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 18,
+                "requested": 1.0,
+                "usage": 0.1895
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 5,
+                "requested": 0.5,
+                "usage": 0.0996
+              }
+            ]
+          },
+          {
+            "t": 17,
+            "u": 1,
+            "actual_load": 0.9648,
+            "requested_load": 3.5,
+            "overbooking_ratio": 3.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3136
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1115
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0127
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3876
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 6,
+                "requested": 0.5,
+                "usage": 0.0116
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 10,
+                "requested": 0.5,
+                "usage": 0.0675
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 22,
+                "requested": 0.5,
+                "usage": 0.0603
+              }
+            ]
+          },
+          {
+            "t": 18,
+            "u": 1,
+            "actual_load": 0.9284,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3133
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1068
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0107
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.2359
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 4,
+                "requested": 0.5,
+                "usage": 0.0074
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 17,
+                "requested": 1.0,
+                "usage": 0.1812
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 10,
+                "requested": 0.5,
+                "usage": 0.073
+              }
+            ]
+          },
+          {
+            "t": 19,
+            "u": 1,
+            "actual_load": 0.9895,
+            "requested_load": 2.0,
+            "overbooking_ratio": 2.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3136
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.4161
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.187
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 8,
+                "requested": 0.5,
+                "usage": 0.0728
+              }
+            ]
+          },
+          {
+            "t": 20,
+            "u": 1,
+            "actual_load": 0.9783,
+            "requested_load": 3.0,
+            "overbooking_ratio": 3.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3132
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3861
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0328
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1591
+              },
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 2,
+                "requested": 0.5,
+                "usage": 0.0117
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 14,
+                "requested": 0.5,
+                "usage": 0.0753
+              }
+            ]
+          },
+          {
+            "t": 21,
+            "u": 1,
+            "actual_load": 0.9218,
+            "requested_load": 2.5,
+            "overbooking_ratio": 2.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3125
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.3702
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0127
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1429
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 11,
+                "requested": 0.5,
+                "usage": 0.0835
+              }
+            ]
+          },
+          {
+            "t": 22,
+            "u": 1,
+            "actual_load": 0.745,
+            "requested_load": 4.0,
+            "overbooking_ratio": 4.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1057
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0879
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0691
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1186
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 13,
+                "requested": 0.5,
+                "usage": 0.0801
+              },
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 8,
+                "requested": 0.5,
+                "usage": 0.0674
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 15,
+                "requested": 1.0,
+                "usage": 0.2163
+              }
+            ]
+          },
+          {
+            "t": 23,
+            "u": 1,
+            "actual_load": 0.9261,
+            "requested_load": 5.5,
+            "overbooking_ratio": 5.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1056
+              },
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0903
+              },
+              {
+                "type": "on_demand",
+                "id": 2,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.0172
+              },
+              {
+                "type": "on_demand",
+                "id": 3,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1116
+              },
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 15,
+                "requested": 0.5,
+                "usage": 0.0829
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 8,
+                "requested": 1.0,
+                "usage": 0.1573
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 10,
+                "requested": 1.0,
+                "usage": 0.1724
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 12,
+                "requested": 1.0,
+                "usage": 0.189
+              }
+            ]
+          }
+        ]
+      },
+      "1": {
+        "used_flag": false
+      },
+      "2": {
+        "used_flag": false
+      },
+      "3": {
+        "used_flag": false
+      },
+      "4": {
+        "used_flag": true,
+        "timeseries": [
+          {
+            "t": 0,
+            "u": 1,
+            "actual_load": 0.1323,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 15,
+                "requested": 0.5,
+                "usage": 0.0566
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 9,
+                "requested": 0.5,
+                "usage": 0.0757
+              }
+            ]
+          },
+          {
+            "t": 1,
+            "u": 1,
+            "actual_load": 0.1754,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 0,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1047
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 12,
+                "requested": 0.5,
+                "usage": 0.0707
+              }
+            ]
+          },
+          {
+            "t": 2,
+            "u": 1,
+            "actual_load": 0.0823,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "spot",
+                "id": 0,
+                "workload": 10,
+                "requested": 0.5,
+                "usage": 0.009
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 6,
+                "requested": 0.5,
+                "usage": 0.0734
+              }
+            ]
+          },
+          {
+            "t": 3,
+            "u": 1,
+            "actual_load": 0.1291,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 18,
+                "requested": 0.5,
+                "usage": 0.0573
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 16,
+                "requested": 0.5,
+                "usage": 0.0718
+              }
+            ]
+          },
+          {
+            "t": 4,
+            "u": 1,
+            "actual_load": 0.254,
+            "requested_load": 1.5,
+            "overbooking_ratio": 1.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 4,
+                "requested": 0.5,
+                "usage": 0.0978
+              },
+              {
+                "type": "batch",
+                "id": 1,
+                "workload": 20,
+                "requested": 1.0,
+                "usage": 0.1562
+              }
+            ]
+          },
+          {
+            "t": 5,
+            "u": 1,
+            "actual_load": 0.0719,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 11,
+                "requested": 0.5,
+                "usage": 0.0719
+              }
+            ]
+          },
+          {
+            "t": 6,
+            "u": 1,
+            "actual_load": 0.1404,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 20,
+                "requested": 0.5,
+                "usage": 0.0694
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 22,
+                "requested": 0.5,
+                "usage": 0.071
+              }
+            ]
+          },
+          {
+            "t": 7,
+            "u": 1,
+            "actual_load": 0.1461,
+            "requested_load": 1.0,
+            "overbooking_ratio": 1.0,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 0,
+                "workload": 11,
+                "requested": 0.5,
+                "usage": 0.0695
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 3,
+                "requested": 0.5,
+                "usage": 0.0766
+              }
+            ]
+          },
+          {
+            "t": 8,
+            "u": 1,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 9,
+            "u": 1,
+            "actual_load": 0.0763,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "spot",
+                "id": 1,
+                "workload": 5,
+                "requested": 0.5,
+                "usage": 0.0763
+              }
+            ]
+          },
+          {
+            "t": 10,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 11,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 12,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 13,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 14,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 15,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 16,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 17,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 18,
+            "u": 0,
+            "actual_load": 0.0,
+            "requested_load": 0.0,
+            "overbooking_ratio": 0.0,
+            "contrib": []
+          },
+          {
+            "t": 19,
+            "u": 1,
+            "actual_load": 0.1074,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "on_demand",
+                "id": 1,
+                "workload": null,
+                "requested": 0.5,
+                "usage": 0.1074
+              }
+            ]
+          },
+          {
+            "t": 20,
+            "u": 1,
+            "actual_load": 0.0682,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 14,
+                "requested": 0.5,
+                "usage": 0.0682
+              }
+            ]
+          },
+          {
+            "t": 21,
+            "u": 1,
+            "actual_load": 0.232,
+            "requested_load": 1.5,
+            "overbooking_ratio": 1.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 13,
+                "requested": 0.5,
+                "usage": 0.0792
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 17,
+                "requested": 0.5,
+                "usage": 0.083
+              },
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 18,
+                "requested": 0.5,
+                "usage": 0.0698
+              }
+            ]
+          },
+          {
+            "t": 22,
+            "u": 1,
+            "actual_load": 0.0688,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 19,
+                "requested": 0.5,
+                "usage": 0.0688
+              }
+            ]
+          },
+          {
+            "t": 23,
+            "u": 1,
+            "actual_load": 0.072,
+            "requested_load": 0.5,
+            "overbooking_ratio": 0.5,
+            "contrib": [
+              {
+                "type": "batch",
+                "id": 2,
+                "workload": 23,
+                "requested": 0.5,
+                "usage": 0.072
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
