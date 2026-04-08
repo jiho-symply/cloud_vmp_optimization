@@ -1,0 +1,11 @@
+{
+  "status": 2,
+  "runtime": 8.247420072555542,
+  "sol_count": 4,
+  "has_solution": true,
+  "obj_val": 130542.73673953567,
+  "is_mip": true,
+  "obj_bound": 130542.73673953564,
+  "mip_gap": 0.0,
+  "node_count": 1.0
+}

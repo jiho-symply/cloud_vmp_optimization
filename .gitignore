@@ -1,2 +1,5 @@
-trace_data/*
-azure2019_data/*
+.venv/
+__pycache__/
+data/raw/trace_data/*
+data/raw/azure2019_data/*
+scripts/__pycache__/

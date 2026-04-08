@@ -1,0 +1,6 @@
+"2","VM Virtual Core Count >0 and VM Virtual Core Count <=2"
+"4","VM Virtual Core Count >2 and VM Virtual Core Count <=4"
+"8","VM Virtual Core Count >4 and VM Virtual Core Count <=8"
+"12","VM Virtual Core Count >8 and VM Virtual Core Count <=12"
+"24","VM Virtual Core Count >12 and VM Virtual Core Count <=24"
+">24","VM Virtual Core Count >24"

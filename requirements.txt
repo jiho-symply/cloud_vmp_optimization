@@ -1,0 +1,8 @@
+numpy
+pandas
+matplotlib
+tqdm
+notebook
+ipykernel
+ipywidgets
+gurobipy
