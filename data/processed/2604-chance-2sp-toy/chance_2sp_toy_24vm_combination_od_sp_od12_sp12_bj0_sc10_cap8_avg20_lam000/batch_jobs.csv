@@ -1,0 +1,1 @@
+batch_job_id,parent_workload_id,source_time,vm_id,vCPU,min_core_usage,avg_core_usage,max_core_usage

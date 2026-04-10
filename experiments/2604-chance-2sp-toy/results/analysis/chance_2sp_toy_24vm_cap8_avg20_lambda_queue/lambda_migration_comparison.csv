@@ -1,0 +1,9 @@
+group,case,on_demand,spot,batch,actual_migration_event_count_lambda_0_0,actual_migration_event_count_lambda_0_1,migration_count_lambda_0_0,migration_count_lambda_0_1,used_server_count_lambda_0_0,used_server_count_lambda_0_1
+combination,OD + BJ,12,0,12,40,0,259.0,0.0,5,5
+combination,OD + SP,12,12,0,207,17,276.0,17.0,5,5
+combination,OD + SP + BJ,8,8,8,110,0,184.0,0.0,4,4
+combination,OD only,24,0,0,410,0,552.0,0.0,5,6
+ratio,balanced,8,8,8,140,28,184.0,28.0,5,8
+ratio,batch-heavy,5,5,14,0,0,115.0,0.0,5,6
+ratio,service-heavy,14,5,5,181,0,305.0,0.0,5,5
+ratio,spot-heavy,5,14,5,79,0,115.0,0.0,4,4

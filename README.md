@@ -1,15 +1,7 @@
 # cloud_vmp_optimization
 
-Workspace layout:
+이 저장소는 Virtual Machine Placement(VMP) 문제를 실험하기 위한 연구용 repository입니다. Azure trace 전처리 코드, 여러 toy/prototype 최적화 모델, 그리고 실험별 결과 묶음을 함께 관리합니다.
 
-- `data/metadata`: dataset docs, schemas, bucket definitions, and download links
-- `data/raw`: downloaded Azure raw trace files
-- `data/processed`: experiment-specific processed samples such as `sample_vm_data.csv`
-- `experiments/current`: current working experiment files from the former repo root
-- `experiments/version1`: first experiment bundle
-- `experiments/version2`: second experiment bundle
-- `results/<experiment>/runs`: solver outputs and generated figures per experiment
-- `notebooks/reference`: upstream/reference notebooks that analyze the Azure dataset
-- `scripts`: helper utilities such as dataset download scripts
+실험 코드는 `experiments/` 아래에 있고, 가공된 입력 데이터는 `data/processed/` 아래에 정리되어 있습니다. 각 실험은 자신만의 `results/` 폴더를 내부에 두어 결과 그림과 요약 파일을 함께 보관합니다.
 
-Python scripts inside each experiment now resolve their dataset and results paths from the repository root, so they can be run from any working directory.
+가장 최근에 정리된 chance-constrained 2SP toy experiment 문서는 `experiments/2604-chance-2sp-toy/` 아래에 있습니다.

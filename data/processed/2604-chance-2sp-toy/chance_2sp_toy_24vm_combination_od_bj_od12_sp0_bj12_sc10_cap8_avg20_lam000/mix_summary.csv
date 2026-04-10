@@ -1,0 +1,6 @@
+workload_type,vCPU,count
+batch,2,7
+batch,4,3
+batch,8,2
+on_demand,2,8
+on_demand,4,4

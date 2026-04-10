@@ -1,0 +1,107 @@
+{
+  "instance_name": "chance_2sp_toy_24vm_ratio_service_heavy_od14_sp5_bj5_sc10_cap8_avg20_lam010",
+  "seed": 43,
+  "scenario_seed": 42,
+  "source_csv": "C:\\Users\\jiho\\code\\cloud_vmp_optimization\\data\\processed\\2601-initial-toy-model\\sample_vm_data.csv",
+  "time_periods": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "server_capacity": 8.0,
+  "num_servers": 7,
+  "big_m": 36.89695231493405,
+  "chance_constraints": {
+    "epsilon_od": 0.1,
+    "epsilon_sp": 0.2,
+    "rho": 0.8
+  },
+  "objective": {
+    "lambda_migration": 0.1
+  },
+  "scenario_sampling": "deterministic triangular(min, avg, max) keyed by (vm_id, time, scenario)",
+  "batch_modeling": "split each original batch VM trace into one-slot batch jobs",
+  "sampling_policy": {
+    "pool_filter": "vm_category in {Interactive, Delay-insensitive}, vCPU <= 8, avg_cpu_mean >= 20.0, hour < 24",
+    "toy_sampling": "uniform over candidate VMs regardless of lifetime length within the horizon"
+  },
+  "counts": {
+    "on_demand": 14,
+    "spot": 5,
+    "batch": 5
+  },
+  "scenarios": [
+    {
+      "scenario": "scen_01",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_02",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_03",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_04",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_05",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_06",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_07",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_08",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_09",
+      "probability": 0.1
+    },
+    {
+      "scenario": "scen_10",
+      "probability": 0.1
+    }
+  ],
+  "files": {
+    "workload_metadata": "workload_metadata.csv",
+    "selected_vm_traces": "selected_vm_traces.csv",
+    "scenario_time_series": "scenario_time_series.csv",
+    "batch_jobs": "batch_jobs.csv",
+    "batch_job_demands": "batch_job_demands.csv",
+    "scenario_detail": "scenario_detail.csv",
+    "scenario_summary": "scenario_summary.csv",
+    "scenario_probabilities": "scenario_probabilities.csv",
+    "mix_summary": "mix_summary.csv"
+  }
+}

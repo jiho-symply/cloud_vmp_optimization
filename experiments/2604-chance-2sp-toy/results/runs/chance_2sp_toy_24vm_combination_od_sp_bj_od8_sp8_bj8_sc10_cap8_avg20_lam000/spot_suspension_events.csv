@@ -1,0 +1,15 @@
+workload_id,scenario,server,start_time,end_time,duration_hours
+sp_00,scen_08,0,20,20,1
+sp_01,scen_03,0,5,5,1
+sp_01,scen_03,0,10,10,1
+sp_01,scen_03,0,15,15,1
+sp_01,scen_04,0,5,5,1
+sp_01,scen_04,0,20,20,1
+sp_02,scen_09,0,22,22,1
+sp_02,scen_10,0,22,22,1
+sp_05,scen_04,0,13,13,1
+sp_05,scen_05,0,22,22,1
+sp_06,scen_03,0,5,5,1
+sp_06,scen_03,0,13,14,2
+sp_06,scen_03,0,19,19,1
+sp_06,scen_06,0,22,22,1
