@@ -3,3 +3,18 @@ __pycache__/
 data/raw/trace_data/*
 data/raw/azure2019_data/*
 scripts/__pycache__/
+
+# Generated experiment data and solver outputs.
+# Keep experiment code and documentation tracked; regenerate these locally.
+data/processed/
+experiments/**/results/
+results/
+
+# Common generated artifacts from optimization experiments.
+*.sol
+*.lp
+*.mps
+*.mst
+*.log
+formulation_results.csv
+*_results.csv

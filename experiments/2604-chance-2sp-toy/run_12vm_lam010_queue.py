@@ -1,5 +1,4 @@
 import argparse
-import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -16,46 +15,72 @@ REPO_ROOT = EXPERIMENT_DIR.parents[1]
 SOURCE_CSV = REPO_ROOT / "data" / "processed" / "2601-initial-toy-model" / "sample_vm_data.csv"
 DATA_ROOT = REPO_ROOT / "data" / "processed" / EXPERIMENT_NAME
 RESULTS_ROOT = EXPERIMENT_DIR / "results" / "runs"
-ANALYSIS_DIR = EXPERIMENT_DIR / "results" / "analysis" / "chance_2sp_toy_30vm_combination_sweep_cap4"
+ANALYSIS_DIR = EXPERIMENT_DIR / "results" / "analysis" / "chance_2sp_toy_12vm_cap8_avg20_lam010_queue"
 RUNS_GROUP_DIR = RESULTS_ROOT / ANALYSIS_DIR.name
-DEFAULT_THREADS = 8
 
-CASE_CONFIGS = [
-    {"case": "od_only", "label": "OD only", "on_demand": 30, "spot": 0, "batch": 0},
-    {"case": "od_sp", "label": "OD + SP", "on_demand": 15, "spot": 15, "batch": 0},
-    {"case": "od_bj", "label": "OD + BJ", "on_demand": 15, "spot": 0, "batch": 15},
-    {"case": "od_sp_bj", "label": "OD + SP + BJ", "on_demand": 10, "spot": 10, "batch": 10},
-]
+LAMBDA_VALUE = 0.1
+CASE_GROUPS = {
+    "ratio": [
+        {"case": "balanced", "label": "balanced", "on_demand": 4, "spot": 4, "batch": 4},
+        {"case": "service_heavy", "label": "service-heavy", "on_demand": 8, "spot": 2, "batch": 2},
+        {"case": "spot_heavy", "label": "spot-heavy", "on_demand": 2, "spot": 8, "batch": 2},
+        {"case": "batch_heavy", "label": "batch-heavy", "on_demand": 2, "spot": 2, "batch": 8},
+    ],
+    "combination": [
+        {"case": "od_only", "label": "OD only", "on_demand": 12, "spot": 0, "batch": 0},
+        {"case": "od_sp", "label": "OD + SP", "on_demand": 6, "spot": 6, "batch": 0},
+        {"case": "od_bj", "label": "OD + BJ", "on_demand": 6, "spot": 0, "batch": 6},
+        {"case": "od_sp_bj", "label": "OD + SP + BJ", "on_demand": 4, "spot": 4, "batch": 4},
+    ],
+}
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="30-VM 조합 스윕을 실행합니다.")
+    parser = argparse.ArgumentParser(description="12-VM / cap8 / avg_cpu>=20 / lambda=0.1 실험을 큐 방식으로 실행합니다.")
     parser.add_argument("--source-csv", type=Path, default=SOURCE_CSV)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--scenario-seed", type=int, default=42)
     parser.add_argument("--scenario-count", type=int, default=10)
-    parser.add_argument("--time-limit", type=int, default=1800)
+    parser.add_argument("--time-limit", type=int, default=7200)
     parser.add_argument("--mip-gap", type=float, default=0.001)
     parser.add_argument("--max-workers", type=int, default=4)
-    parser.add_argument("--threads", type=int, default=DEFAULT_THREADS)
+    parser.add_argument("--threads", type=int, default=8)
     return parser.parse_args()
 
 
-def build_case_name(case_config, scenario_count):
+def lambda_tag(lambda_value):
+    return f"lam{int(round(lambda_value * 100)):03d}"
+
+
+def build_case_name(group_name, case_config, scenario_count):
+    total_vm = case_config["on_demand"] + case_config["spot"] + case_config["batch"]
     return (
-        f"chance_2sp_toy_30vm_{case_config['case']}_"
+        f"chance_2sp_toy_{total_vm}vm_{group_name}_{case_config['case']}_"
         f"od{case_config['on_demand']}_sp{case_config['spot']}_bj{case_config['batch']}_"
-        f"sc{scenario_count}_cap4"
+        f"sc{scenario_count}_cap8_avg20_{lambda_tag(LAMBDA_VALUE)}"
     )
 
 
-def collect_case_row(case_config, case_name, summary, visualization_outputs):
-    migration_events = pd.read_csv(visualization_outputs["migration_events_csv"])
-    spot_suspensions = pd.read_csv(visualization_outputs["spot_suspension_events_csv"])
+def read_csv_safe(path):
+    path = Path(path)
+    if not path.exists() or path.stat().st_size == 0:
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
+
+
+def collect_case_row(group_name, case_config, case_name, summary, visualization_outputs):
+    migration_events = read_csv_safe(visualization_outputs["migration_events_csv"])
+    spot_suspensions = read_csv_safe(visualization_outputs["spot_suspension_events_csv"])
     total_vm = case_config["on_demand"] + case_config["spot"] + case_config["batch"]
 
     return {
+        "group": group_name,
         "case": case_config["label"],
         "instance_name": case_name,
+        "lambda_migration": LAMBDA_VALUE,
         "total_vm": total_vm,
         "on_demand": case_config["on_demand"],
         "spot": case_config["spot"],
@@ -92,9 +117,20 @@ def collect_case_row(case_config, case_name, summary, visualization_outputs):
 
 
 def run_single_case(task):
-    case_index, case_config, source_csv, seed, scenario_count, time_limit, mip_gap, threads = task
+    (
+        group_name,
+        case_config,
+        case_seed,
+        source_csv,
+        scenario_seed,
+        scenario_count,
+        time_limit,
+        mip_gap,
+        threads,
+    ) = task
+
     source_csv = Path(source_csv)
-    case_name = build_case_name(case_config, scenario_count)
+    case_name = build_case_name(group_name, case_config, scenario_count)
     instance_dir = DATA_ROOT / case_name
     results_dir = RUNS_GROUP_DIR / case_name
     results_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -103,18 +139,19 @@ def run_single_case(task):
         source_csv=source_csv,
         output_dir=instance_dir,
         instance_name=case_name,
-        seed=seed + case_index,
+        seed=case_seed,
         scenario_count=scenario_count,
         on_demand_count=case_config["on_demand"],
         spot_count=case_config["spot"],
         batch_count=case_config["batch"],
-        max_vcpu=4,
-        server_capacity=4.0,
+        max_vcpu=8,
+        min_avg_cpu=20.0,
+        server_capacity=8.0,
         epsilon_od=0.10,
         epsilon_sp=0.20,
         rho=0.80,
-        lambda_migration=0.50,
-        scenario_seed=seed,
+        lambda_migration=LAMBDA_VALUE,
+        scenario_seed=scenario_seed,
     )
     summary = solve_instance(
         instance_dir=instance_dir,
@@ -122,10 +159,10 @@ def run_single_case(task):
         time_limit=time_limit,
         mip_gap=mip_gap,
         threads=threads,
-        use_fallback=True,
+        use_fallback=False,
     )
     visualization_outputs = create_case_plots(instance_dir, results_dir)
-    return collect_case_row(case_config, case_name, summary, visualization_outputs)
+    return collect_case_row(group_name, case_config, case_name, summary, visualization_outputs)
 
 
 def main():
@@ -135,33 +172,66 @@ def main():
     RUNS_GROUP_DIR.mkdir(parents=True, exist_ok=True)
     ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
 
-    tasks = [
-        (index, case_config, str(source_csv), args.seed, args.scenario_count, args.time_limit, args.mip_gap, args.threads)
-        for index, case_config in enumerate(CASE_CONFIGS)
-    ]
+    case_seed_map = {}
+    case_order = 0
+    for group_name, case_list in CASE_GROUPS.items():
+        for case_config in case_list:
+            case_seed_map[(group_name, case_config["case"])] = args.seed + case_order
+            case_order += 1
+
+    tasks = []
+    for group_name, case_list in CASE_GROUPS.items():
+        for case_config in case_list:
+            case_seed = case_seed_map[(group_name, case_config["case"])]
+            tasks.append(
+                (
+                    group_name,
+                    case_config,
+                    case_seed,
+                    str(source_csv),
+                    args.scenario_seed,
+                    args.scenario_count,
+                    args.time_limit,
+                    args.mip_gap,
+                    args.threads,
+                )
+            )
 
     comparison_rows = []
     with ProcessPoolExecutor(max_workers=args.max_workers) as executor:
-        futures = {executor.submit(run_single_case, task): task[1]["label"] for task in tasks}
+        futures = {
+            executor.submit(run_single_case, task): (
+                task[0],
+                task[1]["label"],
+            )
+            for task in tasks
+        }
         for future in as_completed(futures):
-            case_label = futures[future]
+            group_name, case_label = futures[future]
             case_row = future.result()
             comparison_rows.append(case_row)
             print(
-                f"[done] {case_label}: status={case_row['status_name']}, "
-                f"used_servers={case_row['used_server_count']}, "
-                f"overbooking={case_row['peak_overbooking_ratio']:.3f}"
+                f"[done] {group_name} / {case_label}: "
+                f"status={case_row['status_name']}, "
+                f"servers={case_row['used_server_count']}, "
+                f"actual_migrations={case_row['actual_migration_event_count']}"
             )
 
-    comparison_df = pd.DataFrame(comparison_rows).sort_values(["on_demand", "spot", "batch"], ascending=[False, False, False]).reset_index(drop=True)
-    comparison_csv = ANALYSIS_DIR / "combination_sweep_summary.csv"
-    comparison_png = ANALYSIS_DIR / "combination_sweep_comparison.png"
+    comparison_df = pd.DataFrame(comparison_rows).sort_values(
+        ["group", "case"], ascending=[True, True]
+    ).reset_index(drop=True)
 
-    comparison_df.to_csv(comparison_csv, index=False)
-    create_ratio_comparison_figure(comparison_df, comparison_png)
+    summary_csv = ANALYSIS_DIR / "all_jobs_summary.csv"
+    comparison_df.to_csv(summary_csv, index=False)
 
-    print(f"saved: {comparison_csv}")
-    print(f"saved: {comparison_png}")
+    for group_name in CASE_GROUPS:
+        subset = comparison_df.loc[comparison_df["group"] == group_name].copy()
+        if subset.empty:
+            continue
+        output_png = ANALYSIS_DIR / f"{group_name}_{lambda_tag(LAMBDA_VALUE)}.png"
+        create_ratio_comparison_figure(subset, output_png)
+
+    print(f"saved: {summary_csv}")
 
 
 if __name__ == "__main__":

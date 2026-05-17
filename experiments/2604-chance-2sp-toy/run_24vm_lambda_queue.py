@@ -18,6 +18,7 @@ SOURCE_CSV = REPO_ROOT / "data" / "processed" / "2601-initial-toy-model" / "samp
 DATA_ROOT = REPO_ROOT / "data" / "processed" / EXPERIMENT_NAME
 RESULTS_ROOT = EXPERIMENT_DIR / "results" / "runs"
 ANALYSIS_DIR = EXPERIMENT_DIR / "results" / "analysis" / "chance_2sp_toy_24vm_cap8_avg20_lambda_queue"
+RUNS_GROUP_DIR = RESULTS_ROOT / ANALYSIS_DIR.name
 
 LAMBDA_VALUES = [0.1, 0.0]
 CASE_GROUPS = {
@@ -134,7 +135,8 @@ def run_single_case(task):
     source_csv = Path(source_csv)
     case_name = build_case_name(group_name, case_config, scenario_count, lambda_value)
     instance_dir = DATA_ROOT / case_name
-    results_dir = RESULTS_ROOT / case_name
+    results_dir = RUNS_GROUP_DIR / case_name
+    results_dir.parent.mkdir(parents=True, exist_ok=True)
 
     build_instance(
         source_csv=source_csv,
@@ -214,7 +216,7 @@ def main():
     args = parse_args()
     source_csv = args.source_csv.resolve()
 
-    RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
+    RUNS_GROUP_DIR.mkdir(parents=True, exist_ok=True)
     ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
 
     case_seed_map = {}

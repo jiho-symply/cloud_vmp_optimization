@@ -17,15 +17,18 @@ EXPERIMENT_NAME = EXPERIMENT_DIR.name
 REPO_ROOT = EXPERIMENT_DIR.parents[1]
 DEFAULT_INSTANCE_DIR = REPO_ROOT / "data" / "processed" / EXPERIMENT_NAME / "chance_2sp_toy_24vm_ratio_balanced_od8_sp8_bj8_sc10_cap8_avg20_lam010"
 
-PALETTE_OD = ["#4E79A7", "#6B95C2", "#35618D", "#8CB2D9", "#264B6A", "#A3C2E3", "#5B84B1"]
-PALETTE_BJ = ["#5B8E7D", "#78A99A", "#3F6F60", "#91BCB0", "#2F5A4D", "#A8CCC2", "#6E9F8E"]
+PALETTE_OD = ["#4292C6", "#6BAED6", "#2171B5", "#9ECAE1", "#08519C", "#BDD7E7", "#4F81BD"]
+PALETTE_SP = ["#FFD34D", "#F2C400", "#FFDD66", "#E6B800", "#FFE680", "#C99700", "#D4A400"]
+PALETTE_BJ = ["#41AB5D", "#74C476", "#238B45", "#A1D99B", "#2CA25F", "#66C2A4", "#006D2C"]
 SERVER_COLORS = ["#4E79A7", "#F28E2B", "#59A14F", "#B07AA1", "#E15759", "#76B7B2", "#9C755F", "#BAB0AC"]
-COLOR_SPOT = "#E3A008"
-COLOR_OFF = "#404040"
+COLOR_SPOT = PALETTE_SP[0]
+COLOR_OFF = "black"
 COLOR_PROXY = "#A07BEF"
 COLOR_REALIZED = "#D37244"
 COLOR_ALERT = "#C94F4F"
+COLOR_SAFE = "#DDE9E1"
 COLOR_INACTIVE = "#F4F1EA"
+COLOR_HATCH = "#6F675D"
 FIG_BG = "#F6F3EE"
 AX_BG = "#FFFCF7"
 GRID_COLOR = "#D9D1C3"
@@ -39,16 +42,22 @@ HEATMAP_CMAP = LinearSegmentedColormap.from_list(
 )
 SPOT_RISK_CMAP = LinearSegmentedColormap.from_list(
     "spot_risk",
-    ["#9ED9CC", "#F3C567", "#D37244", "#BC4B51"],
+    ["#FFF4BF", "#FFD34D", "#E6B800", "#BC4B51"],
 )
 SPOT_SHARE_CMAP = LinearSegmentedColormap.from_list(
     "spot_share",
-    ["#DCE7F3", "#8CB2D9", "#4E79A7", "#264B6A"],
+    ["#FFF8D9", "#FFE680", "#FFD34D", "#C99700"],
 )
 
-ROW_HEIGHT = 2.0
+USED_ROW_HEIGHT = 2.0
+UNUSED_ROW_HEIGHT = 0.35
 ROW_GAP = 0.35
 EPS = 1e-9
+EDGE_COLOR = "black"
+EDGE_LW = 0.45
+STACK_ALPHA = 0.90
+OFF_HATCH = "///"
+UNRESERVED_HATCH = "///"
 plt.rcParams["font.family"] = "Malgun Gothic"
 plt.rcParams["axes.unicode_minus"] = False
 plt.rcParams["figure.facecolor"] = FIG_BG
@@ -200,7 +209,6 @@ def off_intervals(on_ranges, start, end):
 
 
 def build_plot_frames(case_data, scenario_name):
-    capacity = float(case_data["instance"]["server_capacity"])
     scenario_state = case_data["scenario_server_state"]
     scenario_state = scenario_state.loc[scenario_state["scenario"] == scenario_name].copy()
 
@@ -215,21 +223,24 @@ def build_plot_frames(case_data, scenario_name):
         ["batch_job_id", "demand"],
     ].rename(columns={"demand": "batch_demand"})
 
+    sp_demand = case_data["scenario_time_series"].loc[
+        (case_data["scenario_time_series"]["scenario"] == scenario_name)
+        & (case_data["scenario_time_series"]["workload_type"] == "spot"),
+        ["workload_id", "time", "demand"],
+    ].rename(columns={"demand": "sp_demand"})
+
     od_stack = case_data["on_demand_placement"].merge(od_demand, on=["workload_id", "time"], how="left")
+    spot_stack = case_data["spot_activity_state"].loc[
+        case_data["spot_activity_state"]["scenario"] == scenario_name,
+        ["workload_id", "time", "server", "active"],
+    ].merge(sp_demand, on=["workload_id", "time"], how="left")
     batch_stack = case_data["batch_schedule"].merge(batch_demand, on="batch_job_id", how="left")
 
-    od_total = od_stack.groupby(["server", "time"], as_index=False)["od_demand"].sum()
-    batch_total = batch_stack.groupby(["server", "time"], as_index=False)["batch_demand"].sum()
+    od_stack["od_demand"] = od_stack["od_demand"].fillna(0.0)
+    spot_stack["sp_demand"] = spot_stack["sp_demand"].fillna(0.0) * spot_stack["active"].fillna(0.0)
+    batch_stack["batch_demand"] = batch_stack["batch_demand"].fillna(0.0)
 
-    spot_total = scenario_state.merge(od_total, on=["server", "time"], how="left").merge(
-        batch_total, on=["server", "time"], how="left"
-    )
-    spot_total["od_demand"] = spot_total["od_demand"].fillna(0.0)
-    spot_total["batch_demand"] = spot_total["batch_demand"].fillna(0.0)
-    spot_total["spot_demand"] = (spot_total["load"] - spot_total["od_demand"] - spot_total["batch_demand"]).clip(lower=0.0)
-    spot_total["utilization"] = spot_total["load"] / capacity
-
-    return scenario_state, od_stack, batch_stack, spot_total
+    return scenario_state, od_stack, spot_stack, batch_stack
 
 
 def build_spot_activity_tables(case_data):
@@ -290,6 +301,63 @@ def build_spot_activity_tables(case_data):
         suspensions = pd.DataFrame(columns=["workload_id", "scenario", "server", "start_time", "end_time", "duration_hours"])
 
     return activity, suspensions
+
+
+def build_sla_violation_tables(case_data):
+    violation_state = case_data["scenario_server_state"].copy()
+    if violation_state.empty:
+        return (
+            pd.DataFrame(columns=["server", "time", "scenario", "phi", "u", "gamma"]),
+            pd.DataFrame(columns=["server", "scenario", "start_time", "end_time", "duration_hours"]),
+        )
+
+    violation_state["time"] = violation_state["time"].astype(int)
+    violation_state["server"] = violation_state["server"].astype(int)
+    violation_state["phi"] = violation_state["phi"].fillna(0).astype(float).round().astype(int)
+    violation_state["u"] = violation_state["u"].fillna(0).astype(float).round().astype(int)
+    violation_state["gamma"] = violation_state["gamma"].fillna(0).astype(float).round().astype(int)
+
+    violation_rows = []
+    for (server, scenario_name), group in violation_state.groupby(["server", "scenario"]):
+        ordered = group.sort_values("time")
+        violation_start = None
+        violation_last = None
+
+        for row in ordered.itertuples(index=False):
+            is_violation = int(row.phi) == 1
+            if is_violation and violation_start is None:
+                violation_start = int(row.time)
+            if is_violation:
+                violation_last = int(row.time)
+            if not is_violation and violation_start is not None:
+                violation_rows.append(
+                    {
+                        "server": int(server),
+                        "scenario": scenario_name,
+                        "start_time": violation_start,
+                        "end_time": violation_last,
+                        "duration_hours": violation_last - violation_start + 1,
+                    }
+                )
+                violation_start = None
+                violation_last = None
+
+        if violation_start is not None:
+            violation_rows.append(
+                {
+                    "server": int(server),
+                    "scenario": scenario_name,
+                    "start_time": violation_start,
+                    "end_time": violation_last,
+                    "duration_hours": violation_last - violation_start + 1,
+                }
+            )
+
+    violations = pd.DataFrame(violation_rows)
+    if violations.empty:
+        violations = pd.DataFrame(columns=["server", "scenario", "start_time", "end_time", "duration_hours"])
+
+    return violation_state, violations
 
 
 def build_on_demand_migration_events(case_data):
@@ -355,9 +423,12 @@ def choose_spot_comparison_scenarios(case_data, spot_activity, default_scenario)
 def create_gantt_figure(case_data, scenario_name, output_path, migration_events=None):
     times = [int(time) for time in case_data["instance"]["time_periods"]]
     used_servers = case_data["summary"].get("used_servers", list(range(case_data["instance"]["num_servers"])))
+    all_servers = list(range(int(case_data["instance"]["num_servers"])))
+    unused_servers = [server for server in all_servers if server not in used_servers]
+    plot_servers = list(used_servers) + unused_servers
     capacity = float(case_data["instance"]["server_capacity"])
 
-    scenario_state, od_stack, batch_stack, spot_total = build_plot_frames(case_data, scenario_name)
+    scenario_state, od_stack, spot_stack, batch_stack = build_plot_frames(case_data, scenario_name)
     scenario_metrics = case_data["scenario_metrics"].set_index("scenario")
     peak_utilization = float(scenario_metrics.loc[scenario_name, "peak_server_utilization"])
     gamma_count = int(scenario_metrics.loc[scenario_name, "gamma_count"])
@@ -366,89 +437,115 @@ def create_gantt_figure(case_data, scenario_name, output_path, migration_events=
         migration_events = build_on_demand_migration_events(case_data)
     migration_count = int(len(migration_events))
 
-    fig_height = max(4.8, 1.0 * len(used_servers) + 1.8)
+    fig_height = max(4.8, 0.85 * len(plot_servers) + 1.8)
     fig, ax = plt.subplots(figsize=(17, fig_height), facecolor=FIG_BG)
     style_axis(ax, grid_axis="x")
 
-    row_base = {server: index * (ROW_HEIGHT + ROW_GAP) for index, server in enumerate(used_servers)}
-    max_y = len(used_servers) * (ROW_HEIGHT + ROW_GAP)
+    row_height = {server: (USED_ROW_HEIGHT if server in used_servers else UNUSED_ROW_HEIGHT) for server in plot_servers}
+    row_base = {}
+    cursor = 0.0
+    for server in plot_servers:
+        row_base[server] = cursor
+        cursor += row_height[server] + ROW_GAP
+    max_y = cursor
     od_midpoint = {}
 
-    for server in used_servers:
+    for server in plot_servers:
         base = row_base[server]
+        server_height = row_height[server]
         server_state = scenario_state.loc[scenario_state["server"] == server].sort_values("time")
-        on_ranges = on_intervals(server_state["u"].tolist(), times)
+        if server_state.empty:
+            on_ranges = []
+        else:
+            on_ranges = on_intervals(server_state["u"].tolist(), times)
 
-        ax.plot([times[0], times[-1] + 1], [base, base], color=SPINE_COLOR, linewidth=0.8, alpha=0.55)
-        ax.plot([times[0], times[-1] + 1], [base + ROW_HEIGHT, base + ROW_HEIGHT], color=SPINE_COLOR, linewidth=0.9, alpha=0.65)
+        ax.plot([times[0], times[-1] + 1], [base, base], color="black", linewidth=0.6, alpha=0.35)
+        ax.plot([times[0], times[-1] + 1], [base + server_height, base + server_height], color="black", linewidth=0.6, alpha=0.35)
 
         for left, right in off_intervals(on_ranges, times[0], times[-1] + 1):
             ax.broken_barh(
                 [(left, right - left)],
-                (base, ROW_HEIGHT),
+                (base, server_height),
                 facecolors=COLOR_OFF,
                 edgecolor=COLOR_OFF,
-                alpha=0.08,
+                alpha=0.10,
                 linewidth=0.0,
-                hatch="///",
+                hatch=OFF_HATCH,
             )
+
+        if server not in used_servers:
+            continue
 
         for time in times:
             y = base
 
-            od_rows = od_stack.loc[(od_stack["server"] == server) & (od_stack["time"] == time)].sort_values("workload_id")
+            od_rows = od_stack.loc[(od_stack["server"] == server) & (od_stack["time"] == time)].copy()
+            if not od_rows.empty:
+                od_rows["_order"] = od_rows["workload_id"].str.split("_").str[1].astype(int)
+                od_rows = od_rows.sort_values(["_order", "workload_id"])
             for row in od_rows.itertuples(index=False):
                 if row.od_demand <= EPS:
                     continue
-                height = (row.od_demand / capacity) * ROW_HEIGHT
+                height = (row.od_demand / capacity) * server_height
                 ax.broken_barh(
                     [(time, 1.0)],
                     (y, height),
                     facecolors=pick_color(int(row.workload_id.split("_")[1]), PALETTE_OD),
-                    edgecolor=AX_BG,
-                    linewidth=0.45,
-                    alpha=0.97,
+                    edgecolor=EDGE_COLOR,
+                    linewidth=EDGE_LW,
+                    alpha=STACK_ALPHA,
                 )
                 od_midpoint[(row.workload_id, time)] = (time + 0.5, y + 0.5 * height)
                 y += height
 
-            spot_value = float(
-                spot_total.loc[
-                    (spot_total["server"] == server) & (spot_total["time"] == time),
-                    "spot_demand",
-                ].sum()
-            )
-            if spot_value > EPS:
-                height = (spot_value / capacity) * ROW_HEIGHT
+            spot_rows = spot_stack.loc[(spot_stack["server"] == server) & (spot_stack["time"] == time)].copy()
+            if not spot_rows.empty:
+                spot_rows["_order"] = spot_rows["workload_id"].str.split("_").str[1].astype(int)
+                spot_rows = spot_rows.sort_values(["_order", "workload_id"])
+            for row in spot_rows.itertuples(index=False):
+                if row.sp_demand <= EPS:
+                    continue
+                height = (row.sp_demand / capacity) * server_height
                 ax.broken_barh(
                     [(time, 1.0)],
                     (y, height),
-                    facecolors=COLOR_SPOT,
-                    edgecolor=AX_BG,
-                    linewidth=0.45,
-                    alpha=0.94,
+                    facecolors=pick_color(int(row.workload_id.split("_")[1]), PALETTE_SP),
+                    edgecolor=EDGE_COLOR,
+                    linewidth=EDGE_LW,
+                    alpha=STACK_ALPHA,
                 )
                 y += height
 
-            batch_rows = batch_stack.loc[(batch_stack["server"] == server) & (batch_stack["time"] == time)].sort_values("batch_job_id")
+            batch_rows = batch_stack.loc[(batch_stack["server"] == server) & (batch_stack["time"] == time)].copy()
+            if not batch_rows.empty:
+                batch_rows = batch_rows.sort_values(["source_time", "batch_job_id"])
             for row in batch_rows.itertuples(index=False):
                 if row.batch_demand <= EPS:
                     continue
-                height = (row.batch_demand / capacity) * ROW_HEIGHT
+                height = (row.batch_demand / capacity) * server_height
                 ax.broken_barh(
                     [(time, 1.0)],
                     (y, height),
-                    facecolors=pick_color(int(str(row.parent_workload_id).split("_")[1]), PALETTE_BJ),
-                    edgecolor=AX_BG,
-                    linewidth=0.45,
-                    alpha=0.95,
+                    facecolors=PALETTE_BJ[0],
+                    edgecolor=EDGE_COLOR,
+                    linewidth=EDGE_LW,
+                    alpha=STACK_ALPHA,
                 )
                 y += height
 
         server_peak = server_state["load"].max() / capacity if not server_state.empty else 0.0
+        if server_peak > 1.0 + EPS:
+            ax.plot(
+                [times[-1] + 0.82, times[-1] + 0.82],
+                [base, base + server_height],
+                color=COLOR_ALERT,
+                linestyle=(0, (2.0, 2.2)),
+                linewidth=0.9,
+                alpha=0.95,
+            )
         ax.text(
             times[-1] + 1.18,
-            base + 0.5 * ROW_HEIGHT,
+            base + 0.5 * server_height,
             f"{server_peak * 100:.0f}%",
             va="center",
             ha="left",
@@ -480,8 +577,19 @@ def create_gantt_figure(case_data, scenario_name, output_path, migration_events=
     ax.set_ylim(-ROW_GAP, max_y)
     ax.set_xlabel("시간")
     ax.set_ylabel("서버")
-    ax.set_yticks([row_base[server] + 0.5 * ROW_HEIGHT for server in used_servers])
-    ax.set_yticklabels([f"S{server}" for server in used_servers])
+    ax.set_yticks([row_base[server] + 0.5 * row_height[server] for server in plot_servers])
+    ax.set_yticklabels([f"S{server}" for server in plot_servers])
+    ax.text(
+        1.045,
+        0.5,
+        "peak cpu utilization",
+        transform=ax.transAxes,
+        rotation=90,
+        va="center",
+        ha="left",
+        fontsize=10,
+        color=MUTED_TEXT,
+    )
     ax.set_title(
         f"{case_data['instance']['instance_name']}\n"
         f"실제 worst-case scenario {scenario_name} | 최대 이용률 {peak_utilization * 100:.1f}%",
@@ -504,10 +612,10 @@ def create_gantt_figure(case_data, scenario_name, output_path, migration_events=
     )
     ax.legend(
         handles=[
-            Patch(facecolor=COLOR_OFF, alpha=0.10, hatch="///", label="서버 OFF"),
-            Patch(facecolor=PALETTE_OD[0], label="On-demand"),
-            Patch(facecolor=COLOR_SPOT, label="Spot"),
-            Patch(facecolor=PALETTE_BJ[0], label="Batch"),
+            Patch(facecolor=COLOR_OFF, alpha=0.10, hatch=OFF_HATCH, label="서버 OFF"),
+            Patch(facecolor=PALETTE_OD[0], edgecolor=EDGE_COLOR, linewidth=EDGE_LW, label="On-demand"),
+            Patch(facecolor=COLOR_SPOT, edgecolor=EDGE_COLOR, linewidth=EDGE_LW, label="Spot"),
+            Patch(facecolor=PALETTE_BJ[0], edgecolor=EDGE_COLOR, linewidth=EDGE_LW, label="Batch"),
             FancyArrowPatch((0, 0), (1, 0), arrowstyle="->", label="Migration"),
         ],
         loc="upper left",
@@ -516,7 +624,7 @@ def create_gantt_figure(case_data, scenario_name, output_path, migration_events=
         handler_map={FancyArrowPatch: HandlerLegendArrow()},
     )
 
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.tight_layout(rect=[0, 0, 0.965, 0.95])
     plt.savefig(output_path, dpi=220, bbox_inches="tight")
     plt.close(fig)
 
@@ -817,6 +925,126 @@ def create_spot_activity_figure(case_data, spot_activity, scenario_name, output_
     plt.close(fig)
 
 
+def create_sla_violation_figure(case_data, violation_state, scenario_name, output_path):
+    scenario_order = [scenario["scenario"] for scenario in case_data["instance"]["scenarios"]]
+    times = [int(time) for time in case_data["instance"]["time_periods"]]
+    servers = list(range(case_data["instance"]["num_servers"]))
+
+    if violation_state.empty:
+        fig, ax = plt.subplots(figsize=(8, 3.8), facecolor=FIG_BG)
+        ax.axis("off")
+        ax.text(
+            0.5,
+            0.5,
+            "SLA violation 정보를 만들 수 있는 server state가 없습니다.",
+            ha="center",
+            va="center",
+            fontsize=12,
+            color=MUTED_TEXT,
+        )
+        plt.tight_layout()
+        plt.savefig(output_path, dpi=220, bbox_inches="tight")
+        plt.close(fig)
+        return
+
+    total_violation_by_server = (
+        violation_state.groupby("server", as_index=False)["phi"]
+        .sum()
+        .sort_values(["phi", "server"], ascending=[False, True])
+    )
+    server_order = total_violation_by_server["server"].astype(int).tolist()
+    time_index = {time: idx for idx, time in enumerate(times)}
+    server_index = {server: idx for idx, server in enumerate(server_order)}
+
+    scenario_count = len(scenario_order)
+    ncols = min(5, scenario_count)
+    nrows = int(math.ceil(scenario_count / ncols))
+    fig_height = max(6.0, 1.1 + 0.34 * len(server_order) * nrows)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4.1 * ncols, fig_height), squeeze=False, facecolor=FIG_BG)
+
+    cmap = ListedColormap([COLOR_OFF, COLOR_SAFE, COLOR_ALERT])
+    total_violation_hours = int(violation_state["phi"].sum())
+    violation_lookup = total_violation_by_server.set_index("server")["phi"].to_dict()
+
+    for scenario_index, scenario_label in enumerate(scenario_order):
+        row = scenario_index // ncols
+        col = scenario_index % ncols
+        ax = axes[row][col]
+        style_axis(ax, grid_axis="none")
+
+        matrix = np.full((len(server_order), len(times)), np.nan)
+        scenario_rows = violation_state.loc[violation_state["scenario"] == scenario_label]
+        for state_row in scenario_rows.itertuples(index=False):
+            if int(state_row.phi) == 1:
+                value = 2
+            elif int(state_row.u) == 1:
+                value = 1
+            else:
+                value = 0
+            matrix[server_index[int(state_row.server)], time_index[int(state_row.time)]] = value
+
+        ax.imshow(
+            matrix,
+            aspect="auto",
+            interpolation="none",
+            cmap=cmap,
+            vmin=-0.5,
+            vmax=2.5,
+        )
+        violation_hours = int(scenario_rows["phi"].sum())
+        ax.set_title(f"{scenario_label}\nviolation server-hour {violation_hours}", fontsize=10)
+        ax.set_xticks(range(0, len(times), 4))
+        ax.set_xticklabels([times[idx] for idx in range(0, len(times), 4)])
+        if col == 0:
+            ytick_labels = [f"S{server} · {int(violation_lookup[server])}" for server in server_order]
+            ax.set_yticks(range(len(server_order)))
+            ax.set_yticklabels(ytick_labels, fontsize=8)
+            ax.set_ylabel("서버 · 총 violation server-hour")
+        else:
+            ax.set_yticks(range(len(server_order)))
+            ax.set_yticklabels([])
+        ax.set_xlabel("시간")
+        ax.set_xticks(np.arange(-0.5, len(times), 1), minor=True)
+        ax.set_yticks(np.arange(-0.5, len(server_order), 1), minor=True)
+        ax.grid(which="minor", color=AX_BG, linewidth=0.45)
+        ax.tick_params(which="minor", bottom=False, left=False)
+
+        if scenario_label == scenario_name:
+            for spine in ax.spines.values():
+                spine.set_edgecolor(COLOR_ALERT)
+                spine.set_linewidth(2.0)
+
+    total_axes = nrows * ncols
+    for empty_index in range(scenario_count, total_axes):
+        row = empty_index // ncols
+        col = empty_index % ncols
+        axes[row][col].axis("off")
+
+    legend_handles = [
+        Patch(facecolor=COLOR_OFF, label="서버 꺼짐"),
+        Patch(facecolor=COLOR_SAFE, label="정상"),
+        Patch(facecolor=COLOR_ALERT, label="SLA violation"),
+    ]
+    fig.legend(
+        legend_handles,
+        [handle.get_label() for handle in legend_handles],
+        loc="upper center",
+        bbox_to_anchor=(0.5, 0.975),
+        ncol=len(legend_handles),
+        frameon=True,
+        edgecolor=SPINE_COLOR,
+    )
+    fig.suptitle(
+        f"SLA violation 시나리오별 상태  |  전체 violation server-hour {total_violation_hours}  |  "
+        f"빨간 테두리는 상세 scenario ({scenario_name})",
+        y=0.995,
+        fontsize=14,
+    )
+    plt.tight_layout(rect=[0, 0, 1, 0.93])
+    plt.savefig(output_path, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
 def create_on_demand_migration_figure(case_data, migration_events, output_path):
     times = [int(time) for time in case_data["instance"]["time_periods"]]
     placement = case_data["on_demand_placement"].copy()
@@ -854,10 +1082,11 @@ def create_on_demand_migration_figure(case_data, migration_events, output_path):
         matrix[od_index[row.workload_id], time_index[row.time]] = row.server
 
     hourly_counts = migration_events.groupby("time").size().reindex(times, fill_value=0)
+    unreserved_cells = np.argwhere(np.isnan(matrix))
 
     fig_height = max(4.8, 1.5 + 0.42 * len(od_ids))
     fig = plt.figure(figsize=(18, fig_height), facecolor=FIG_BG)
-    grid = fig.add_gridspec(2, 1, height_ratios=[1.0, max(2.8, 0.35 * len(od_ids))], hspace=0.08)
+    grid = fig.add_gridspec(2, 1, height_ratios=[1.0, max(2.8, 0.35 * len(od_ids))], hspace=0.22)
     top_ax = fig.add_subplot(grid[0, 0])
     heat_ax = fig.add_subplot(grid[1, 0], sharex=top_ax)
 
@@ -866,7 +1095,7 @@ def create_on_demand_migration_figure(case_data, migration_events, output_path):
 
     top_ax.bar(times, hourly_counts.values, color="#8E6CBE", width=0.82, edgecolor="none")
     top_ax.set_ylabel("건수")
-    top_ax.set_title("시간대별 on-demand migration event", loc="left")
+    top_ax.set_title("시간대별 on-demand migration event", loc="left", pad=10)
     top_ax.tick_params(axis="x", labelbottom=False)
 
     cmap = ListedColormap([get_server_color(server) for server in range(case_data["instance"]["num_servers"])])
@@ -879,7 +1108,20 @@ def create_on_demand_migration_figure(case_data, migration_events, output_path):
         vmin=-0.5,
         vmax=case_data["instance"]["num_servers"] - 0.5,
     )
-    heat_ax.set_title("On-demand VM 서버 배치 변화", loc="left")
+    for row_index, col_index in unreserved_cells:
+        heat_ax.add_patch(
+            Rectangle(
+                (col_index - 0.5, row_index - 0.5),
+                1.0,
+                1.0,
+                facecolor="none",
+                edgecolor=COLOR_HATCH,
+                linewidth=0.0,
+                hatch=UNRESERVED_HATCH,
+                zorder=2.6,
+            )
+        )
+    heat_ax.set_title("On-demand VM 서버 배치 변화", loc="left", pad=12)
     heat_ax.set_xlabel("시간")
     heat_ax.set_ylabel("On-demand VM")
     heat_ax.set_xticks(range(len(times)))
@@ -904,6 +1146,9 @@ def create_on_demand_migration_figure(case_data, migration_events, output_path):
         )
 
     legend_handles = [Patch(facecolor=get_server_color(server), label=f"S{server}") for server in range(case_data["instance"]["num_servers"])]
+    legend_handles.append(
+        Patch(facecolor=COLOR_INACTIVE, edgecolor=COLOR_HATCH, hatch=UNRESERVED_HATCH, label="미예약")
+    )
     legend_handles.append(
         Line2D(
             [0],
@@ -931,7 +1176,7 @@ def create_on_demand_migration_figure(case_data, migration_events, output_path):
         y=0.99,
         fontsize=13,
     )
-    fig.subplots_adjust(top=0.88, bottom=0.16, left=0.07, right=0.98, hspace=0.10)
+    fig.subplots_adjust(top=0.88, bottom=0.16, left=0.07, right=0.98, hspace=0.22)
     plt.savefig(output_path, dpi=220, bbox_inches="tight")
     plt.close(fig)
 
@@ -944,12 +1189,14 @@ def create_case_plots(instance_dir, results_dir, scenario=None):
     case_data = load_case_files(instance_dir, results_dir)
     scenario_name = choose_scenario(case_data, requested_scenario=scenario)
     spot_activity, spot_suspensions = build_spot_activity_tables(case_data)
+    violation_state, violation_events = build_sla_violation_tables(case_data)
     migration_events = build_on_demand_migration_events(case_data)
     suspended_scenario, clean_scenario = choose_spot_comparison_scenarios(case_data, spot_activity, scenario_name)
 
     gantt_path = results_dir / f"server_workload_gantt_{scenario_name}.png"
     diagnostics_path = results_dir / "scenario_diagnostics.png"
     spot_activity_path = results_dir / "spot_vm_activity_by_scenario.png"
+    sla_violation_path = results_dir / "sla_violation_by_scenario.png"
     migration_path = results_dir / "on_demand_migration_timeline.png"
     suspended_gantt_path = results_dir / "server_workload_gantt_suspended.png"
     clean_gantt_path = results_dir / "server_workload_gantt_clean.png"
@@ -961,10 +1208,13 @@ def create_case_plots(instance_dir, results_dir, scenario=None):
         create_gantt_figure(case_data, clean_scenario, clean_gantt_path, migration_events=migration_events)
     create_diagnostics_figure(case_data, scenario_name, diagnostics_path)
     create_spot_activity_figure(case_data, spot_activity, scenario_name, spot_activity_path)
+    create_sla_violation_figure(case_data, violation_state, scenario_name, sla_violation_path)
     create_on_demand_migration_figure(case_data, migration_events, migration_path)
 
     spot_activity.to_csv(results_dir / "spot_activity.csv", index=False)
     spot_suspensions.to_csv(results_dir / "spot_suspension_events.csv", index=False)
+    violation_state.to_csv(results_dir / "sla_violation_state.csv", index=False)
+    violation_events.to_csv(results_dir / "sla_violation_events.csv", index=False)
     migration_events.to_csv(results_dir / "on_demand_migration_events.csv", index=False)
 
     return {
@@ -972,6 +1222,7 @@ def create_case_plots(instance_dir, results_dir, scenario=None):
         "gantt_path": gantt_path,
         "diagnostics_path": diagnostics_path,
         "spot_activity_path": spot_activity_path,
+        "sla_violation_path": sla_violation_path,
         "migration_path": migration_path,
         "suspended_gantt_path": suspended_gantt_path if suspended_scenario is not None else None,
         "clean_gantt_path": clean_gantt_path if clean_scenario is not None else None,
@@ -979,6 +1230,8 @@ def create_case_plots(instance_dir, results_dir, scenario=None):
         "clean_scenario": clean_scenario,
         "spot_activity_csv": results_dir / "spot_activity.csv",
         "spot_suspension_events_csv": results_dir / "spot_suspension_events.csv",
+        "sla_violation_state_csv": results_dir / "sla_violation_state.csv",
+        "sla_violation_events_csv": results_dir / "sla_violation_events.csv",
         "migration_events_csv": results_dir / "on_demand_migration_events.csv",
     }
 
@@ -1139,9 +1392,12 @@ def main():
     print(f"Saved: {outputs['gantt_path']}")
     print(f"Saved: {outputs['diagnostics_path']}")
     print(f"Saved: {outputs['spot_activity_path']}")
+    print(f"Saved: {outputs['sla_violation_path']}")
     print(f"Saved: {outputs['migration_path']}")
     print(f"Saved: {outputs['spot_activity_csv']}")
     print(f"Saved: {outputs['spot_suspension_events_csv']}")
+    print(f"Saved: {outputs['sla_violation_state_csv']}")
+    print(f"Saved: {outputs['sla_violation_events_csv']}")
     print(f"Saved: {outputs['migration_events_csv']}")
 
 

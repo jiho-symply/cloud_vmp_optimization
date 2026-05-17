@@ -1,10 +1,13 @@
 import argparse
+import itertools
 import json
 from pathlib import Path
 
 import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
+
+from cut_profiles import CUT_PROFILES
 
 
 EXPERIMENT_DIR = Path(__file__).resolve().parent
@@ -24,6 +27,7 @@ def parse_args():
     parser.add_argument("--threads", type=int, default=None)
     parser.add_argument("--server-limit", type=int, default=None)
     parser.add_argument("--no-rel-heur-time", type=float, default=0.0)
+    parser.add_argument("--cut-profile", type=str, default="baseline", choices=sorted(CUT_PROFILES.keys()))
     parser.add_argument("--use-fallback", action="store_true")
     return parser.parse_args()
 
@@ -35,8 +39,111 @@ def status_name(status_code):
         GRB.INFEASIBLE: "INFEASIBLE",
         GRB.INTERRUPTED: "INTERRUPTED",
         GRB.SUBOPTIMAL: "SUBOPTIMAL",
+        GRB.SOLUTION_LIMIT: "SOLUTION_LIMIT",
     }
     return status_names.get(status_code, str(status_code))
+
+
+def resolve_cut_profile(cut_profile):
+    if cut_profile not in CUT_PROFILES:
+        raise ValueError(f"Unknown cut profile: {cut_profile}")
+    return dict(CUT_PROFILES[cut_profile])
+
+
+def increment_cut_count(cut_stats, key, amount):
+    if amount <= 0:
+        return
+    cut_stats[key] = int(cut_stats.get(key, 0)) + int(amount)
+
+
+def build_server_time_rhs(data, variables, server, time_value):
+    rhs_terms = []
+    for workload_id in data["on_demand_ids"]:
+        if time_value in data["od_active"][workload_id]:
+            rhs_terms.append(variables["x"][workload_id, server, time_value])
+    for workload_id in data["spot_ids"]:
+        if time_value in data["spot_active"][workload_id]:
+            rhs_terms.append(variables["y"][workload_id, server])
+    for batch_job_id in data["batch_ids"]:
+        rhs_terms.append(variables["z"][batch_job_id, server, time_value])
+    return gp.quicksum(rhs_terms)
+
+
+def build_cover_candidates(data, time_value, scenario_name, threshold, include_types=("od", "sp", "bj")):
+    include_types = set(include_types)
+    candidates = []
+    if "od" in include_types:
+        for workload_id in data["on_demand_ids"]:
+            if time_value in data["od_active"][workload_id]:
+                demand = data["d_od"][workload_id, time_value, scenario_name]
+                if demand > threshold:
+                    candidates.append(("od", workload_id, float(demand)))
+    if "sp" in include_types:
+        for workload_id in data["spot_ids"]:
+            if time_value in data["spot_active"][workload_id]:
+                demand = data["d_sp"][workload_id, time_value, scenario_name]
+                if demand > threshold:
+                    candidates.append(("sp", workload_id, float(demand)))
+    if "bj" in include_types:
+        for batch_job_id in data["batch_ids"]:
+            demand = data["d_batch"][batch_job_id, scenario_name]
+            if demand > threshold:
+                candidates.append(("bj", batch_job_id, float(demand)))
+    candidates.sort(key=lambda item: item[2], reverse=True)
+    return candidates
+
+
+def build_greedy_minimal_cover(data, time_value, scenario_name, capacity, include_types=("od", "sp", "bj")):
+    candidates = build_cover_candidates(
+        data=data,
+        time_value=time_value,
+        scenario_name=scenario_name,
+        threshold=0.0,
+        include_types=include_types,
+    )
+    if not candidates:
+        return None
+
+    cover = []
+    total_demand = 0.0
+    for item in candidates:
+        cover.append(item)
+        total_demand += item[2]
+        if total_demand > capacity + 1e-9:
+            break
+
+    if total_demand <= capacity + 1e-9:
+        return None
+
+    cover.sort(key=lambda item: item[2])
+    changed = True
+    while changed:
+        changed = False
+        current_total = sum(item[2] for item in cover)
+        for index, item in enumerate(list(cover)):
+            if current_total - item[2] > capacity + 1e-9:
+                del cover[index]
+                changed = True
+                break
+
+    cover.sort(key=lambda item: item[2], reverse=True)
+    return cover
+
+
+def build_cover_expr(variables, item, server, time_value, scenario_name):
+    item_type, item_id, _ = item
+    if item_type == "od":
+        return variables["x"][item_id, server, time_value]
+    if item_type == "sp":
+        return variables["a"][item_id, server, time_value, scenario_name]
+    return variables["z"][item_id, server, time_value]
+
+
+def configure_solver_cut_parameters(model, cut_flags):
+    param_values = dict(cut_flags.get("solver_params", {}))
+    for param_name, param_value in param_values.items():
+        model.setParam(param_name, param_value)
+    return param_values
 
 
 def load_instance_data(instance_dir):
@@ -122,7 +229,6 @@ def load_instance_data(instance_dir):
         "energy_cpu": float(instance.get("objective", {}).get("energy_cpu", 0.0)),
         "energy_migration": float(instance.get("objective", {}).get("energy_migration", 0.0)),
     }
-
 
 def build_variables(model, data):
     servers = data["servers"]
@@ -300,7 +406,428 @@ def add_second_stage_constraints(model, data, variables):
     )
 
 
-def add_symmetry_constraints(model, data, variables):
+def add_experimental_cuts(model, data, variables, cut_flags, cut_stats):
+    servers = data["servers"]
+    times = data["times"]
+    scenarios = data["scenarios"]
+    scenario_prob = data["scenario_prob"]
+    rho = data["rho"]
+    capacity = data["capacity"]
+    big_m = data["big_m"]
+    epsilon_od = data["epsilon_od"]
+    epsilon_sp = data["epsilon_sp"]
+    spot_ids = data["spot_ids"]
+    od_active = data["od_active"]
+    spot_active = data["spot_active"]
+    d_od = data["d_od"]
+    d_batch = data["d_batch"]
+    u = variables["u"]
+    u_used = variables["u_used"]
+    x = variables["x"]
+    y = variables["y"]
+    z = variables["z"]
+    a = variables["a"]
+    gamma = variables["gamma"]
+    delta = variables["delta"]
+    phi = variables["phi"]
+    eta = variables["eta"]
+    load = variables["load"]
+
+    if cut_flags.get("activation_upper"):
+        local_count = 0
+        for server in servers:
+            for time_value in times:
+                rhs = build_server_time_rhs(data, variables, server, time_value)
+                model.addConstr(u[server, time_value] <= rhs, name=f"cut_activation_upper[{server},{time_value}]")
+                local_count += 1
+        increment_cut_count(cut_stats, "activation_upper", local_count)
+
+        local_count = 0
+        for server in servers:
+            rhs = gp.quicksum(build_server_time_rhs(data, variables, server, time_value) for time_value in times)
+            model.addConstr(u_used[server] <= rhs, name=f"cut_used_upper[{server}]")
+            local_count += 1
+        increment_cut_count(cut_stats, "used_upper", local_count)
+
+    if cut_flags.get("spot_completion_server"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            active_times = data["spot_active"][workload_id]
+            active_count = len(active_times)
+            if active_count == 0:
+                continue
+            for server in servers:
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        gp.quicksum(a[workload_id, server, time_value, scenario_name] for time_value in active_times)
+                        >= rho * active_count * y[workload_id, server],
+                        name=f"cut_spot_completion_server[{workload_id},{server},{scenario_name}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "spot_completion_server", local_count)
+
+    if cut_flags.get("spot_delta_server"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            active_times = data["spot_active"][workload_id]
+            active_count = len(active_times)
+            if active_count == 0:
+                continue
+            for server in servers:
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        gp.quicksum(a[workload_id, server, time_value, scenario_name] for time_value in active_times)
+                        >= active_count * (y[workload_id, server] - delta[workload_id, scenario_name]),
+                        name=f"cut_spot_delta_server[{workload_id},{server},{scenario_name}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "spot_delta_server", local_count)
+
+    if cut_flags.get("spot_time_lower"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            for server in servers:
+                for time_value in data["spot_active"][workload_id]:
+                    for scenario_name in scenarios:
+                        model.addConstr(
+                            a[workload_id, server, time_value, scenario_name]
+                            >= y[workload_id, server] - delta[workload_id, scenario_name],
+                            name=f"cut_spot_time_lower[{workload_id},{server},{time_value},{scenario_name}]",
+                        )
+                        local_count += 1
+        increment_cut_count(cut_stats, "spot_time_lower", local_count)
+
+    if cut_flags.get("delta_gamma_link"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            for server in servers:
+                for time_value in data["spot_active"][workload_id]:
+                    for scenario_name in scenarios:
+                        model.addConstr(
+                            delta[workload_id, scenario_name]
+                            >= y[workload_id, server] + gamma[server, time_value, scenario_name] - 1,
+                            name=f"cut_delta_gamma_link[{workload_id},{server},{time_value},{scenario_name}]",
+                        )
+                        local_count += 1
+        increment_cut_count(cut_stats, "delta_gamma_link", local_count)
+
+    if cut_flags.get("delta_mass_gamma"):
+        local_count = 0
+        for time_value in times:
+            active_spot_ids = [workload_id for workload_id in spot_ids if time_value in spot_active[workload_id]]
+            active_count = len(active_spot_ids)
+            if active_count == 0:
+                continue
+            for server in servers:
+                assigned_spots = gp.quicksum(y[workload_id, server] for workload_id in active_spot_ids)
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        gp.quicksum(delta[workload_id, scenario_name] for workload_id in active_spot_ids)
+                        >= assigned_spots - active_count * (1 - gamma[server, time_value, scenario_name]),
+                        name=f"cut_delta_mass_gamma[{server},{time_value},{scenario_name}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "delta_mass_gamma", local_count)
+
+    if cut_flags.get("spot_gamma_aggregate"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            active_times = data["spot_active"][workload_id]
+            active_count = len(active_times)
+            if active_count == 0:
+                continue
+            for server in servers:
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        gp.quicksum(gamma[server, time_value, scenario_name] for time_value in active_times)
+                        <= active_count * (delta[workload_id, scenario_name] + 1 - y[workload_id, server]),
+                        name=f"cut_spot_gamma_aggregate[{workload_id},{server},{scenario_name}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "spot_gamma_aggregate", local_count)
+
+    if cut_flags.get("spot_bridge_lower"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            for server in servers:
+                for time_value in data["spot_active"][workload_id]:
+                    for scenario_name in scenarios:
+                        model.addConstr(
+                            a[workload_id, server, time_value, scenario_name]
+                            >= y[workload_id, server]
+                            - gamma[server, time_value, scenario_name]
+                            - delta[workload_id, scenario_name],
+                            name=f"cut_spot_bridge_lower[{workload_id},{server},{time_value},{scenario_name}]",
+                        )
+                        local_count += 1
+        increment_cut_count(cut_stats, "spot_bridge_lower", local_count)
+
+    if cut_flags.get("spot_bridge_aggregate"):
+        local_count = 0
+        for workload_id in data["spot_ids"]:
+            active_times = data["spot_active"][workload_id]
+            active_count = len(active_times)
+            if active_count == 0:
+                continue
+            for server in servers:
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        gp.quicksum(a[workload_id, server, time_value, scenario_name] for time_value in active_times)
+                        >= active_count * y[workload_id, server]
+                        - gp.quicksum(gamma[server, time_value, scenario_name] for time_value in active_times)
+                        - active_count * delta[workload_id, scenario_name],
+                        name=f"cut_spot_bridge_aggregate[{workload_id},{server},{scenario_name}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "spot_bridge_aggregate", local_count)
+
+    if cut_flags.get("state_link"):
+        local_count = 0
+        for server in servers:
+            for time_value in times:
+                for scenario_name in scenarios:
+                    model.addConstr(
+                        phi[server, time_value, scenario_name] <= u[server, time_value],
+                        name=f"cut_phi_state_link[{server},{time_value},{scenario_name}]",
+                    )
+                    model.addConstr(
+                        gamma[server, time_value, scenario_name] <= u[server, time_value],
+                        name=f"cut_gamma_state_link[{server},{time_value},{scenario_name}]",
+                    )
+                    local_count += 2
+        for server in servers:
+            for scenario_name in scenarios:
+                model.addConstr(
+                    eta[server, scenario_name] <= gp.quicksum(u[server, time_value] for time_value in times),
+                    name=f"cut_eta_state_link[{server},{scenario_name}]",
+                )
+                local_count += 1
+        increment_cut_count(cut_stats, "state_link", local_count)
+
+    if cut_flags.get("phi_scenario_mass"):
+        local_count = 0
+        for server in servers:
+            for time_value in times:
+                model.addConstr(
+                    gp.quicksum(scenario_prob[scenario_name] * phi[server, time_value, scenario_name] for scenario_name in scenarios)
+                    <= epsilon_od,
+                    name=f"cut_phi_scenario_mass[{server},{time_value}]",
+                )
+                local_count += 1
+        increment_cut_count(cut_stats, "phi_scenario_mass", local_count)
+
+    if cut_flags.get("eta_aggregate_load"):
+        local_count = 0
+        time_count = len(times)
+        for server in servers:
+            for scenario_name in scenarios:
+                model.addConstr(
+                    gp.quicksum(load[server, time_value, scenario_name] for time_value in times)
+                    <= capacity * gp.quicksum(u[server, time_value] for time_value in times)
+                    + big_m * time_count * eta[server, scenario_name],
+                    name=f"cut_eta_aggregate_load[{server},{scenario_name}]",
+                )
+                local_count += 1
+        increment_cut_count(cut_stats, "eta_aggregate_load", local_count)
+
+    if cut_flags.get("eta_cover_general"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                cover_items = build_greedy_minimal_cover(
+                    data=data,
+                    time_value=time_value,
+                    scenario_name=scenario_name,
+                    capacity=capacity,
+                    include_types=("od", "sp", "bj"),
+                )
+                if not cover_items:
+                    continue
+                for server in servers:
+                    lhs = gp.quicksum(
+                        build_cover_expr(variables, item, server, time_value, scenario_name) for item in cover_items
+                    )
+                    item_tokens = ",".join(f"{item_type}:{item_id}" for item_type, item_id, _ in cover_items)
+                    model.addConstr(
+                        lhs <= len(cover_items) - 1 + eta[server, scenario_name],
+                        name=f"cut_eta_cover_general[{server},{time_value},{scenario_name},{item_tokens}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "eta_cover_general", local_count)
+
+    if cut_flags.get("eta_cover_fixed"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                cover_items = build_greedy_minimal_cover(
+                    data=data,
+                    time_value=time_value,
+                    scenario_name=scenario_name,
+                    capacity=capacity,
+                    include_types=("od", "bj"),
+                )
+                if not cover_items:
+                    continue
+                for server in servers:
+                    lhs = gp.quicksum(
+                        build_cover_expr(variables, item, server, time_value, scenario_name) for item in cover_items
+                    )
+                    item_tokens = ",".join(f"{item_type}:{item_id}" for item_type, item_id, _ in cover_items)
+                    model.addConstr(
+                        lhs <= len(cover_items) - 1 + eta[server, scenario_name],
+                        name=f"cut_eta_cover_fixed[{server},{time_value},{scenario_name},{item_tokens}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "eta_cover_fixed", local_count)
+
+    if cut_flags.get("minimal_cover_general"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                cover_items = build_greedy_minimal_cover(
+                    data=data,
+                    time_value=time_value,
+                    scenario_name=scenario_name,
+                    capacity=capacity,
+                    include_types=("od", "sp", "bj"),
+                )
+                if not cover_items:
+                    continue
+                for server in servers:
+                    lhs = gp.quicksum(
+                        build_cover_expr(variables, item, server, time_value, scenario_name) for item in cover_items
+                    )
+                    item_tokens = ",".join(f"{item_type}:{item_id}" for item_type, item_id, _ in cover_items)
+                    model.addConstr(
+                        lhs <= len(cover_items) - 1 + phi[server, time_value, scenario_name],
+                        name=f"cut_minimal_cover_general[{server},{time_value},{scenario_name},{item_tokens}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "minimal_cover_general", local_count)
+
+    if cut_flags.get("minimal_cover_fixed"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                cover_items = build_greedy_minimal_cover(
+                    data=data,
+                    time_value=time_value,
+                    scenario_name=scenario_name,
+                    capacity=capacity,
+                    include_types=("od", "bj"),
+                )
+                if not cover_items:
+                    continue
+                for server in servers:
+                    lhs = gp.quicksum(
+                        build_cover_expr(variables, item, server, time_value, scenario_name) for item in cover_items
+                    )
+                    item_tokens = ",".join(f"{item_type}:{item_id}" for item_type, item_id, _ in cover_items)
+                    model.addConstr(
+                        lhs <= len(cover_items) - 1 + phi[server, time_value, scenario_name],
+                        name=f"cut_minimal_cover_fixed[{server},{time_value},{scenario_name},{item_tokens}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "minimal_cover_fixed", local_count)
+
+    if cut_flags.get("aggregate_fixed_load"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                lhs = gp.quicksum(
+                    d_od[workload_id, time_value, scenario_name] * x[workload_id, server, time_value]
+                    for workload_id in data["on_demand_ids"]
+                    if time_value in od_active[workload_id]
+                    for server in servers
+                ) + gp.quicksum(
+                    d_batch[batch_job_id, scenario_name] * z[batch_job_id, server, time_value]
+                    for batch_job_id in data["batch_ids"]
+                    for server in servers
+                )
+                rhs = capacity * gp.quicksum(u[server, time_value] for server in servers) + big_m * gp.quicksum(
+                    phi[server, time_value, scenario_name] for server in servers
+                )
+                model.addConstr(
+                    lhs <= rhs,
+                    name=f"cut_aggregate_fixed_load[{time_value},{scenario_name}]",
+                )
+                local_count += 1
+        increment_cut_count(cut_stats, "aggregate_fixed_load", local_count)
+
+    if cut_flags.get("gamma_probability_cap"):
+        local_count = 0
+        for workload_id in spot_ids:
+            for server in servers:
+                for time_value in spot_active[workload_id]:
+                    model.addConstr(
+                        gp.quicksum(
+                            scenario_prob[scenario_name] * gamma[server, time_value, scenario_name]
+                            for scenario_name in scenarios
+                        )
+                        <= epsilon_sp + 1 - y[workload_id, server],
+                        name=f"cut_gamma_probability_cap[{workload_id},{server},{time_value}]",
+                    )
+                    local_count += 1
+        increment_cut_count(cut_stats, "gamma_probability_cap", local_count)
+
+    if cut_flags.get("pairwise_cover"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                pair_candidates = build_cover_candidates(data, time_value, scenario_name, threshold=capacity / 2.0)
+                for item_left, item_right in itertools.combinations(pair_candidates, 2):
+                    if item_left[2] + item_right[2] <= capacity + 1e-9:
+                        continue
+                    for server in servers:
+                        lhs = (
+                            build_cover_expr(variables, item_left, server, time_value, scenario_name)
+                            + build_cover_expr(variables, item_right, server, time_value, scenario_name)
+                        )
+                        model.addConstr(
+                            lhs <= 1 + phi[server, time_value, scenario_name],
+                            name=f"cut_pair_cover[{server},{time_value},{scenario_name},{item_left[0]},{item_left[1]},{item_right[0]},{item_right[1]}]",
+                        )
+                        local_count += 1
+        increment_cut_count(cut_stats, "pairwise_cover", local_count)
+
+    if cut_flags.get("triple_cover"):
+        local_count = 0
+        for time_value in times:
+            for scenario_name in scenarios:
+                triple_candidates = build_cover_candidates(data, time_value, scenario_name, threshold=capacity / 3.0)[:12]
+                triple_rows = []
+                for triple_items in itertools.combinations(triple_candidates, 3):
+                    total_demand = sum(item[2] for item in triple_items)
+                    if total_demand <= capacity + 1e-9:
+                        continue
+                    if any(
+                        triple_items[left][2] + triple_items[right][2] > capacity + 1e-9
+                        for left, right in ((0, 1), (0, 2), (1, 2))
+                    ):
+                        continue
+                    triple_rows.append((total_demand, triple_items))
+
+                triple_rows.sort(key=lambda row: row[0], reverse=True)
+                for _, triple_items in triple_rows[:50]:
+                    for server in servers:
+                        lhs = gp.quicksum(
+                            build_cover_expr(variables, item, server, time_value, scenario_name)
+                            for item in triple_items
+                        )
+                        model.addConstr(
+                            lhs <= 2 + phi[server, time_value, scenario_name],
+                            name=(
+                                f"cut_triple_cover[{server},{time_value},{scenario_name},"
+                                f"{triple_items[0][0]},{triple_items[0][1]},"
+                                f"{triple_items[1][0]},{triple_items[1][1]},"
+                                f"{triple_items[2][0]},{triple_items[2][1]}]"
+                            ),
+                        )
+                        local_count += 1
+        increment_cut_count(cut_stats, "triple_cover", local_count)
+
+
+def add_symmetry_constraints(model, data, variables, cut_flags=None, cut_stats=None):
     servers = data["servers"]
     times = data["times"]
     scenarios = data["scenarios"]
@@ -313,8 +840,22 @@ def add_symmetry_constraints(model, data, variables):
     u_used = variables["u_used"]
     power_load = variables["power_load"]
     server_energy = variables["server_energy"]
+    cut_flags = cut_flags or {}
+    cut_stats = cut_stats or {}
 
     model.addConstrs(u_used[s] >= u_used[s + 1] for s in servers[:-1])
+    increment_cut_count(cut_stats, "base_server_order", max(0, len(servers) - 1))
+
+    if cut_flags.get("uptime_symmetry"):
+        local_count = 0
+        for server in servers[:-1]:
+            model.addConstr(
+                gp.quicksum(u[server, time_value] for time_value in times)
+                >= gp.quicksum(u[server + 1, time_value] for time_value in times),
+                name=f"cut_uptime_order[{server}]",
+            )
+            local_count += 1
+        increment_cut_count(cut_stats, "uptime_symmetry", local_count)
 
     if objective_type == "energy":
         for s in servers:
@@ -330,6 +871,7 @@ def add_symmetry_constraints(model, data, variables):
                 name=f"server_energy_balance[{s}]",
             )
         model.addConstrs(server_energy[s] >= server_energy[s + 1] for s in servers[:-1])
+        increment_cut_count(cut_stats, "energy_order", max(0, len(servers) - 1))
 
 
 def set_objective(model, data, variables):
@@ -388,27 +930,38 @@ def build_model(
     threads=None,
     server_limit=None,
     no_rel_heur_time=0.0,
+    cut_profile="baseline",
 ):
     model = gp.Model("chance_constrained_2sp_toy")
+    cut_flags = resolve_cut_profile(cut_profile)
+    cut_stats = {}
     if time_limit is not None and float(time_limit) > 0.0:
         model.setParam("TimeLimit", float(time_limit))
     model.setParam("MIPGap", mip_gap)
     model.setParam("LogFile", str(results_dir / log_name))
+    model.setParam("LogToConsole", 0)
     if threads is not None:
         model.setParam("Threads", threads)
     if no_rel_heur_time and no_rel_heur_time > 0.0:
         model.setParam("NoRelHeurTime", float(no_rel_heur_time))
+    solver_cut_params = configure_solver_cut_parameters(model, cut_flags)
 
     variables = build_variables(model, data)
     add_first_stage_constraints(model, data, variables)
     add_second_stage_constraints(model, data, variables)
-    add_symmetry_constraints(model, data, variables)
+    add_experimental_cuts(model, data, variables, cut_flags, cut_stats)
+    add_symmetry_constraints(model, data, variables, cut_flags=cut_flags, cut_stats=cut_stats)
     if server_limit is not None:
         model.addConstr(
             gp.quicksum(variables["u_used"][s] for s in data["servers"]) <= int(server_limit),
             name="server_limit",
         )
     set_objective(model, data, variables)
+    model._cut_profile = cut_profile
+    model._cut_profile_category = cut_profile
+    model._cut_profile_description = json.dumps(cut_flags, ensure_ascii=False, sort_keys=True)
+    model._cut_counts = cut_stats
+    model._solver_cut_params = solver_cut_params
     return model, variables
 
 
@@ -423,6 +976,9 @@ def build_summary(model, data):
         "objective_value": float(model.ObjVal) if has_solution else None,
         "objective_bound": float(model.ObjBound) if model.IsMIP else None,
         "mip_gap": float(model.MIPGap) if has_solution and model.IsMIP else None,
+        "node_count": float(model.NodeCount) if model.IsMIP else 0.0,
+        "iter_count": float(model.IterCount),
+        "work_units": float(model.Work),
         "instance_name": data["instance"]["instance_name"],
         "server_capacity": data["capacity"],
         "num_servers": len(data["servers"]),
@@ -434,6 +990,11 @@ def build_summary(model, data):
         "energy_idle": data["energy_idle"],
         "energy_cpu": data["energy_cpu"],
         "energy_migration": data["energy_migration"],
+        "cut_profile": getattr(model, "_cut_profile", "baseline"),
+        "cut_profile_category": getattr(model, "_cut_profile_category", "baseline"),
+        "cut_profile_description": getattr(model, "_cut_profile_description", ""),
+        "solver_cut_params": getattr(model, "_solver_cut_params", {}),
+        "cut_counts": getattr(model, "_cut_counts", {}),
     }
 
 
@@ -813,6 +1374,32 @@ def apply_start_values(variables, start_values):
                 variables[name][key].Start = value
 
 
+def apply_var_hints(variables, hint_values, hint_priority=10):
+    if not hint_values:
+        return
+
+    for name, value_map in hint_values.items():
+        if name not in variables:
+            continue
+        for key, value in value_map.items():
+            if key in variables[name]:
+                variables[name][key].VarHintVal = value
+                variables[name][key].VarHintPri = int(hint_priority)
+
+
+def apply_fixed_values(variables, fixed_values):
+    if not fixed_values:
+        return
+
+    for name, value_map in fixed_values.items():
+        if name not in variables:
+            continue
+        for key, value in value_map.items():
+            if key in variables[name]:
+                variables[name][key].LB = value
+                variables[name][key].UB = value
+
+
 def is_better_objective(candidate, incumbent, tolerance=1e-9):
     if candidate is None:
         return False
@@ -831,6 +1418,11 @@ def solve_with_alternating_phases(
     alternate_norel_time=0.0,
     alternate_main_time=0.0,
     alternate_max_rounds=6,
+    cut_profile="baseline",
+    start_values=None,
+    hint_values=None,
+    hint_priority=10,
+    fixed_values=None,
 ):
     cumulative_runtime = 0.0
     phase_rows = []
@@ -873,9 +1465,13 @@ def solve_with_alternating_phases(
                 threads=threads,
                 server_limit=server_limit,
                 no_rel_heur_time=phase_budget if phase_kind == "norel" else 0.0,
+                cut_profile=cut_profile,
             )
 
+            apply_fixed_values(variables, fixed_values)
+            apply_start_values(variables, start_values)
             apply_start_values(variables, incumbent_start_values)
+            apply_var_hints(variables, hint_values, hint_priority=hint_priority)
             if incumbent_objective is not None:
                 cutoff_margin = max(1e-6, abs(float(incumbent_objective)) * 1e-6)
                 model.setParam("Cutoff", float(incumbent_objective) + cutoff_margin)
@@ -1020,6 +1616,11 @@ def solve_once(
     alternate_norel_time=0.0,
     alternate_main_time=0.0,
     alternate_max_rounds=6,
+    cut_profile="baseline",
+    start_values=None,
+    hint_values=None,
+    hint_priority=10,
+    fixed_values=None,
 ):
     if alternate_norel_time and alternate_norel_time > 0.0 and alternate_main_time and alternate_main_time > 0.0:
         return solve_with_alternating_phases(
@@ -1032,6 +1633,11 @@ def solve_once(
             alternate_norel_time=alternate_norel_time,
             alternate_main_time=alternate_main_time,
             alternate_max_rounds=alternate_max_rounds,
+            cut_profile=cut_profile,
+            start_values=start_values,
+            hint_values=hint_values,
+            hint_priority=hint_priority,
+            fixed_values=fixed_values,
         )
 
     model, variables = build_model(
@@ -1043,14 +1649,19 @@ def solve_once(
         threads=threads,
         server_limit=server_limit,
         no_rel_heur_time=no_rel_heur_time,
+        cut_profile=cut_profile,
     )
     norel_summary = None
     norel_runtime = 0.0
     main_runtime = 0.0
 
+    apply_fixed_values(variables, fixed_values)
+    apply_var_hints(variables, hint_values, hint_priority=hint_priority)
+
     if norel_pre_time and norel_pre_time > 0.0:
         model.setParam("NoRelHeurTime", float(norel_pre_time))
         model.setParam("TimeLimit", float(norel_pre_time))
+        apply_start_values(variables, start_values)
         model.optimize()
 
         norel_summary = build_summary(model, data)
@@ -1062,9 +1673,11 @@ def solve_once(
                 model.setParam("TimeLimit", float(time_limit))
             else:
                 model.setParam("TimeLimit", GRB.INFINITY)
+            apply_start_values(variables, start_values)
             model.optimize()
             main_runtime = float(model.Runtime)
     else:
+        apply_start_values(variables, start_values)
         model.optimize()
         main_runtime = float(model.Runtime)
 
@@ -1129,7 +1742,12 @@ def solve_instance(
     alternate_norel_time=0.0,
     alternate_main_time=0.0,
     alternate_max_rounds=6,
+    cut_profile="baseline",
     use_fallback=False,
+    start_values=None,
+    hint_values=None,
+    hint_priority=10,
+    fixed_values=None,
 ):
     instance_dir = instance_dir.resolve()
     results_dir = results_dir.resolve()
@@ -1153,6 +1771,11 @@ def solve_instance(
         alternate_norel_time=alternate_norel_time,
         alternate_main_time=alternate_main_time,
         alternate_max_rounds=alternate_max_rounds,
+        cut_profile=cut_profile,
+        start_values=start_values,
+        hint_values=hint_values,
+        hint_priority=hint_priority,
+        fixed_values=fixed_values,
     )
 
     fallback_record = None
@@ -1182,6 +1805,11 @@ def solve_instance(
             alternate_norel_time=0.0,
             alternate_main_time=0.0,
             alternate_max_rounds=1,
+            cut_profile=cut_profile,
+            start_values=start_values,
+            hint_values=hint_values,
+            hint_priority=hint_priority,
+            fixed_values=fixed_values,
         )
 
     selected_source, selected_record = choose_solution_record(base_record, fallback_record)
@@ -1241,6 +1869,7 @@ def main():
         alternate_norel_time=args.alternate_norel_time,
         alternate_main_time=args.alternate_main_time,
         alternate_max_rounds=args.alternate_max_rounds,
+        cut_profile=args.cut_profile,
         use_fallback=args.use_fallback,
     )
     print(json.dumps(summary, indent=2))
