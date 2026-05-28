@@ -25,6 +25,7 @@ For every cited paper, verify at least one stable source before citing it:
 - Avoid broad claims such as "the literature proves" unless the cited paper directly supports the statement.
 - Separate exact support from bridge support. Exact support means the paper models the same object or decision. Bridge support means it supports one component, such as temporal packing, stochastic item sizes, chance constraints, prediction-based VM allocation, or migration cost.
 - For every bridge citation, state the missing dimensions explicitly: for example, "not VM-specific," "not temporal," "not stochastic," "not two-stage," or "not production VMP."
+- If the DOI, publisher page, or abstract verifies the paper's existence but the full text has not been checked for a detailed modeling claim, record the claim in `10_full_text_verification_gaps.md` before upgrading it to strong evidence.
 
 ## Required Markdown Structure
 
@@ -57,6 +58,8 @@ Each worker owns exactly one topic file. Workers may read other files in this di
 - Alignment with `00_current_model_summary.md`.
 
 Weak or conditional claims must be labeled as such. A useful limitation is better than a forced justification.
+
+When reviewing supplied PDFs, update `10_full_text_verification_gaps.md` first, then update topic files only where the full text confirms, narrows, rejects, or supersedes the existing claim.
 
 ## Current Modeling Questions to Verify
 

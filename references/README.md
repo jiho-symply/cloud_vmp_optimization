@@ -42,6 +42,7 @@ The main literature finding is important:
 - [07_energy_and_power_model.md](07_energy_and_power_model.md): reviews powered-server time, load-dependent power, fire-up distinction, and migration energy/cost.
 - [08_post2017_q1_stochastic_temporal_vmp_screen.md](08_post2017_q1_stochastic_temporal_vmp_screen.md): screens post-2017 Q1/top-venue papers for the stochastic temporal VMP/TBPP intersection.
 - [09_notation_and_terms.md](09_notation_and_terms.md): defines terms, sets, parameters, variables, representative constraints, and paper-style equations aligned with the Notion model page.
+- [10_full_text_verification_gaps.md](10_full_text_verification_gaps.md): tracks claims that need full-paper confirmation before being used as strong manuscript evidence.
 
 ## Recommended Framing
 
