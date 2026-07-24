@@ -1,20 +1,49 @@
+# Local environments and secrets.
 .venv/
+.env
+.env.*
+!.env.example
+
+# Python and test caches.
 __pycache__/
-data/raw/trace_data/*
-data/raw/azure2019_data/*
-scripts/__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
 
-# Generated experiment data and solver outputs.
-# Keep experiment code and documentation tracked; regenerate these locally.
-data/processed/
-experiments/**/results/
-results/
+# Downloaded and generated datasets. Keep the small, reproducible migration
+# fixture in Git so the toy experiments have a stable input.
+/data/raw/
+/data/processed/*
+!/data/processed/notion_toy_google2019_micro_stress_v1/
+!/data/processed/notion_toy_google2019_micro_stress_v1/**
 
-# Common generated artifacts from optimization experiments.
+# Generated experiment outputs.
+/experiments/**/results/
+/experiments/**/runs/
+/experiments/**/generated/
+/experiments/**/exports/
+/experiments/**/type_mix_results*/
+/results/
+
+# Keep output directories available for compatibility symlinks without
+# committing their generated contents.
+!/experiments/2607-notion-energy-vmp/runs/
+/experiments/2607-notion-energy-vmp/runs/*
+!/experiments/2607-notion-energy-vmp/runs/README.md
+!/experiments/2607-notion-energy-vmp/generated/
+/experiments/2607-notion-energy-vmp/generated/*
+!/experiments/2607-notion-energy-vmp/generated/README.md
+
+# Review handoffs and local copies of papers.
+/review_bundles/
+/references/papers/
+
+# Solver and benchmark artifacts.
+*.log
+*.pid
 *.sol
 *.lp
 *.mps
 *.mst
-*.log
-formulation_results.csv
-*_results.csv
+migration_benchmark*.csv

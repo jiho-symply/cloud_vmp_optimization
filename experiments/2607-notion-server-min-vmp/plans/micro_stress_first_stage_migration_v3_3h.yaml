@@ -1,0 +1,95 @@
+schema_version: 3
+status: executed_target_gap_not_reached
+suite_name: notion_server_min_micro_stress_first_stage_migration_v3_3h
+base_config: configs/micro_stress_baseline.yaml
+output_root: runs/notion_server_min_micro_stress_first_stage_migration_v3_3h
+
+formulation:
+  id: notion_server_min_exact_destination_migration_v3_20260723
+  # Private Notion exports are not vendored. Pass --spec-path to verify a local copy.
+  spec_path: null
+  spec_sha256: bf2b4dc77d9fd3cf26b6d7f3314113454103bd50767e9f72b9f4dc3d3c2e26d7
+  change_summary_path: FORMULATION_CHANGES_MIGRATION_V3.md
+
+execution_result:
+  completed_launches: 11
+  original_launches: 5
+  retry_launches: 6
+  solver_status: TIME_LIMIT
+  target_gap_reached: 0
+
+generation:
+  design: one_factor_at_a_time
+  semantics: copy_baseline_then_override_exactly_one_factor
+  forbid_full_cartesian_product: true
+  combine_factors_within_stage: false
+  deduplicate_identical_configs_globally: true
+  exact_unique_candidate_configs:
+    first_stage: 11
+  immutable_configs: true
+  require_common_random_numbers_within_comparison_group: true
+
+stages:
+  first_stage:
+    enabled: true
+    purpose: screen_each_parameter_with_exact_destination_migration_v3
+    design: one_factor_at_a_time
+    anchor: baseline
+    factors:
+      - id: spot_discount_ratio
+        config_path: economics.spot_discount_ratio
+        levels:
+          - {id: gamma_0, value: 0.0}
+          - {id: gamma_0_1, value: 0.1}
+          - {id: gamma_0_3, value: 0.3}
+          - {id: gamma_0_5, value: 0.5}
+      - id: migration_coefficient
+        config_path: migration.coefficient
+        levels:
+          - {id: c_mig_0, value: 0.0}
+          - {id: c_mig_0_05, value: 0.05}
+          - {id: c_mig_0_1, value: 0.1}
+          - {id: c_mig_1, value: 1.0}
+      - id: batch_startup_cpu
+        config_path: batch.startup_cpu
+        levels:
+          - {id: startup_cpu_0, value: 0.0}
+          - {id: startup_cpu_0_05, value: 0.05}
+          - {id: startup_cpu_0_1, value: 0.1}
+      - id: batch_base_mem
+        config_path: batch.base_mem
+        levels:
+          - {id: base_mem_0, value: 0.0}
+          - {id: base_mem_0_05, value: 0.05}
+          - {id: base_mem_0_1, value: 0.1}
+
+execution_policy:
+  max_parallel_jobs: 5
+  threads_per_job: 16
+  total_thread_limit: 80
+  time_limit_seconds: 10800
+  mip_gap: 0.001
+  soft_mem_limit_gb_per_job: 80
+  memory_limit_enforcement: gurobi_softmemlimit_plus_aggregate_preflight
+  nodefile_start_gb: 0.5
+  safety:
+    memory_reserve_gb: 64
+    disk_reserve_gb: 60
+    write_lp: false
+    write_mps: false
+    require_disjoint_cpu_affinity: true
+
+validation:
+  expected_dimensions:
+    scenarios: 10
+    on_demand: 10
+    spot: 10
+    batch_jobs: 10
+    max_batch_families: 3
+    servers: 6
+  expected_dataset_selection: descending_mean_resource_usage_with_deterministic_ties
+  require_fresh_suite_root: true
+  require_dynamic_google_dir: true
+  preserve_existing_baseline_and_sweep: true
+  migration_index: [vm, destination_server, transition_time, scenario]
+  exact_migration_constraints_per_variable: 3

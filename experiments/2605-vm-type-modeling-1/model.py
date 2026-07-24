@@ -13,40 +13,34 @@ order as the Notion page:
 
 2. Second-stage scenario decisions
    - xR[i,s,t,xi]: on-demand VM's actual server after optional migration
-   - m[i,s,sp,t,xi]: migration arc from s to sp at time t
+   - m[i,t,xi]: 1 if on-demand VM i changes server at time t
    - yR[j,s,t,xi]: spot VM active state after server-level suspension
    - z[k,s,t,xi]: processed batch workload volume
    - gamma/phi/eta/delta: suspension and SLA violation indicators
 
-Important modeling choices made from the Notion draft:
+Important modeling choices made from the latest Notion page:
 
-- The page uses x[i,s] as first-stage on-demand placement, then defines
-  xR[i,s,t,xi] from migration arcs m[i,s,sp,t,xi].  This file follows that
-  notation.
+- The current page uses x[i,s] as first-stage on-demand placement and
+  xR[i,s,t,xi] as realized scenario placement.  Migration is represented by
+  a change detector m[i,t,xi], not by explicit server-to-server arcs.
 - The page states that migration is limited to at most once per VM.  The code
-  implements this through the Notion constraint
-  sum_{sp != s,t} m[i,s,sp,t,xi] <= x[i,s], which permits migration only from
-  the first-stage source server and at most one outbound move per scenario.
-  Migration variables are created only from the second active period onward,
-  because the first active period is fixed to the first-stage placement.
+  implements this as sum_t m[i,t,xi] <= 1 for each VM and scenario.  Migration
+  variables are created only from the second active period onward, because the
+  first active period is fixed to the first-stage placement.
 - Batch z is linked to both reservation b and spot-like suspension gamma:
   z[k,s,t,xi] <= r_B[k] * b[k,s,t]
   z[k,s,t,xi] <= r_B[k] * (1 - gamma[s,t,xi])
-- Implementation-required: xR[i,s,t,xi] <= u[s,t] is added.  Without this,
-  a migrated on-demand VM could remain on a server at a later time even if
-  that server is off, because the Notion migration equation only checks the
-  destination server at the migration time.
+- Implementation-required: xR[i,s,t,xi] <= u[s,t] is kept so realized
+  on-demand placement cannot use a powered-off server.
 - Implementation-required: the current Notion energy objective uses capped
-  load barL[s,t,xi].  Therefore this file defines barL = min(L, C u) with a
-  big-M branch variable.  The equivalent Gurobi indicator version is left as
-  commented code near the constraints for comparison.
+  load barL[s,t,xi].  Therefore this file defines barL = min(L, C u);
+  config selects either the indicator or big-M implementation.
 - Scenario probabilities are used in the chance constraints and in the CPU
   energy term exactly as shown in the updated Notion objective.
-- The migration-energy term is counted once per migration arc.  This avoids
-  multiplying the same migration by every server-time pair.
-- The updated Notion symmetry-breaking section defines u_s with both
-  u_s >= u_st and u_s <= sum_t u_st, then orders homogeneous servers with
-  u_s >= u_{s+1}.  This file implements u_s as u_used[s].
+- The migration-energy term is counted once per positive m[i,t,xi].  This
+  avoids multiplying the same migration by every server-time pair.
+- Homogeneous-server symmetry breaking is controlled by config.  The available
+  modes are none, horizon-level use ordering, powered-slot ordering, or both.
 - Additional model-meaningfulness constraints are marked below.  They make
   loose indicator/state variables exact where possible, prevent post-recourse
   low-priority workload from exceeding server capacity, and remove dominated
@@ -56,13 +50,27 @@ Important modeling choices made from the Notion draft:
 import argparse
 import csv
 import json
+import sys
 from pathlib import Path
 
 import gurobipy as gp
 from gurobipy import GRB
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+EXPERIMENT_DIR = Path(__file__).resolve().parent
+EXPERIMENTS_DIR = EXPERIMENT_DIR.parent
+REPO_ROOT = EXPERIMENTS_DIR.parent
+if str(EXPERIMENTS_DIR) not in sys.path:
+    sys.path.insert(0, str(EXPERIMENTS_DIR))
+
+from config_2605 import (  # noqa: E402
+    apply_solver_config,
+    formulation_config,
+    load_config,
+    resolve_path,
+    solver_config,
+)
+DEFAULT_CONFIG = EXPERIMENT_DIR / "config.json"
 DEFAULT_INSTANCE = (
     REPO_ROOT
     / "data"
@@ -76,10 +84,11 @@ DEFAULT_RESULTS_DIR = REPO_ROOT / "experiments" / "2605-vm-type-modeling-1" / "r
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Solve the Notion VM type modeling (1) MILP.")
-    parser.add_argument("--instance", type=Path, default=DEFAULT_INSTANCE)
-    parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS_DIR)
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    parser.add_argument("--instance", type=Path, default=None)
+    parser.add_argument("--results-dir", type=Path, default=None)
     parser.add_argument("--time-limit", type=float, default=None)
-    parser.add_argument("--mip-gap", type=float, default=0.001)
+    parser.add_argument("--mip-gap", type=float, default=None)
     parser.add_argument("--threads", type=int, default=None)
     return parser.parse_args()
 
@@ -134,7 +143,18 @@ def status_name(status):
     return names.get(status, str(status))
 
 
-def build_model(data):
+def build_model(data, formulation=None):
+    formulation = formulation or {}
+    bar_load_mode = formulation.get("bar_load_mode", "indicator")
+    server_symmetry = formulation.get("server_symmetry", "used_and_powered_slots")
+    if bar_load_mode not in {"indicator", "big_m"}:
+        raise ValueError("model.formulation.bar_load_mode must be 'indicator' or 'big_m'.")
+    if server_symmetry not in {"none", "used", "powered_slots", "used_and_powered_slots"}:
+        raise ValueError(
+            "model.formulation.server_symmetry must be one of "
+            "'none', 'used', 'powered_slots', 'used_and_powered_slots'."
+        )
+
     S = data["servers"]
     T = data["times"]
     I = data["on_demand"]
@@ -163,7 +183,7 @@ def build_model(data):
         name="xR",
     )
     m = model.addVars(
-        [(i, s, sp, t, xi) for i in I for s in S for sp in S if sp != s for t in T_i[i][1:] for xi in Xi],
+        [(i, t, xi) for i in I for t in T_i[i][1:] for xi in Xi],
         vtype=GRB.BINARY,
         name="m",
     )
@@ -189,7 +209,6 @@ def build_model(data):
 
     # First-stage placement and reservation constraints.
     model.addConstrs(gp.quicksum(x[i, s] for s in S) == 1 for i in I)
-    model.addConstrs(x[i, s] <= u[s, t] for i in I for s in S for t in T_i[i])
     model.addConstrs(gp.quicksum(y[j, s] for s in S) == 1 for j in J)
     model.addConstrs(y[j, s] <= u[s, t] for j in J for s in S for t in T_j[j])
     model.addConstrs(b[k, s, t] <= u[s, t] for k in K for s in S for t in T)
@@ -199,50 +218,32 @@ def build_model(data):
     )
     model.addConstrs(u_used[s] >= u[s, t] for s in S for t in T)
     model.addConstrs(u_used[s] <= gp.quicksum(u[s, t] for t in T) for s in S)
-    # Additional model-meaningfulness constraint:
-    # Do not keep a server on at time t unless it has a first-stage workload,
-    # a batch reservation, or is used by an on-demand VM in some scenario after
-    # migration.  This removes dominated idle-on states that otherwise make
-    # time-limited incumbents hard to interpret.
-    model.addConstrs(
-        u[s, t]
-        <= gp.quicksum(x[i, s] for i in I if t in T_i[i])
-        + gp.quicksum(y[j, s] for j in J if t in T_j[j])
-        + gp.quicksum(b[k, s, t] for k in K)
-        + gp.quicksum(xR[i, s, t, xi] for i in I if t in T_i[i] for xi in Xi)
-        for s in S
-        for t in T
-    )
 
-    # On-demand migration.  These are the equations written in the Notion page;
-    # no extra "must depart from previous live server" strengthening is added.
+    # On-demand migration.  The latest Notion notation uses m[i,t,xi] as a
+    # server-change detector between consecutive active periods.
+    model.addConstrs(
+        gp.quicksum(xR[i, s, t, xi] for s in S) == 1
+        for i in I
+        for t in T_i[i]
+        for xi in Xi
+    )
     for i in I:
         first_t = T_i[i][0]
         model.addConstrs(xR[i, s, first_t, xi] == x[i, s] for s in S for xi in Xi)
-        for t in T_i[i][1:]:
+        for prev_t, t in zip(T_i[i][:-1], T_i[i][1:]):
             for s in S:
                 for xi in Xi:
-                    inbound = gp.quicksum(m[i, sp, s, tau, xi] for sp in S if sp != s for tau in T_i[i][1:] if tau <= t)
-                    outbound = gp.quicksum(m[i, s, sp, tau, xi] for sp in S if sp != s for tau in T_i[i][1:] if tau <= t)
-                    model.addConstr(xR[i, s, t, xi] == x[i, s] - outbound + inbound)
+                    model.addConstr(m[i, t, xi] >= xR[i, s, t, xi] - xR[i, s, prev_t, xi])
+                    model.addConstr(m[i, t, xi] >= xR[i, s, prev_t, xi] - xR[i, s, t, xi])
+                    # Optional exactness upper bound, intentionally disabled to
+                    # match the current formulation.  The active lower bounds
+                    # force m=1 on a placement change, but allow m=1 without a
+                    # change when migration has zero objective cost.
+                    # model.addConstr(m[i, t, xi] <= 2 - xR[i, s, prev_t, xi] - xR[i, s, t, xi])
         model.addConstrs(
-            gp.quicksum(m[i, s, sp, t, xi] for sp in S if sp != s for t in T_i[i][1:]) <= x[i, s]
-            for s in S
+            gp.quicksum(m[i, t, xi] for t in T_i[i][1:]) <= 1
             for xi in Xi
         )
-    model.addConstrs(
-        m[i, s, sp, t, xi] <= u[sp, t]
-        for i in I
-        for s in S
-        for sp in S
-        if sp != s
-        for t in T_i[i][1:]
-        for xi in Xi
-    )
-    # Implementation-required: actual on-demand placement must be on an active
-    # server.  This is necessary because the Notion migration equation defines
-    # xR after a move, but m <= u only checks the destination server at the
-    # migration slot.
     model.addConstrs(xR[i, s, t, xi] <= u[s, t] for i in I for s in S for t in T_i[i] for xi in Xi)
 
     # Spot active linking, using the Notion symbol yR.
@@ -277,6 +278,7 @@ def build_model(data):
                 # capacity.  If phi=1, gamma=1 already removes low-priority
                 # work and the remaining excess is interpreted as OD SLA loss.
                 model.addConstr(total_load[s, t, xi] <= C * u[s, t] + M * phi[s, t, xi])
+
                 # Additional model-meaningfulness constraint:
                 # gamma should not float to 1 on a server-time with no
                 # low-priority work unless OD violation forces it.
@@ -285,31 +287,31 @@ def build_model(data):
                     + gp.quicksum(b[k, s, t] for k in K)
                 )
                 model.addConstr(gamma[s, t, xi] <= phi[s, t, xi] + low_priority_planned)
+
                 # Implementation-required: Notion's updated energy objective
                 # uses barL, so the capped-load variable must be defined.
                 # cap_select=0 selects barL=total_load; cap_select=1 selects
-                # barL=C*u.  The two upper bounds plus the two big-M lower
-                # bounds enforce barL = min(total_load, C*u).
+                # barL=C*u.  The active formulation is selected by config.
                 model.addConstr(bar_load[s, t, xi] <= total_load[s, t, xi])
                 model.addConstr(bar_load[s, t, xi] <= C * u[s, t])
-                model.addConstr(bar_load[s, t, xi] >= total_load[s, t, xi] - cap_m * cap_select[s, t, xi])
-                model.addConstr(bar_load[s, t, xi] >= C * u[s, t] - cap_m * (1 - cap_select[s, t, xi]))
-
-                # Indicator alternative, kept for comparison but not used:
-                # model.addGenConstrIndicator(
-                #     cap_select[s, t, xi],
-                #     0,
-                #     bar_load[s, t, xi] - total_load[s, t, xi],
-                #     GRB.EQUAL,
-                #     0.0,
-                # )
-                # model.addGenConstrIndicator(
-                #     cap_select[s, t, xi],
-                #     1,
-                #     bar_load[s, t, xi] - C * u[s, t],
-                #     GRB.EQUAL,
-                #     0.0,
-                # )
+                if bar_load_mode == "indicator":
+                    model.addGenConstrIndicator(
+                        cap_select[s, t, xi],
+                        0,
+                        bar_load[s, t, xi] - total_load[s, t, xi],
+                        GRB.EQUAL,
+                        0.0,
+                    )
+                    model.addGenConstrIndicator(
+                        cap_select[s, t, xi],
+                        1,
+                        bar_load[s, t, xi] - C * u[s, t],
+                        GRB.EQUAL,
+                        0.0,
+                    )
+                else:
+                    model.addConstr(bar_load[s, t, xi] >= total_load[s, t, xi] - cap_m * cap_select[s, t, xi])
+                    model.addConstr(bar_load[s, t, xi] >= C * u[s, t] - cap_m * (1 - cap_select[s, t, xi]))
     # Additional model-meaningfulness constraint:
     # eta is the exact "any OD SLA violation on server s in scenario xi" flag.
     # The lower bound eta >= phi is above; this upper bound prevents eta from
@@ -338,16 +340,17 @@ def build_model(data):
         for xi in Xi
     )
 
-    # Homogeneous-server symmetry breaking: earlier server indices are used first.
-    model.addConstrs(u_used[s] >= u_used[S[index + 1]] for index, s in enumerate(S[:-1]))
-    # Additional symmetry breaking for homogeneous servers: if two servers are
-    # both used, the lower-index server has at least as many powered-on slots.
-    model.addConstrs(
-        gp.quicksum(u[s, t] for t in T) >= gp.quicksum(u[S[index + 1], t] for t in T)
-        for index, s in enumerate(S[:-1])
-    )
+    if server_symmetry in {"used", "used_and_powered_slots"}:
+        model.addConstrs(u_used[s] >= u_used[S[index + 1]] for index, s in enumerate(S[:-1]))
+    if server_symmetry in {"powered_slots", "used_and_powered_slots"}:
+        # Safe for homogeneous servers: any feasible solution can be relabeled
+        # in nonincreasing powered-slot order without changing objective value.
+        model.addConstrs(
+            gp.quicksum(u[s, t] for t in T) >= gp.quicksum(u[S[index + 1], t] for t in T)
+            for index, s in enumerate(S[:-1])
+        )
 
-    migration_count = gp.quicksum(m[i, s, sp, t, xi] for i in I for s in S for sp in S if sp != s for t in T_i[i][1:] for xi in Xi)
+    migration_count = gp.quicksum(prob[xi] * m[i, t, xi] for i in I for t in T_i[i][1:] for xi in Xi)
     if data["objective_type"] == "energy":
         idle_energy = data["energy_idle"] * gp.quicksum(u[s, t] for s in S for t in T)
         cpu_energy = (data["energy_cpu"] / C) * gp.quicksum(
@@ -359,7 +362,11 @@ def build_model(data):
         mig_energy = data["energy_migration"] * migration_count
         model.setObjective(idle_energy + cpu_energy + mig_energy, GRB.MINIMIZE)
     else:
-        model.setObjective(gp.quicksum(u_used[s] for s in S) + data["lambda_migration"] * migration_count / max(1, len(I) * len(Xi)), GRB.MINIMIZE)
+        model.setObjective(
+            gp.quicksum(u_used[s] for s in S)
+            + data["lambda_migration"] * migration_count / max(1, len(I) * len(Xi)),
+            GRB.MINIMIZE,
+        )
 
     return model
 
@@ -385,7 +392,7 @@ def write_solution(model, results_dir):
     }
 
 
-def write_summary(model, data, results_dir, solution_files=None):
+def write_summary(model, data, results_dir, solution_files=None, run_config=None):
     results_dir.mkdir(parents=True, exist_ok=True)
     summary = {
         "status": status_name(model.Status),
@@ -398,6 +405,7 @@ def write_summary(model, data, results_dir, solution_files=None):
         "constraints": model.NumConstrs,
         "instance": data["raw"]["name"],
         "solution_files": solution_files or {},
+        "run_config": run_config or {},
     }
     with open(results_dir / "summary.json", "w", encoding="utf-8") as file:
         json.dump(summary, file, indent=2)
@@ -405,18 +413,50 @@ def write_summary(model, data, results_dir, solution_files=None):
 
 def main():
     args = parse_args()
-    data = load_data(args.instance)
-    model = build_model(data)
-    args.results_dir.mkdir(parents=True, exist_ok=True)
-    if args.time_limit is not None:
-        model.setParam("TimeLimit", args.time_limit)
-    model.setParam("MIPGap", args.mip_gap)
-    model.setParam("LogFile", str(args.results_dir / "solver.log"))
-    if args.threads is not None:
-        model.setParam("Threads", args.threads)
+    config = load_config(args.config)
+    instance_path = args.instance or resolve_path(
+        config.get("model", {}).get("instance"),
+        REPO_ROOT,
+        DEFAULT_INSTANCE,
+    )
+    results_dir = args.results_dir or resolve_path(
+        config.get("model", {}).get("results_dir"),
+        REPO_ROOT,
+        DEFAULT_RESULTS_DIR,
+    )
+    formulation = formulation_config(
+        config,
+        defaults={"bar_load_mode": "indicator", "server_symmetry": "used_and_powered_slots"},
+    )
+    solver = solver_config(config, defaults={"mip_gap": 0.001, "method": 2})
+
+    data = load_data(instance_path)
+    model = build_model(data, formulation=formulation)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    effective_solver = apply_solver_config(
+        model,
+        solver,
+        results_dir,
+        time_limit=args.time_limit,
+        mip_gap=args.mip_gap,
+        threads=args.threads,
+    )
+
     model.optimize()
-    solution_files = write_solution(model, args.results_dir)
-    write_summary(model, data, args.results_dir, solution_files)
+    solution_files = write_solution(model, results_dir)
+    write_summary(
+        model,
+        data,
+        results_dir,
+        solution_files,
+        run_config={
+            "config_file": str(args.config),
+            "instance": str(instance_path),
+            "results_dir": str(results_dir),
+            "formulation": formulation,
+            "solver": effective_solver,
+        },
+    )
 
 
 if __name__ == "__main__":

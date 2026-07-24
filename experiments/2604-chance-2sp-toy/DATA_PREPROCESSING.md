@@ -42,7 +42,7 @@ $$
 
 ### 후보 VM 필터
 `sample_vm_data.csv`에서 VM별 요약을 만든 뒤 다음 조건을 만족하는 VM만 남깁니다.
-- `vm_category`가 `Interactive` 또는 `Delay-insensitive`
+- `vm_category`가 `Interactive`
 - `vCPU <= 8`
 - VM별 평균 CPU 사용률 `avg_cpu_mean >= 20`
 - 시간 구간은 `hour < 24`
@@ -50,6 +50,10 @@ $$
 여기서 `avg_cpu_mean`은 원본 `avg_cpu`의 VM별 평균입니다. 즉, 최신 벤치마크는 평균적으로 꽤 바쁜 VM만 대상으로 샘플링합니다.
 
 ### VM 샘플링 규칙
+요청한 OD/SP/BJ 수의 합만큼 `Interactive` 후보 풀에서 한 번 균등
+샘플링하고, seed로 섞은 뒤 OD, SP, BJ 순서로 분할합니다. 따라서 세
+workload type은 동일한 원본 category 후보 분포를 공유합니다.
+
 샘플링은 VM lifetime 길이와 무관하게 균등 확률입니다.
 
 즉, horizon 동안 계속 살아 있는 VM과 중간에 유입되는 VM을 따로 가중하지 않습니다.

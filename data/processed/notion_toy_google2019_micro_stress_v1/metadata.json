@@ -1,0 +1,1658 @@
+{
+  "assigned_machine_cpu_capacity_audit": {
+    "denominator_definition": "unique top-level (collection_id, instance_index) keys with a positive-overlap usage interval in the requested horizon",
+    "scopes": {
+      "raw_extracted_top_level_instances": {
+        "by_instance_kind": {
+          "alloc": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 434,
+              "assessed_source_row_count": 85059,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.0,
+              "fraction_of_assessable_instances": 0.0,
+              "fraction_of_observed_instances": 0.0,
+              "observed_instance_count": 434,
+              "observed_source_row_count": 85059,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": 0.09216589861751152,
+              "fraction_of_assessable_instances": 0.09216589861751152,
+              "over_all_overlapping_capacities_instance_count": 40,
+              "over_capacity_instance_count": 40
+            },
+            "instance_count": 434,
+            "machine_capacity_incomplete_instance_count": 0,
+            "maximum_usage": {
+              "assessed_instance_count": 434,
+              "assessed_source_row_count": 85286,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.09216589861751152,
+              "fraction_of_assessable_instances": 0.09216589861751152,
+              "fraction_of_observed_instances": 0.09216589861751152,
+              "observed_instance_count": 434,
+              "observed_source_row_count": 85286,
+              "over_all_overlapping_capacities_instance_count": 40,
+              "over_all_overlapping_capacities_source_row_count": 642,
+              "over_capacity_instance_count": 40,
+              "over_capacity_source_row_count": 642
+            },
+            "source_usage_row_count": 85286
+          },
+          "task": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 4566,
+              "assessed_source_row_count": 774587,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.0,
+              "fraction_of_assessable_instances": 0.0,
+              "fraction_of_observed_instances": 0.0,
+              "observed_instance_count": 4566,
+              "observed_source_row_count": 774615,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": 0.01576872536136662,
+              "fraction_of_assessable_instances": 0.01576872536136662,
+              "over_all_overlapping_capacities_instance_count": 72,
+              "over_capacity_instance_count": 72
+            },
+            "instance_count": 4566,
+            "machine_capacity_incomplete_instance_count": 14,
+            "maximum_usage": {
+              "assessed_instance_count": 4566,
+              "assessed_source_row_count": 782589,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.01576872536136662,
+              "fraction_of_assessable_instances": 0.01576872536136662,
+              "fraction_of_observed_instances": 0.01576872536136662,
+              "observed_instance_count": 4566,
+              "observed_source_row_count": 782618,
+              "over_all_overlapping_capacities_instance_count": 72,
+              "over_all_overlapping_capacities_source_row_count": 250,
+              "over_capacity_instance_count": 72,
+              "over_capacity_source_row_count": 250
+            },
+            "source_usage_row_count": 782618
+          },
+          "unknown": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 0,
+              "assessed_source_row_count": 0,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "fraction_of_observed_instances": null,
+              "observed_instance_count": 0,
+              "observed_source_row_count": 0,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_capacity_instance_count": 0
+            },
+            "instance_count": 0,
+            "machine_capacity_incomplete_instance_count": 0,
+            "maximum_usage": {
+              "assessed_instance_count": 0,
+              "assessed_source_row_count": 0,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "fraction_of_observed_instances": null,
+              "observed_instance_count": 0,
+              "observed_source_row_count": 0,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "source_usage_row_count": 0
+          }
+        },
+        "cpu_usage_distribution": {
+          "assessed_instance_count": 5000,
+          "assessed_source_row_count": 859646,
+          "capacity_change_ambiguous_source_row_count": 0,
+          "fraction_of_all_instances": 0.0,
+          "fraction_of_assessable_instances": 0.0,
+          "fraction_of_observed_instances": 0.0,
+          "observed_instance_count": 5000,
+          "observed_source_row_count": 859674,
+          "over_all_overlapping_capacities_instance_count": 0,
+          "over_all_overlapping_capacities_source_row_count": 0,
+          "over_capacity_instance_count": 0,
+          "over_capacity_source_row_count": 0
+        },
+        "either_metric": {
+          "assessed_instance_count": 5000,
+          "fraction_of_all_instances": 0.0224,
+          "fraction_of_assessable_instances": 0.0224,
+          "fraction_of_observed_instances": 0.0224,
+          "observed_instance_count": 5000,
+          "over_all_overlapping_capacities_instance_count": 112,
+          "over_capacity_instance_count": 112
+        },
+        "instance_count": 5000,
+        "machine_capacity_incomplete_instance_count": 14,
+        "machine_capacity_incomplete_source_row_count": 43,
+        "machine_history_unmatched_instance_count": 1,
+        "machine_history_unmatched_source_row_count": 5,
+        "maximum_usage": {
+          "assessed_instance_count": 5000,
+          "assessed_source_row_count": 867875,
+          "capacity_change_ambiguous_source_row_count": 0,
+          "fraction_of_all_instances": 0.0224,
+          "fraction_of_assessable_instances": 0.0224,
+          "fraction_of_observed_instances": 0.0224,
+          "observed_instance_count": 5000,
+          "observed_source_row_count": 867904,
+          "over_all_overlapping_capacities_instance_count": 112,
+          "over_all_overlapping_capacities_source_row_count": 892,
+          "over_capacity_instance_count": 112,
+          "over_capacity_source_row_count": 892
+        },
+        "source_usage_row_count": 867904
+      },
+      "selected_model_input_instances": {
+        "by_instance_kind": {
+          "alloc": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 382,
+              "assessed_source_row_count": 79483,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.0,
+              "fraction_of_assessable_instances": 0.0,
+              "fraction_of_observed_instances": 0.0,
+              "observed_instance_count": 382,
+              "observed_source_row_count": 79483,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": 0.09947643979057591,
+              "fraction_of_assessable_instances": 0.09947643979057591,
+              "over_all_overlapping_capacities_instance_count": 38,
+              "over_capacity_instance_count": 38
+            },
+            "instance_count": 382,
+            "machine_capacity_incomplete_instance_count": 0,
+            "maximum_usage": {
+              "assessed_instance_count": 382,
+              "assessed_source_row_count": 79698,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.09947643979057591,
+              "fraction_of_assessable_instances": 0.09947643979057591,
+              "fraction_of_observed_instances": 0.09947643979057591,
+              "observed_instance_count": 382,
+              "observed_source_row_count": 79698,
+              "over_all_overlapping_capacities_instance_count": 38,
+              "over_all_overlapping_capacities_source_row_count": 549,
+              "over_capacity_instance_count": 38,
+              "over_capacity_source_row_count": 549
+            },
+            "source_usage_row_count": 79698
+          },
+          "task": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 3100,
+              "assessed_source_row_count": 635754,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.0,
+              "fraction_of_assessable_instances": 0.0,
+              "fraction_of_observed_instances": 0.0,
+              "observed_instance_count": 3100,
+              "observed_source_row_count": 635771,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": 0.01935483870967742,
+              "fraction_of_assessable_instances": 0.01935483870967742,
+              "over_all_overlapping_capacities_instance_count": 60,
+              "over_capacity_instance_count": 60
+            },
+            "instance_count": 3100,
+            "machine_capacity_incomplete_instance_count": 9,
+            "maximum_usage": {
+              "assessed_instance_count": 3100,
+              "assessed_source_row_count": 639014,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": 0.01935483870967742,
+              "fraction_of_assessable_instances": 0.01935483870967742,
+              "fraction_of_observed_instances": 0.01935483870967742,
+              "observed_instance_count": 3100,
+              "observed_source_row_count": 639032,
+              "over_all_overlapping_capacities_instance_count": 60,
+              "over_all_overlapping_capacities_source_row_count": 225,
+              "over_capacity_instance_count": 60,
+              "over_capacity_source_row_count": 225
+            },
+            "source_usage_row_count": 639032
+          },
+          "unknown": {
+            "cpu_usage_distribution": {
+              "assessed_instance_count": 0,
+              "assessed_source_row_count": 0,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "fraction_of_observed_instances": null,
+              "observed_instance_count": 0,
+              "observed_source_row_count": 0,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "either_metric": {
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_capacity_instance_count": 0
+            },
+            "instance_count": 0,
+            "machine_capacity_incomplete_instance_count": 0,
+            "maximum_usage": {
+              "assessed_instance_count": 0,
+              "assessed_source_row_count": 0,
+              "capacity_change_ambiguous_source_row_count": 0,
+              "fraction_of_all_instances": null,
+              "fraction_of_assessable_instances": null,
+              "fraction_of_observed_instances": null,
+              "observed_instance_count": 0,
+              "observed_source_row_count": 0,
+              "over_all_overlapping_capacities_instance_count": 0,
+              "over_all_overlapping_capacities_source_row_count": 0,
+              "over_capacity_instance_count": 0,
+              "over_capacity_source_row_count": 0
+            },
+            "source_usage_row_count": 0
+          }
+        },
+        "cpu_usage_distribution": {
+          "assessed_instance_count": 3482,
+          "assessed_source_row_count": 715237,
+          "capacity_change_ambiguous_source_row_count": 0,
+          "fraction_of_all_instances": 0.0,
+          "fraction_of_assessable_instances": 0.0,
+          "fraction_of_observed_instances": 0.0,
+          "observed_instance_count": 3482,
+          "observed_source_row_count": 715254,
+          "over_all_overlapping_capacities_instance_count": 0,
+          "over_all_overlapping_capacities_source_row_count": 0,
+          "over_capacity_instance_count": 0,
+          "over_capacity_source_row_count": 0
+        },
+        "either_metric": {
+          "assessed_instance_count": 3482,
+          "fraction_of_all_instances": 0.028144744399770247,
+          "fraction_of_assessable_instances": 0.028144744399770247,
+          "fraction_of_observed_instances": 0.028144744399770247,
+          "observed_instance_count": 3482,
+          "over_all_overlapping_capacities_instance_count": 98,
+          "over_capacity_instance_count": 98
+        },
+        "instance_count": 3482,
+        "machine_capacity_incomplete_instance_count": 9,
+        "machine_capacity_incomplete_source_row_count": 26,
+        "machine_history_unmatched_instance_count": 1,
+        "machine_history_unmatched_source_row_count": 5,
+        "maximum_usage": {
+          "assessed_instance_count": 3482,
+          "assessed_source_row_count": 718712,
+          "capacity_change_ambiguous_source_row_count": 0,
+          "fraction_of_all_instances": 0.028144744399770247,
+          "fraction_of_assessable_instances": 0.028144744399770247,
+          "fraction_of_observed_instances": 0.028144744399770247,
+          "observed_instance_count": 3482,
+          "observed_source_row_count": 718730,
+          "over_all_overlapping_capacities_instance_count": 98,
+          "over_all_overlapping_capacities_source_row_count": 774,
+          "over_capacity_instance_count": 98,
+          "over_capacity_source_row_count": 774
+        },
+        "source_usage_row_count": 718730
+      }
+    },
+    "status": "audit_only_no_cap_drop_or_rescaling_applied",
+    "unit_key": [
+      "collection_id",
+      "instance_index"
+    ]
+  },
+  "automatic_utilization_calibration_applied": false,
+  "cpu_p100_audit": {
+    "converted_q_cpu_gt_one_count": 0,
+    "selected_vm_count": 0,
+    "status": "cpu_p100_with_representative_capacity_vm_drop_no_clipping"
+  },
+  "dataset_name": "notion_toy_google2019_v5_mode_capacity_bounded",
+  "default_model_usage_file": "vm_usage_hourly_scenarios.csv",
+  "episode_quality_filter": {
+    "after_event_state_quality_filter_before_sampling": {
+      "by_termination_reason": {
+        "EVICT": {
+          "count": 310,
+          "max": 22.707473582777776,
+          "mean": 5.024360365163979,
+          "min": 0.8637546166666666,
+          "p10": 1.0157175120555557,
+          "p25": 1.3766882047222222,
+          "p50": 2.626600554861111,
+          "p75": 5.3718583396527775,
+          "p90": 16.033455673500004,
+          "p95": 18.20555035186111,
+          "p99": 19.39561423440279
+        },
+        "FAIL": {
+          "count": 59,
+          "max": 19.739918206944445,
+          "mean": 5.76913034394068,
+          "min": 1.081808028888889,
+          "p10": 1.2537114516111112,
+          "p25": 1.9715449030555554,
+          "p50": 4.8467398797222225,
+          "p75": 6.757420787222222,
+          "p90": 13.560536697000003,
+          "p95": 18.08312088561111,
+          "p99": 19.116031952883336
+        },
+        "FINISH": {
+          "count": 822,
+          "max": 21.106194021388887,
+          "mean": 1.6653136668403623,
+          "min": 0.8344514005555556,
+          "p10": 0.9437021914722222,
+          "p25": 1.0739219254861112,
+          "p50": 1.3246742502777777,
+          "p75": 1.8732930110416666,
+          "p90": 2.5466655318055555,
+          "p95": 3.292620333125,
+          "p99": 6.0633453057805555
+        },
+        "HORIZON_CENSORED": {
+          "count": 2118,
+          "max": 24.0,
+          "mean": 16.21600439662116,
+          "min": 0.9217884713888889,
+          "p10": 1.7773551731388888,
+          "p25": 5.155585777777778,
+          "p50": 24.0,
+          "p75": 24.0,
+          "p90": 24.0,
+          "p95": 24.0,
+          "p99": 24.0
+        },
+        "KILL": {
+          "count": 1643,
+          "max": 23.921964706944443,
+          "mean": 4.839036586496246,
+          "min": 0.8460344711111111,
+          "p10": 1.0478836827777778,
+          "p25": 1.4262152340277778,
+          "p50": 2.672497868333333,
+          "p75": 6.1564763779166665,
+          "p90": 14.187480719555547,
+          "p95": 16.229599622083335,
+          "p99": 18.819187059016667
+        },
+        "LOST": {
+          "count": 462,
+          "max": 23.766321958611112,
+          "mean": 13.39756008849988,
+          "min": 0.9092220075,
+          "p10": 2.254170794305556,
+          "p25": 11.737687142083335,
+          "p50": 14.320240212916666,
+          "p75": 17.819177955555556,
+          "p90": 20.190784906333334,
+          "p95": 21.067024449541666,
+          "p99": 23.1059196898
+        }
+      },
+      "episode_count": 5414,
+      "lifetime_hours": {
+        "count": 5414,
+        "max": 24.0,
+        "mean": 9.559018363904691,
+        "min": 0.8344514005555556,
+        "p10": 1.1061435877777777,
+        "p25": 1.639374888125,
+        "p50": 4.571034201805556,
+        "p75": 18.990387153055554,
+        "p90": 24.0,
+        "p95": 24.0,
+        "p99": 24.0
+      }
+    },
+    "after_min_usage_rows": {
+      "by_termination_reason": {
+        "EVICT": {
+          "count": 312,
+          "max": 22.707473582777776,
+          "mean": 4.999232505372151,
+          "min": 0.8637546166666666,
+          "p10": 1.0151492329444445,
+          "p25": 1.3732010297916668,
+          "p50": 2.595665933611111,
+          "p75": 5.348825779513889,
+          "p90": 15.994715211027783,
+          "p95": 18.201340065916668,
+          "p99": 19.385183096986104
+        },
+        "FAIL": {
+          "count": 59,
+          "max": 19.739918206944445,
+          "mean": 5.76913034394068,
+          "min": 1.081808028888889,
+          "p10": 1.2537114516111112,
+          "p25": 1.9715449030555554,
+          "p50": 4.8467398797222225,
+          "p75": 6.757420787222222,
+          "p90": 13.560536697000003,
+          "p95": 18.08312088561111,
+          "p99": 19.116031952883336
+        },
+        "FINISH": {
+          "count": 823,
+          "max": 21.106194021388887,
+          "mean": 1.6664362552764278,
+          "min": 0.8344514005555556,
+          "p10": 0.9437295371111112,
+          "p25": 1.0740135340277779,
+          "p50": 1.32717094,
+          "p75": 1.8749543636111112,
+          "p90": 2.554002708722223,
+          "p95": 3.2925647279166665,
+          "p99": 6.06318812845
+        },
+        "HORIZON_CENSORED": {
+          "count": 2123,
+          "max": 24.0,
+          "mean": 16.23433693454715,
+          "min": 0.9217884713888889,
+          "p10": 1.7779853420555556,
+          "p25": 5.155585777777778,
+          "p50": 24.0,
+          "p75": 24.0,
+          "p90": 24.0,
+          "p95": 24.0,
+          "p99": 24.0
+        },
+        "KILL": {
+          "count": 1690,
+          "max": 23.921964706944443,
+          "mean": 4.7794688775359955,
+          "min": 0.8460344711111111,
+          "p10": 1.0579220319166667,
+          "p25": 1.4711353284722222,
+          "p50": 2.5400108091666667,
+          "p75": 5.777753995555555,
+          "p90": 13.867982699666669,
+          "p95": 16.22479746326389,
+          "p99": 18.818899342380558
+        },
+        "LOST": {
+          "count": 464,
+          "max": 23.766321958611112,
+          "mean": 13.400599418773947,
+          "min": 0.9092220075,
+          "p10": 2.293216118472223,
+          "p25": 11.740389053472223,
+          "p50": 14.320240212916666,
+          "p75": 17.810365544444444,
+          "p90": 20.188893243444443,
+          "p95": 21.058787316402775,
+          "p99": 23.10505000228889
+        }
+      },
+      "episode_count": 5471,
+      "lifetime_hours": {
+        "count": 5471,
+        "max": 24.0,
+        "mean": 9.51056372060897,
+        "min": 0.8344514005555556,
+        "p10": 1.1068616697222222,
+        "p25": 1.6578791988888888,
+        "p50": 4.381823500555556,
+        "p75": 18.822235934583333,
+        "p90": 24.0,
+        "p95": 24.0,
+        "p99": 24.0
+      }
+    },
+    "cpu_maximum_policy": "max_cpu_usage is cpu_usage_distribution[10] (p100); extracted maximum_usage.cpus is ignored for q and retained only as raw audit provenance",
+    "cpu_p100_over_capacity_episode_count_retained_not_dropped": 0,
+    "drop_fraction": 0.19362617047783628,
+    "drop_reason_counts_nonexclusive": {
+      "empty_cpu_usage_distribution": 4794,
+      "machine_capacity_incomplete": 25,
+      "machine_history_missing": 1
+    },
+    "episode_count_by_termination_reason": {
+      "EVICT": 8787,
+      "FAIL": 1314,
+      "FINISH": 4883,
+      "HORIZON_CENSORED": 2727,
+      "KILL": 6941,
+      "LOST": 699
+    },
+    "episode_count_by_termination_reason_before_quality_filter": {
+      "EVICT": 8415,
+      "FAIL": 1314,
+      "FINISH": 4831,
+      "HORIZON_CENSORED": 2720,
+      "KILL": 6917,
+      "LOST": 686
+    },
+    "episode_count_by_termination_reason_dropped": {
+      "EVICT": 2335,
+      "FAIL": 703,
+      "FINISH": 191,
+      "HORIZON_CENSORED": 316,
+      "KILL": 1169,
+      "LOST": 104
+    },
+    "episode_count_by_termination_reason_retained": {
+      "EVICT": 6080,
+      "FAIL": 611,
+      "FINISH": 4640,
+      "HORIZON_CENSORED": 2404,
+      "KILL": 5748,
+      "LOST": 582
+    },
+    "episode_count_dropped": 4818,
+    "episode_count_retained_after_quality_filter": 20065,
+    "episode_count_with_usage_before_quality_filter": 24883,
+    "exact_duplicate_source_row_count_removed": 2,
+    "lifecycle_episode_count_overlapping_horizon": 25351,
+    "lifetime_hours_before_quality_filter": {
+      "max": 24.0,
+      "mean": 2.503952808810109,
+      "min": 5.555555555555555e-10,
+      "p50": 0.1372766725,
+      "p95": 24.0
+    },
+    "lifetime_hours_retained_after_quality_filter": {
+      "max": 24.0,
+      "mean": 2.714048106142897,
+      "min": 5.555555555555555e-10,
+      "p50": 0.165543605,
+      "p95": 24.0
+    },
+    "max_instances": 5000,
+    "minimum_reconstructed_usage_buckets": 12,
+    "orphan_terminal_event_cohort_count": 1185,
+    "parent_instance_count": 5000,
+    "positive_horizon_source_row_count_after_exact_dedup": 867904,
+    "quality_filter_policy": "drop an episode before min_usage_rows and deterministic sampling if any assigned positive-duration source fragment has an empty/unavailable CPU distribution, no assigned-machine history, or incomplete positive CPU-capacity coverage",
+    "repeated_running_start_cohort_count": 31258,
+    "right_censor_policy": "an execution without a terminal event is active from its evidenced start through day_end_us; only an execution already running at day_start_us spans the full horizon",
+    "selected_after_deterministic_hash_head": {
+      "by_termination_reason": {
+        "EVICT": {
+          "count": 289,
+          "max": 22.707473582777776,
+          "mean": 5.057198264833718,
+          "min": 0.8637546166666666,
+          "p10": 1.0156464771666667,
+          "p25": 1.375805556111111,
+          "p50": 2.5712370958333333,
+          "p75": 5.383374619722222,
+          "p90": 16.21252504038889,
+          "p95": 18.207655494833332,
+          "p99": 19.450914140344445
+        },
+        "FAIL": {
+          "count": 51,
+          "max": 19.739918206944445,
+          "mean": 5.32132482077342,
+          "min": 1.081808028888889,
+          "p10": 1.2640128202777778,
+          "p25": 1.9088801702777778,
+          "p50": 4.299171669722222,
+          "p75": 6.217042205,
+          "p90": 12.598235708333334,
+          "p95": 14.563668076666666,
+          "p99": 19.052000235277777
+        },
+        "FINISH": {
+          "count": 751,
+          "max": 16.712881884166666,
+          "mean": 1.6337145761776888,
+          "min": 0.8451406372222222,
+          "p10": 0.9395925719444445,
+          "p25": 1.0682797766666667,
+          "p50": 1.3159973969444445,
+          "p75": 1.8602088697222223,
+          "p90": 2.5380514969444445,
+          "p95": 3.2768727905555557,
+          "p99": 5.807306947777779
+        },
+        "HORIZON_CENSORED": {
+          "count": 1977,
+          "max": 24.0,
+          "mean": 16.2248842824563,
+          "min": 0.9217884713888889,
+          "p10": 1.7890238150000002,
+          "p25": 5.155585777777778,
+          "p50": 24.0,
+          "p75": 24.0,
+          "p90": 24.0,
+          "p95": 24.0,
+          "p99": 24.0
+        },
+        "KILL": {
+          "count": 1502,
+          "max": 23.921964706944443,
+          "mean": 4.8945476407086845,
+          "min": 0.8460344711111111,
+          "p10": 1.047841313888889,
+          "p25": 1.4528640078472221,
+          "p50": 2.745600436388889,
+          "p75": 6.320711873194444,
+          "p90": 14.240660747111113,
+          "p95": 16.43826868691668,
+          "p99": 18.818830078080556
+        },
+        "LOST": {
+          "count": 430,
+          "max": 23.766321958611112,
+          "mean": 13.596342626422482,
+          "min": 0.9092220075,
+          "p10": 2.5367393956666673,
+          "p25": 11.776320368472222,
+          "p50": 14.592893193611111,
+          "p75": 17.848098750000002,
+          "p90": 20.183218254777778,
+          "p95": 21.034075916986108,
+          "p99": 23.119834689977775
+        }
+      },
+      "episode_count": 5000,
+      "lifetime_hours": {
+        "count": 5000,
+        "max": 24.0,
+        "mean": 9.646894324645613,
+        "min": 0.8451406372222222,
+        "p10": 1.1065141247777779,
+        "p25": 1.6612401804166668,
+        "p50": 4.873000333611111,
+        "p75": 19.236247356874998,
+        "p90": 24.0,
+        "p95": 24.0,
+        "p99": 24.0
+      }
+    },
+    "source_row_count_split_at_episode_boundary": 7155,
+    "source_row_count_without_running_episode_overlap": 27536,
+    "source_usage_row_count": 867906,
+    "terminal_reason_conflict_cohort_count": 162,
+    "unit_key": [
+      "collection_id",
+      "instance_index",
+      "episode_index"
+    ],
+    "usage_inferred_episode_count": 0
+  },
+  "event_state_ambiguity_audit": {
+    "ambiguous_candidate_count": 57,
+    "ambiguous_candidate_count_by_class": {
+      "batch_candidate": 49,
+      "on_demand": 6,
+      "spot": 2
+    },
+    "ambiguous_candidates": [
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 31789883713,
+        "instance_index": 51,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 128381343012,
+        "instance_index": 244,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 264106656289,
+        "instance_index": 0,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 330587133435,
+        "instance_index": 385,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 372914713658,
+        "instance_index": 173,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 373174661826,
+        "instance_index": 274,
+        "provisional_class": "spot",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 373174661826,
+        "instance_index": 682,
+        "provisional_class": "spot",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374574602941,
+        "instance_index": 7,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780789764,
+        "instance_index": 1944,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780791765,
+        "instance_index": 1134,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780791765,
+        "instance_index": 1414,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780791765,
+        "instance_index": 1610,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780793772,
+        "instance_index": 372,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780795775,
+        "instance_index": 276,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780795775,
+        "instance_index": 748,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780797776,
+        "instance_index": 91,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780797776,
+        "instance_index": 108,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780797776,
+        "instance_index": 387,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780797776,
+        "instance_index": 560,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780797776,
+        "instance_index": 1556,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780799777,
+        "instance_index": 167,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780799777,
+        "instance_index": 230,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780799777,
+        "instance_index": 373,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780799777,
+        "instance_index": 1012,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780801778,
+        "instance_index": 263,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780801778,
+        "instance_index": 1073,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780801778,
+        "instance_index": 1276,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780803880,
+        "instance_index": 408,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780803880,
+        "instance_index": 1843,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780805995,
+        "instance_index": 1100,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780805995,
+        "instance_index": 1490,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780805995,
+        "instance_index": 1572,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780807996,
+        "instance_index": 366,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780807996,
+        "instance_index": 1093,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780809297,
+        "instance_index": 144,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780809297,
+        "instance_index": 499,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780809297,
+        "instance_index": 1273,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780811299,
+        "instance_index": 379,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780811299,
+        "instance_index": 1165,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780813300,
+        "instance_index": 101,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780813300,
+        "instance_index": 614,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780813300,
+        "instance_index": 1280,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780813300,
+        "instance_index": 1510,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780813300,
+        "instance_index": 1722,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780815303,
+        "instance_index": 331,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780815303,
+        "instance_index": 777,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780815303,
+        "instance_index": 803,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780815303,
+        "instance_index": 1344,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780817307,
+        "instance_index": 619,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780817307,
+        "instance_index": 935,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780817307,
+        "instance_index": 1204,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780819308,
+        "instance_index": 1533,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780819308,
+        "instance_index": 1834,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780824011,
+        "instance_index": 966,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780824011,
+        "instance_index": 1002,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374780824011,
+        "instance_index": 1175,
+        "provisional_class": "batch_candidate",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      },
+      {
+        "arrival_candidate_count": 2,
+        "arrival_reason": "same_time_conflicting_instance_state",
+        "arrival_state_ambiguous": true,
+        "collection_id": 374827630582,
+        "instance_index": 413,
+        "provisional_class": "on_demand",
+        "scheduler_candidate_count": 0,
+        "scheduler_reason": "",
+        "scheduler_state_ambiguous": false
+      }
+    ],
+    "arrival_ambiguity_reason_counts": {
+      "same_time_conflicting_instance_state": 57
+    },
+    "arrival_state_ambiguous_count": 57,
+    "eligible_candidate_count_before_ambiguity_filter": 5471,
+    "excluded_ambiguous_candidate_count": 57,
+    "scheduler_ambiguity_reason_counts": {},
+    "scheduler_state_ambiguous_count": 0,
+    "strict_event_state": true
+  },
+  "fallback_counts": {
+    "arrival_state_ambiguous_count": 0,
+    "arrival_state_used_post_arrival_count": 0,
+    "cpu_p100_gt_one_count": 0,
+    "max_cpu_usage_fallback_from_average_count": 0,
+    "max_mem_usage_fallback_from_average_count": 7,
+    "resource_request_cpu_fallback_zero_count": 0,
+    "resource_request_mem_fallback_zero_count": 0,
+    "scheduler_state_ambiguous_count": 0,
+    "scheduler_state_used_post_arrival_count": 0
+  },
+  "horizon_hours": 24,
+  "horizon_t5": 288,
+  "micro_stress_derivation": {
+    "artifact_kind": "trace-derived capacity-pressure stress benchmark",
+    "canonical_data_modified": false,
+    "scenario_policy": {
+      "model_loader_behavior": "scenario 0 is observed; scenarios 1..9 are generated by the experiment loader",
+      "model_num_scenarios": 10,
+      "stored_scenarios": [
+        0
+      ]
+    },
+    "selection": {
+      "classes": [
+        "on_demand",
+        "spot",
+        "batch_candidate"
+      ],
+      "count_per_class": 10,
+      "order": "score descending, vm_id ascending deterministic tie-break",
+      "score": "coverage-weighted mean(cpu_usage) + coverage-weighted mean(mem_usage)",
+      "service_eligibility": "at least one observed 5-minute row in every active 30-minute slot",
+      "uses_specific_slot": false
+    },
+    "source_dir": "data/processed/notion_toy_google2019_v5_mode_capacity_bounded",
+    "transformation": {
+      "batch_family_count": 3,
+      "batch_grouping": "balanced contiguous average-usage rank groups; highest group gets largest pair",
+      "batch_target_pairs_ascending": [
+        [
+          0.47,
+          0.47
+        ],
+        [
+          0.48,
+          0.48
+        ],
+        [
+          0.49,
+          0.49
+        ]
+      ],
+      "od_memory_pressure": {
+        "exponent": 0.2,
+        "formula": "new_usage = target_q * (source_usage / source_q) ** exponent",
+        "reason": "A monotone utilization transform is required to establish the five-server hard-memory lower bound while keeping each VM below half a server.",
+        "temporal_order_preserved": true,
+        "zero_preserved": true
+      },
+      "proportional_resources": "OD CPU, Spot CPU/MEM, and Batch CPU/MEM: new_usage = target_q * source_usage / source_q",
+      "service_target_q": 0.49
+    },
+    "validation_summary": {
+      "batch_family_count_expected_by_loader": 3,
+      "batch_joint_q_pairs": [
+        {
+          "q_cpu": 0.47,
+          "q_mem": 0.47
+        },
+        {
+          "q_cpu": 0.48,
+          "q_mem": 0.48
+        },
+        {
+          "q_cpu": 0.49,
+          "q_mem": 0.49
+        }
+      ],
+      "canonical_source_integrity": {
+        "sha256_after": {
+          "metadata.json": "cae4245a6b2d3e03bfadcc44ca09e3c4fc6114a78973803793857745c284dd70",
+          "servers.csv": "c2ce2d26fc171f665109d67faacaea54a69d6d58cf46912b473d22bc316f0ca4",
+          "vm_requests.csv": "bc889ab2f7a7e1ca3d76b4625723e6fab0dec6547fa46db9a1b36a07c29ac0ad",
+          "vm_usage_5min_scenarios.csv": "121fcdf155c3b060a3564567a22afbafc2cf845f01d0d0e2d65e7c27c8f69db9"
+        },
+        "sha256_before": {
+          "metadata.json": "cae4245a6b2d3e03bfadcc44ca09e3c4fc6114a78973803793857745c284dd70",
+          "servers.csv": "c2ce2d26fc171f665109d67faacaea54a69d6d58cf46912b473d22bc316f0ca4",
+          "vm_requests.csv": "bc889ab2f7a7e1ca3d76b4625723e6fab0dec6547fa46db9a1b36a07c29ac0ad",
+          "vm_usage_5min_scenarios.csv": "121fcdf155c3b060a3564567a22afbafc2cf845f01d0d0e2d65e7c27c8f69db9"
+        },
+        "unchanged": true
+      },
+      "class_counts": {
+        "batch_candidate": 10,
+        "on_demand": 10,
+        "spot": 10
+      },
+      "invariants": {
+        "actual_and_maximum_usage_at_most_q": true,
+        "exact_class_counts": true,
+        "exactly_three_batch_joint_q_pairs": true,
+        "finite_nonnegative_actual_usage": true,
+        "five_server_aggregate_lower_bound": true,
+        "request_and_maximum_at_most_q": true,
+        "scenario_zero_od_fits_exactly_five_two_dimensional_bins": true,
+        "scenario_zero_only": true,
+        "unique_usage_keys": true
+      },
+      "od_30min_memory": {
+        "aggregate_server_lower_bound": 5,
+        "all_individual_vm_loads_below_half_server": true,
+        "max_individual_vm_load": 0.48235591966822366,
+        "minimum_required_servers_requested": 5,
+        "peak_aggregate_load": 4.161424709241537,
+        "peak_slot_for_validation_only": 4,
+        "selection_used_peak_slot": false
+      },
+      "scenario_ids_in_usage_file": [
+        0
+      ],
+      "scenario_zero_od_two_dimensional_packing": {
+        "audit_scope": "observed scenario 0; synthetic scenarios are generated by the model loader",
+        "bin_capacity": {
+          "cpu": 1.0,
+          "mem": 1.0
+        },
+        "fits_five_bins_in_every_slot": true,
+        "maximum_minimum_bins": 5,
+        "minimum_bins_by_slot": {
+          "0": 5,
+          "1": 5,
+          "10": 5,
+          "11": 5,
+          "12": 5,
+          "13": 5,
+          "14": 5,
+          "15": 5,
+          "16": 5,
+          "17": 5,
+          "18": 5,
+          "19": 5,
+          "2": 5,
+          "20": 5,
+          "21": 5,
+          "22": 5,
+          "23": 5,
+          "24": 5,
+          "25": 5,
+          "26": 5,
+          "27": 5,
+          "28": 5,
+          "29": 5,
+          "3": 5,
+          "30": 4,
+          "31": 4,
+          "32": 4,
+          "33": 4,
+          "34": 4,
+          "35": 4,
+          "36": 4,
+          "37": 4,
+          "38": 4,
+          "39": 4,
+          "4": 5,
+          "40": 4,
+          "41": 4,
+          "42": 4,
+          "43": 3,
+          "44": 3,
+          "45": 3,
+          "46": 4,
+          "47": 4,
+          "5": 5,
+          "6": 5,
+          "7": 5,
+          "8": 5,
+          "9": 5
+        },
+        "resources": [
+          "cpu",
+          "mem"
+        ]
+      },
+      "scenario_zero_resource_slot_volumes": {
+        "batch": {
+          "cpu": 14.327881464828584,
+          "mem": 24.26337739533443
+        },
+        "on_demand": {
+          "cpu": 77.94764109998715,
+          "mem": 184.08985122077573
+        },
+        "on_demand_plus_batch": {
+          "cpu": 92.27552256481573,
+          "mem": 208.35322861611016
+        }
+      },
+      "scenario_zero_usage_rows": 3136,
+      "selection_manifest_rows": 30,
+      "unique_vm_t5_keys": 3136
+    }
+  },
+  "num_scenarios": 5,
+  "num_servers": 6,
+  "num_vms": 5000,
+  "preprocessing_diagnostics_file": "preprocessing_diagnostics.json",
+  "raw_dir": "data/raw/google2019_cell_a_day0_cpu_distribution",
+  "representative_capacity_vm_filter": {
+    "by_class": {
+      "batch_candidate": {
+        "dropped_vm_count": 0,
+        "retained_vm_count": 2820,
+        "source_vm_count": 2820
+      },
+      "on_demand": {
+        "dropped_vm_count": 0,
+        "retained_vm_count": 1731,
+        "source_vm_count": 1731
+      },
+      "spot": {
+        "dropped_vm_count": 0,
+        "retained_vm_count": 449,
+        "source_vm_count": 449
+      }
+    },
+    "configured_resource_clipping_applied": false,
+    "dropped_both_exceed_count": 0,
+    "dropped_cpu_exceeds_count": 0,
+    "dropped_mem_exceeds_count": 0,
+    "dropped_q_cpu_summary": {
+      "max": null,
+      "mean": null,
+      "min": null,
+      "p50": null,
+      "p95": null
+    },
+    "dropped_q_mem_summary": {
+      "max": null,
+      "mean": null,
+      "min": null,
+      "p50": null,
+      "p95": null
+    },
+    "dropped_vm_count": 0,
+    "dropped_vm_ids": [],
+    "policy": "after deterministic hash sampling and representative-machine unit conversion, drop (without clipping or replacement) every VM with q_cpu > 1 or q_mem > 1",
+    "retained_vm_count": 5000,
+    "sampling_replacement_applied": false,
+    "source_vm_count": 5000,
+    "tolerance": 1e-12
+  },
+  "representative_machine_capacity_raw": {
+    "cpu": 0.591796875,
+    "mem": 0.33349609375
+  },
+  "representative_machine_selection_method": "active_duration_weighted_mode_of_joint_cpu_mem_machine_shape",
+  "resource_scale": {
+    "automatic_utilization_calibration_applied": false,
+    "converted_server_capacity": {
+      "cpu": 1.0,
+      "mem": 1.0
+    },
+    "cpu_divisor": "representative_machine_capacity_raw.cpu",
+    "mem_divisor": "representative_machine_capacity_raw.mem"
+  },
+  "scaling_diagnostics_file": "scaling_diagnostics.json",
+  "seed": 42,
+  "source": "Google ClusterData 2019 BigQuery public dataset",
+  "source_note": "This is a VM-like toy dataset derived from Google ClusterData 2019 Borg instance traces, not a real public-cloud VM trace.",
+  "unit_conversion": {
+    "cpu_divisor": 0.591796875,
+    "mem_divisor": 0.33349609375
+  },
+  "usage_interval_overlap_audit": {
+    "duplicate_interval_group_count": 23,
+    "duplicated_timeline_us": 9979126571,
+    "duplicated_timeline_us_definition": "sum over elementary intervals of duration_us * (concurrent_source_rows - 1), equivalent to summed source duration minus interval-union duration",
+    "exact_duplicate_row_count": 2,
+    "max_concurrent_source_rows": 3,
+    "overlap_affected_bucket_count": 1223,
+    "source_cpu_p100_gt_one_row_count": 0,
+    "source_cpu_p100_gt_one_summary": {
+      "max": null,
+      "mean": null,
+      "min": null,
+      "p50": null,
+      "p95": null
+    },
+    "source_cpu_p100_gt_one_unit_count": 0,
+    "source_interval_overlap_participating_rows": 3081,
+    "source_interval_overlap_participating_rows_definition": "unique source rows active in any elementary interval with concurrency greater than one",
+    "source_interval_overlap_rows": 1760,
+    "source_interval_overlap_rows_definition": "unique source rows whose clipped segment starts before the prior running maximum end within the same VM and 5-minute bucket",
+    "source_interval_overlap_vm_count": 1153
+  }
+}

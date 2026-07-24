@@ -1,7 +1,14 @@
 numpy
 pandas
+requests
+google-cloud-bigquery
+pvlib
+pyarrow
+python-dotenv
+PyYAML
 matplotlib
 tqdm
+pytest
 notebook
 ipykernel
 ipywidgets

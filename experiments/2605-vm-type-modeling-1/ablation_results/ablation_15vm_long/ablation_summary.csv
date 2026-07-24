@@ -1,0 +1,6 @@
+variant,status,runtime,nodes,iter_count,bar_iter_count,variables,binary_vars,constraints,objective,bound,gap,sol_count,barload_mode,exact_indicator_uppers,od_chance_budget,spot_chance_budget,spot_service_ratio,migration,batch_completion,slot_symmetry
+base,TIME_LIMIT,180.02144503593445,1.0,112836.0,0.0,19830,12918,47101,26454.715083916803,0.0,1.0,2,bigm,1,1,1,1,1,1,0
+barload_indicator,TIME_LIMIT,180.01467108726501,1.0,101304.0,0.0,19830,12918,45373,26676.437283882704,0.0,1.0,2,indicator,1,1,1,1,1,1,0
+barload_indicator_slot_symmetry,TIME_LIMIT,180.03018403053284,1.0,110094.0,0.0,19830,12918,45378,26676.437283882704,6478.168081689481,0.7571576739145957,2,indicator,1,1,1,1,1,1,1
+no_batch_completion,TIME_LIMIT,180.0085198879242,1.0,144744.0,0.0,19830,12918,47071,22918.234800970342,2907.944304512688,0.8731165672327622,2,bigm,1,1,1,1,1,0,0
+slot_symmetry,TIME_LIMIT,180.0132131576538,1.0,163302.0,0.0,19830,12918,47106,26454.715083916803,0.0,1.0,2,bigm,1,1,1,1,1,1,1
