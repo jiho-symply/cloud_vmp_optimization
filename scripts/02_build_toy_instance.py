@@ -1,0 +1,1 @@
+../experiments/2607-notion-energy-vmp/scripts/02_build_toy_instance.py

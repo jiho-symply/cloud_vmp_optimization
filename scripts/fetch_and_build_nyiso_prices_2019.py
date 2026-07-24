@@ -1,0 +1,1 @@
+../experiments/2607-notion-energy-vmp/scripts/fetch_and_build_nyiso_prices_2019.py

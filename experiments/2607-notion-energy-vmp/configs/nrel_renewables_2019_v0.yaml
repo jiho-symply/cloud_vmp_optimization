@@ -1,0 +1,99 @@
+year: 2019
+raw_interval_minutes: 5
+placement_interval_minutes: 30
+timezone: UTC
+leap_day: false
+
+expected_rows:
+  raw_5min_per_site: 105120
+  cf_5min_total: 1051200
+  cf_30min_total: 175200
+
+api:
+  min_seconds_between_calls: 1.25
+  max_retries: 5
+  timeout_seconds: 120
+  solar_endpoint: "https://developer.nlr.gov/api/nsrdb/v2/solar/nsrdb-GOES-conus-v4-0-0-download.csv"
+  wind_endpoint: "https://developer.nlr.gov/api/wind-toolkit/v2/wind/wtk-conus-5min-v1-0-0-download.csv"
+
+solar:
+  attributes:
+    - ghi
+    - dni
+    - dhi
+    - air_temperature
+    - wind_speed
+    - solar_zenith_angle
+    - surface_albedo
+    - surface_pressure
+  ac_rated_power_w: 1000000
+  dc_ac_ratio: 1.2
+  inverter_nominal_efficiency: 0.96
+  system_losses: 0.14
+  gamma_pdc: -0.004
+  surface_azimuth: 180.0
+  default_albedo: 0.2
+
+wind:
+  attributes:
+    - windspeed_80m
+    - winddirection_80m
+  rated_power_mw: 1.5
+  hub_height_m: 80
+  cut_in_speed_mps: 3.5
+  rated_speed_mps: 12.0
+  cut_out_speed_mps: 25.0
+  wind_loss_factor: 0.90
+
+scaling:
+  assumed_mean_demand_mw_per_site: 100.0
+  target_average_renewable_to_demand_ratio: 2.0
+  solar_energy_mix: 0.20
+  wind_energy_mix: 0.80
+
+paths:
+  raw_solar_dir: "data/raw/nrel/solar/2019"
+  raw_wind_dir: "data/raw/nrel/wind/2019"
+  processed_dir: "data/processed/nrel"
+
+sites:
+  - site_id: CA
+    state: California
+    lat: 36.7783
+    lon: -119.4179
+  - site_id: WA
+    state: Washington
+    lat: 47.7511
+    lon: -120.7401
+  - site_id: OR
+    state: Oregon
+    lat: 43.8041
+    lon: -120.5542
+  - site_id: IL
+    state: Illinois
+    lat: 40.6331
+    lon: -89.3985
+  - site_id: GA
+    state: Georgia
+    lat: 32.1656
+    lon: -82.9001
+  - site_id: VA
+    state: Virginia
+    lat: 37.4316
+    lon: -78.6569
+  - site_id: TX
+    state: Texas
+    lat: 31.9686
+    lon: -99.9018
+  - site_id: FL
+    state: Florida
+    lat: 27.6648
+    lon: -81.5158
+  - site_id: NC
+    state: North Carolina
+    lat: 35.7596
+    lon: -79.0193
+  - site_id: SC
+    state: South Carolina
+    lat: 33.8361
+    lon: -81.1637

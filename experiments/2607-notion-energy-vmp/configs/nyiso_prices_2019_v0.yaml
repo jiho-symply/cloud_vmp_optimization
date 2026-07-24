@@ -1,0 +1,83 @@
+market: NYISO
+year: 2019
+timezone_raw: America/New_York
+timezone_output: UTC
+raw_interval_rt_minutes: 5
+da_native_interval_minutes: 60
+final_interval_minutes: 5
+placement_interval_minutes: 30
+
+expected_rows:
+  price_5min_total: 1156320
+  price_30min_total: 192720
+  price_5min_per_site: 105120
+  price_30min_per_site: 17520
+
+api:
+  max_retries: 5
+  timeout_seconds: 120
+  min_seconds_between_calls: 0.25
+  da_url_template: "https://mis.nyiso.com/public/csv/damlbmp/{yyyymm}01damlbmp_zone_csv.zip"
+  rt_url_template: "https://mis.nyiso.com/public/csv/realtime/{yyyymm}01realtime_zone_csv.zip"
+
+paths:
+  raw_da_dir: "data/raw/nyiso/da_lbmp_zonal/2019"
+  raw_rt_dir: "data/raw/nyiso/rt_lbmp_zonal_5min/2019"
+  processed_dir: "data/processed/nyiso"
+
+zones:
+  - site_id: WEST
+    nyiso_zone: WEST
+    proxy_city: Buffalo
+    lat: 42.8864
+    lon: -78.8784
+  - site_id: GENESE
+    nyiso_zone: GENESE
+    proxy_city: Rochester
+    lat: 43.1566
+    lon: -77.6088
+  - site_id: CENTRL
+    nyiso_zone: CENTRL
+    proxy_city: Syracuse
+    lat: 43.0481
+    lon: -76.1474
+  - site_id: NORTH
+    nyiso_zone: NORTH
+    proxy_city: Watertown
+    lat: 43.9748
+    lon: -75.9108
+  - site_id: MHKVL
+    nyiso_zone: MHK VL
+    proxy_city: Utica
+    lat: 43.1009
+    lon: -75.2327
+  - site_id: CAPITL
+    nyiso_zone: CAPITL
+    proxy_city: Albany
+    lat: 42.6526
+    lon: -73.7562
+  - site_id: HUDVL
+    nyiso_zone: HUD VL
+    proxy_city: Poughkeepsie
+    lat: 41.7004
+    lon: -73.9210
+  - site_id: MILLWD
+    nyiso_zone: MILLWD
+    proxy_city: White Plains
+    lat: 41.0340
+    lon: -73.7629
+  - site_id: DUNWOD
+    nyiso_zone: DUNWOD
+    proxy_city: Yonkers
+    lat: 40.9312
+    lon: -73.8988
+  - site_id: NYC
+    nyiso_zone: N.Y.C.
+    proxy_city: New York City
+    lat: 40.7128
+    lon: -74.0060
+  - site_id: LONGIL
+    nyiso_zone: LONGIL
+    proxy_city: Hicksville
+    lat: 40.7684
+    lon: -73.5251

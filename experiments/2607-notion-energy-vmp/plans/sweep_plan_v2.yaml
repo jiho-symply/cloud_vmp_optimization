@@ -1,0 +1,77 @@
+suite_name: notion_model_validation_v2
+base_config: configs/toy_200_real.yaml
+output_root: runs/notion_model_validation_v2
+
+parallel:
+  max_workers: 12
+  threads_per_run: 8
+  soft_mem_limit_gb_per_run: 32
+  nodefile_start_gb_per_run: 4
+
+defaults:
+  time_limit_seconds: null
+  mip_gap: 0.001
+  write_lp: false
+  write_mps: false
+
+phases:
+  smoke:
+    enabled: true
+    target_total_vms: 40
+    num_scenarios: 2
+    num_servers: 6
+
+  sampling_replicates:
+    enabled: true
+    seeds: [42, 43, 44]
+
+  size_scaling:
+    enabled: true
+    designs:
+      - {target_total_vms: 100, num_scenarios: 5, num_servers: 8}
+      - {target_total_vms: 100, num_scenarios: 10, num_servers: 8}
+      - {target_total_vms: 200, num_scenarios: 5, num_servers: 12}
+      - {target_total_vms: 200, num_scenarios: 10, num_servers: 12}
+
+  economics_ofat:
+    enabled: true
+    kappa_sla: [0.0, 0.1, 0.2, 0.5]
+    spot_discount_ratio: [0.1, 0.5, 0.7]
+    kappa_migration: [0.0, 0.05, 0.5]
+
+  risk_ofat:
+    enabled: true
+    alpha: [0.80, 0.90]
+    epsilon: [0.0, 0.01, 0.10, 0.20]
+
+  energy_ofat:
+    enabled: true
+    renewable_ratio: [0.0, 0.5, 2.0]
+    ess_capacity_ratio: [0.0, 0.5, 2.0]
+
+  renewable_mix_grid:
+    enabled: true
+    solar_capacity_multiplier: [0.0, 0.5, 1.0, 2.0]
+    wind_capacity_multiplier: [0.0, 0.5, 1.0, 2.0]
+
+  seasonal_real_data:
+    enabled: true
+    blocks:
+      winter: [2019-01-01, 2019-01-02, 2019-01-03, 2019-01-04, 2019-01-05, 2019-01-06, 2019-01-07, 2019-01-08, 2019-01-09, 2019-01-10]
+      spring: [2019-04-01, 2019-04-02, 2019-04-03, 2019-04-04, 2019-04-05, 2019-04-06, 2019-04-07, 2019-04-08, 2019-04-09, 2019-04-10]
+      summer: [2019-07-01, 2019-07-02, 2019-07-03, 2019-07-04, 2019-07-05, 2019-07-06, 2019-07-07, 2019-07-08, 2019-07-09, 2019-07-10]
+      autumn: [2019-10-01, 2019-10-02, 2019-10-03, 2019-10-04, 2019-10-05, 2019-10-06, 2019-10-07, 2019-10-08, 2019-10-09, 2019-10-10]
+
+  latin_hypercube_interactions:
+    enabled: true
+    runs: 128
+    seed: 20260710
+    ranges:
+      kappa_sla: [0.0, 0.5]
+      spot_discount_ratio: [0.1, 0.7]
+      kappa_migration: [0.0, 0.5]
+      alpha: [0.80, 0.95]
+      epsilon: [0.0, 0.20]
+      solar_capacity_multiplier: [0.0, 2.0]
+      wind_capacity_multiplier: [0.0, 2.0]
+      ess_capacity_ratio: [0.0, 2.0]
