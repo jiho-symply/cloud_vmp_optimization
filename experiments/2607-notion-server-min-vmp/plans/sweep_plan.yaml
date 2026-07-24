@@ -1,0 +1,170 @@
+schema_version: 3
+status: planned
+suite_name: notion_server_min_v3
+base_config: configs/baseline.yaml
+output_root: runs/notion_server_min_v3
+
+# Every sweep run starts from this common anchor and changes exactly one factor.
+# Values from different factors, stages, or workload definitions are never
+# combined into a Cartesian product.
+baseline:
+  experiment:
+    seed: 42
+    horizon_hours: 24
+    slot_minutes: 30
+    num_scenarios: 20
+    class_counts:
+      on_demand: 50
+      spot: 50
+      batch_jobs: 50
+    num_servers: 6
+  server:
+    min_on_slots: 2
+    min_off_slots: 2
+  batch:
+    startup_cpu: 0.05
+    startup_mem: 0.0
+    base_cpu: 0.0
+    base_mem: 0.05
+    max_families: 10
+    family_interpretation: deterministic_configured_pair_rank_bins
+  economics:
+    kappa_on_demand: 10.0
+    spot_discount_ratio: 0.30
+    batch_discount_ratio: 0.50
+  migration:
+    coefficient: 0.05
+    coefficient_unit: kWh_per_normalized_memory_unit
+  risk:
+    alpha: 0.95
+    epsilon: 0.05
+  solver:
+    mip_gap: 0.001
+    threads: 8
+    time_limit_seconds: null
+    seed: 42
+    write_lp: false
+    write_mps: false
+
+generation:
+  design: staged_one_factor_at_a_time
+  semantics: copy_baseline_then_override_exactly_one_factor
+  forbid_full_cartesian_product: true
+  combine_factors_within_stage: false
+  combine_factors_across_stages: false
+  deduplicate_identical_configs_globally: true
+  exact_unique_candidate_configs:
+    first_stage: 11
+    second_stage: 14
+    total: 24
+  solver_launch_count: determined_by_structural_feasibility_precheck
+  immutable_configs: true
+  require_source_checksums: true
+  require_common_random_numbers_within_comparison_group: true
+  allow_zero_spot_or_batch_count: true
+  require_structural_feasibility_precheck: true
+
+stages:
+  first_stage:
+    enabled: true
+    purpose: determine_whether_each_model_parameter_has_a_material_effect
+    design: one_factor_at_a_time
+    anchor: baseline
+    factors:
+      - id: spot_discount_ratio
+        config_path: economics.spot_discount_ratio
+        levels:
+          - {id: gamma_0, value: 0.0}
+          - {id: gamma_0_1, value: 0.1}
+          - {id: gamma_0_3, value: 0.3}
+          - {id: gamma_0_5, value: 0.5}
+      - id: migration_coefficient
+        config_path: migration.coefficient
+        levels:
+          - {id: c_mig_0, value: 0.0}
+          - {id: c_mig_0_05, value: 0.05}
+          - {id: c_mig_0_1, value: 0.1}
+          - {id: c_mig_1, value: 1.0}
+      - id: batch_startup_cpu
+        config_path: batch.startup_cpu
+        levels:
+          - {id: startup_cpu_0, value: 0.0}
+          - {id: startup_cpu_0_05, value: 0.05}
+          - {id: startup_cpu_0_1, value: 0.1}
+      - id: batch_base_mem
+        config_path: batch.base_mem
+        levels:
+          - {id: base_mem_0, value: 0.0}
+          - {id: base_mem_0_05, value: 0.05}
+          - {id: base_mem_0_1, value: 0.1}
+
+  second_stage:
+    enabled: true
+    purpose: characterize_responses_over_the_requested_operational_ranges
+    design: one_factor_at_a_time
+    anchor: baseline
+    factors:
+      - id: num_servers
+        config_path: experiment.num_servers
+        levels:
+          - {id: servers_3, value: 3}
+          - {id: servers_4, value: 4}
+          - {id: servers_5, value: 5}
+          - {id: servers_6, value: 6}
+          - {id: servers_7, value: 7}
+          - {id: servers_8, value: 8}
+      - id: workload
+        config_path: experiment.class_counts
+        levels:
+          - id: od_150
+            value: {on_demand: 150, spot: 0, batch_jobs: 0}
+          - id: od_75_spot_75
+            value: {on_demand: 75, spot: 75, batch_jobs: 0}
+          - id: od_50_spot_50_batch_50
+            value: {on_demand: 50, spot: 50, batch_jobs: 50}
+      - id: risk_alpha
+        config_path: risk.alpha
+        levels:
+          - {id: alpha_0_5, value: 0.5}
+          - {id: alpha_0_8, value: 0.8}
+          - {id: alpha_0_9, value: 0.9}
+          - {id: alpha_0_95, value: 0.95}
+      - id: risk_epsilon
+        config_path: risk.epsilon
+        levels:
+          - {id: epsilon_0_5, value: 0.5}
+          - {id: epsilon_0_1, value: 0.1}
+          - {id: epsilon_0_05, value: 0.05}
+          - {id: epsilon_0, value: 0.0}
+
+execution_policy:
+  schedule: first_stage_then_second_stage
+  launch_all_feasible_candidate_configs: true
+  skip_structurally_infeasible_candidates_before_solver_launch: true
+  max_parallel_jobs: 3
+  # Three concurrent jobs use at most 87 of the user-authorized 88 threads.
+  threads_per_job: 29
+  total_thread_limit: 88
+  time_limit_seconds: 21600
+  mip_gap: 0.001
+  soft_mem_limit_gb_per_job: 96
+  nodefile_start_gb: 0.5
+  safety:
+    memory_reserve_gb: 128
+    disk_reserve_gb: 60
+    write_lp: false
+    write_mps: false
+    require_disjoint_cpu_affinity: true
+
+validation:
+  require_exact_baseline_dimensions: true
+  require_deterministic_batch_family_binning: true
+  require_uniform_scenario_probabilities: true
+  require_alpha_strictly_between_zero_and_one: true
+  require_objective_reconstruction: true
+  require_per_server_time_empirical_cvar: true
+  require_strict_priority_residual_audit: true
+  require_batch_completion_all_scenarios: true
+  require_lineage_manifest: true
+  require_no_model_facing_fill_or_interpolation: true
+  preserve_existing_experiment_paths: true
