@@ -14,7 +14,7 @@ Outputs:
 
 - analysis/server_time_state.csv: server-time-scenario load, barL, gamma, phi
 - analysis/on_demand_realized_placement.csv: xR placement by scenario
-- analysis/migration_events.csv: nonzero migration arcs
+- analysis/migration_events.csv: nonzero migration events
 - analysis/spot_activity.csv and analysis/spot_metrics.csv
 - analysis/batch_reservation.csv and analysis/batch_processing.csv
 - analysis/energy_summary.csv and analysis/scenario_metrics.csv
@@ -221,16 +221,44 @@ def build_tables(data, solution_rows):
                         od_realized.append({"workload_id": i, "server": s, "time": t, "scenario": xi, "active": value})
     od_realized = pd.DataFrame(od_realized, columns=["workload_id", "server", "time", "scenario", "active"])
 
+    realized_server_lookup = {}
+    if not od_realized.empty:
+        strongest_realized = (
+            od_realized.sort_values("active")
+            .groupby(["workload_id", "scenario", "time"], as_index=False)
+            .tail(1)
+        )
+        for row in strongest_realized.itertuples(index=False):
+            realized_server_lookup[(row.workload_id, row.scenario, int(row.time))] = int(row.server)
+
     migrations = []
     for row in solution_rows:
         if row["name"] == "m" and row["value"] > EPS:
-            i, s, sp, t, xi = row["indices"]
+            indices = row["indices"]
+            if len(indices) == 5:
+                i, s, sp, t, xi = indices
+                from_server = int(s)
+                to_server = int(sp)
+                time = int(t)
+            elif len(indices) == 3:
+                i, t, xi = indices
+                time = int(t)
+                previous_times = [active_t for active_t in data["od_active"].get(i, []) if active_t < time]
+                if not previous_times:
+                    continue
+                previous_time = previous_times[-1]
+                from_server = realized_server_lookup.get((i, xi, previous_time))
+                to_server = realized_server_lookup.get((i, xi, time))
+                if from_server is None or to_server is None:
+                    continue
+            else:
+                continue
             migrations.append(
                 {
                     "workload_id": i,
-                    "from_server": int(s),
-                    "to_server": int(sp),
-                    "time": int(t),
+                    "from_server": from_server,
+                    "to_server": to_server,
+                    "time": time,
                     "scenario": xi,
                     "value": row["value"],
                 }

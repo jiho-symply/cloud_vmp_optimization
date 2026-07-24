@@ -150,12 +150,15 @@ def sample_category(frame, count, rng, category):
 
 def select_workload_metadata(vm_summary, on_demand_count, spot_count, batch_count, seed):
     rng = np.random.default_rng(seed)
-    selected_on_demand = sample_category(vm_summary, on_demand_count, rng, "Interactive")
-    selected_delay = sample_category(vm_summary, spot_count + batch_count, rng, "Delay-insensitive")
+    total_count = on_demand_count + spot_count + batch_count
+    selected = sample_category(vm_summary, total_count, rng, "Interactive")
+    selected = selected.sample(frac=1.0, random_state=seed).reset_index(drop=True)
 
-    selected_delay = selected_delay.sample(frac=1.0, random_state=seed).reset_index(drop=True)
-    selected_spot = selected_delay.iloc[:spot_count].copy()
-    selected_batch = selected_delay.iloc[spot_count : spot_count + batch_count].copy()
+    od_end = on_demand_count
+    sp_end = od_end + spot_count
+    selected_on_demand = selected.iloc[:od_end].copy()
+    selected_spot = selected.iloc[od_end:sp_end].copy()
+    selected_batch = selected.iloc[sp_end : sp_end + batch_count].copy()
 
     workload_metadata = pd.concat(
         [
@@ -425,8 +428,8 @@ def build_instance(
         "scenario_sampling": "deterministic triangular(min, avg, max) keyed by (vm_id, time, scenario)",
         "batch_modeling": "split each original batch VM trace into one-slot batch jobs",
         "sampling_policy": {
-            "pool_filter": f"vm_category in {{Interactive, Delay-insensitive}}, vCPU <= {max_vcpu}, avg_cpu_mean >= {min_avg_cpu}, hour < 24",
-            "toy_sampling": "uniform over candidate VMs regardless of lifetime length within the horizon",
+            "pool_filter": f"vm_category == Interactive, vCPU <= {max_vcpu}, avg_cpu_mean >= {min_avg_cpu}, hour < 24",
+            "toy_sampling": "uniformly sample the full VM pool from Interactive once, then split it by requested OD/SP/BJ counts",
         },
         "counts": {
             "on_demand": on_demand_count,

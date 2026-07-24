@@ -1,5 +1,5 @@
 """
-Gurobi implementation of the Notion page "VM type modeling (1)".
+CVaR-surrogate Gurobi implementation of the Notion page "VM type modeling (1)".
 
 The model is intentionally written as a readable research prototype.  It is
 not decomposed into many tiny helpers, and most constraints appear in the same
@@ -16,7 +16,9 @@ order as the Notion page:
    - m[i,t,xi]: 1 if on-demand VM i changes server at time t
    - yR[j,s,t,xi]: spot VM active state after server-level suspension
    - z[k,s,t,xi]: processed batch workload volume
-   - gamma/phi/eta/delta: suspension and SLA violation indicators
+   - gamma: server-level low-priority suspension indicator
+   - od_cvar_alpha/od_cvar_excess: CVaR surrogate variables for OD overload
+   - spot_cvar_alpha/spot_cvar_excess: CVaR surrogate variables for spot suspension
 
 Important modeling choices made from the latest Notion page:
 
@@ -35,8 +37,8 @@ Important modeling choices made from the latest Notion page:
 - Implementation-required: the current Notion energy objective uses capped
   load barL[s,t,xi].  Therefore this file defines barL = min(L, C u);
   config selects either the indicator or big-M implementation.
-- Scenario probabilities are used in the chance constraints and in the CPU
-  energy term exactly as shown in the updated Notion objective.
+- Scenario probabilities are used in CVaR surrogate constraints and in the CPU
+  energy term.
 - The migration-energy term is counted once per positive m[i,t,xi].  This
   avoids multiplying the same migration by every server-time pair.
 - Homogeneous-server symmetry breaking is controlled by config.  The available
@@ -75,15 +77,15 @@ DEFAULT_INSTANCE = (
     REPO_ROOT
     / "data"
     / "processed"
-    / "2605-vm-type-modeling-1"
+    / "2605-CVaR-surrogate"
     / "notion_vm_type_24vm_od8_sp8_bj8_sc10_cap8"
     / "vm_type_instance.json"
 )
-DEFAULT_RESULTS_DIR = REPO_ROOT / "experiments" / "2605-vm-type-modeling-1" / "results"
+DEFAULT_RESULTS_DIR = REPO_ROOT / "experiments" / "2605-CVaR-surrogate" / "results"
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Solve the Notion VM type modeling (1) MILP.")
+    parser = argparse.ArgumentParser(description="Solve the CVaR-surrogate VM type modeling (1) MILP.")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--instance", type=Path, default=None)
     parser.add_argument("--results-dir", type=Path, default=None)
@@ -146,7 +148,7 @@ def status_name(status):
 def build_model(data, formulation=None):
     formulation = formulation or {}
     bar_load_mode = formulation.get("bar_load_mode", "indicator")
-    server_symmetry = formulation.get("server_symmetry", "used_and_powered_slots")
+    server_symmetry = formulation.get("server_symmetry", "powered_slots")
     if bar_load_mode not in {"indicator", "big_m"}:
         raise ValueError("model.formulation.bar_load_mode must be 'indicator' or 'big_m'.")
     if server_symmetry not in {"none", "used", "powered_slots", "used_and_powered_slots"}:
@@ -167,7 +169,7 @@ def build_model(data, formulation=None):
     C = data["capacity"]
     M = data["big_m"]
 
-    model = gp.Model("vm_type_modeling_1")
+    model = gp.Model("vm_type_modeling_1_cvar_surrogate")
 
     # First-stage variables.
     u = model.addVars(S, T, vtype=GRB.BINARY, name="u")
@@ -194,17 +196,19 @@ def build_model(data, formulation=None):
     )
     z = model.addVars(K, S, T, Xi, lb=0.0, name="z")
     gamma = model.addVars(S, T, Xi, vtype=GRB.BINARY, name="gamma")
-    phi = model.addVars(S, T, Xi, vtype=GRB.BINARY, name="phi")
-    eta = model.addVars(S, Xi, vtype=GRB.BINARY, name="eta")
-    delta = model.addVars(J, Xi, vtype=GRB.BINARY, name="delta")
     od_load = model.addVars(S, T, Xi, lb=0.0, name="od_load")
     total_load = model.addVars(S, T, Xi, lb=0.0, name="total_load")
     bar_load = model.addVars(S, T, Xi, lb=0.0, name="barL")
     cap_select = model.addVars(S, T, Xi, vtype=GRB.BINARY, name="cap_select")
+    od_cvar_alpha = model.addVars(S, lb=-GRB.INFINITY, name="od_cvar_alpha")
+    od_cvar_excess = model.addVars(S, Xi, lb=0.0, name="od_cvar_excess")
+    spot_cvar_alpha = model.addVars(J, lb=-GRB.INFINITY, name="spot_cvar_alpha")
+    spot_cvar_excess = model.addVars(J, Xi, lb=0.0, name="spot_cvar_excess")
 
     max_od_load = sum(max(data["d_od"].get((i, t, xi), 0.0) for t in T_i[i] for xi in Xi) for i in I)
     max_spot_load = sum(max(data["d_sp"].get((j, t, xi), 0.0) for t in T_j[j] for xi in Xi) for j in J)
     max_batch_load = sum(data["batch_info"][k]["reserved_cpu"] for k in K)
+    # Kept only for the commented big-M barL alternative below.
     cap_m = max(M, max_od_load + max_spot_load + max_batch_load + C)
 
     # First-stage placement and reservation constraints.
@@ -258,7 +262,7 @@ def build_model(data, formulation=None):
         model.addConstrs(z[k, s, t, xi] <= r_b * (1 - gamma[s, t, xi]) for s in S for t in T for xi in Xi)
         model.addConstrs(gp.quicksum(z[k, s, t, xi] for s in S for t in T) >= data["batch_info"][k]["workload"] for xi in Xi)
 
-    # Server load and chance constraints.
+    # Server load and CVaR-surrogate risk constraints.
     for s in S:
         for t in T:
             for xi in Xi:
@@ -269,24 +273,15 @@ def build_model(data, formulation=None):
                 spot_load = gp.quicksum(data["d_sp"].get((j, t, xi), 0.0) * yR[j, s, t, xi] for j in J if t in T_j[j])
                 batch_load = gp.quicksum(z[k, s, t, xi] for k in K)
                 model.addConstr(total_load[s, t, xi] == od_load[s, t, xi] + spot_load + batch_load)
-                model.addConstr(od_load[s, t, xi] <= C * u[s, t] + M * phi[s, t, xi])
-                model.addConstr(eta[s, xi] >= phi[s, t, xi])
-                model.addConstr(gamma[s, t, xi] >= phi[s, t, xi])
-                # Additional model-meaningfulness constraint:
-                # If there is no on-demand violation, the realized workload
-                # after spot/batch suspension must fit within physical server
-                # capacity.  If phi=1, gamma=1 already removes low-priority
-                # work and the remaining excess is interpreted as OD SLA loss.
-                model.addConstr(total_load[s, t, xi] <= C * u[s, t] + M * phi[s, t, xi])
+                # CVaR surrogate for the OD chance constraint:
+                # CVaR_epsilon(max_t {od_load_st(xi) - C u_st}) <= 0.
+                model.addConstr(od_cvar_excess[s, xi] >= od_load[s, t, xi] - C * u[s, t] - od_cvar_alpha[s])
 
-                # Additional model-meaningfulness constraint:
-                # gamma should not float to 1 on a server-time with no
-                # low-priority work unless OD violation forces it.
-                low_priority_planned = (
-                    gp.quicksum(y[j, s] for j in J if t in T_j[j])
-                    + gp.quicksum(b[k, s, t] for k in K)
-                )
-                model.addConstr(gamma[s, t, xi] <= phi[s, t, xi] + low_priority_planned)
+                # If low-priority work is not suspended, total realized load
+                # must fit.  If gamma=1, spot and batch work are already
+                # stopped by yR/z linking, and any remaining OD overload is
+                # governed by the OD CVaR surrogate above.
+                model.addConstr(total_load[s, t, xi] <= C * u[s, t] + M * gamma[s, t, xi])
 
                 # Implementation-required: Notion's updated energy objective
                 # uses barL, so the capped-load variable must be defined.
@@ -312,28 +307,29 @@ def build_model(data, formulation=None):
                 else:
                     model.addConstr(bar_load[s, t, xi] >= total_load[s, t, xi] - cap_m * cap_select[s, t, xi])
                     model.addConstr(bar_load[s, t, xi] >= C * u[s, t] - cap_m * (1 - cap_select[s, t, xi]))
-    # Additional model-meaningfulness constraint:
-    # eta is the exact "any OD SLA violation on server s in scenario xi" flag.
-    # The lower bound eta >= phi is above; this upper bound prevents eta from
-    # taking arbitrary 1 values when all phi values are 0.
     model.addConstrs(
-        eta[s, xi] <= gp.quicksum(phi[s, t, xi] for t in T)
+        od_cvar_alpha[s]
+        + (1.0 / data["epsilon_od"]) * gp.quicksum(prob[xi] * od_cvar_excess[s, xi] for xi in Xi)
+        <= 0.0
         for s in S
-        for xi in Xi
     )
-    model.addConstrs(gp.quicksum(prob[xi] * eta[s, xi] for xi in Xi) <= data["epsilon_od"] for s in S)
 
-    # Spot chance constraint and per-scenario minimum service ratio.
-    model.addConstrs(delta[j, xi] >= 1 - gp.quicksum(yR[j, s, t, xi] for s in S) for j in J for t in T_j[j] for xi in Xi)
-    # Additional model-meaningfulness constraint:
-    # delta is the exact "spot VM j is suspended at least once" flag.
+    # Spot CVaR surrogate and per-scenario minimum service ratio.
+    # CVaR_epsilon(max_t {1 - sum_s yR_jst(xi)}) <= 0 is a conservative
+    # surrogate for "spot VM j is suspended at least once" chance control.
     model.addConstrs(
-        delta[j, xi]
-        <= gp.quicksum(1 - gp.quicksum(yR[j, s, t, xi] for s in S) for t in T_j[j])
+        spot_cvar_excess[j, xi]
+        >= 1 - gp.quicksum(yR[j, s, t, xi] for s in S) - spot_cvar_alpha[j]
         for j in J
+        for t in T_j[j]
         for xi in Xi
     )
-    model.addConstrs(gp.quicksum(prob[xi] * delta[j, xi] for xi in Xi) <= data["epsilon_sp"] for j in J)
+    model.addConstrs(
+        spot_cvar_alpha[j]
+        + (1.0 / data["epsilon_sp"]) * gp.quicksum(prob[xi] * spot_cvar_excess[j, xi] for xi in Xi)
+        <= 0.0
+        for j in J
+    )
     model.addConstrs(
         gp.quicksum(yR[j, s, t, xi] for s in S for t in T_j[j]) >= data["rho"] * len(T_j[j])
         for j in J
@@ -426,9 +422,9 @@ def main():
     )
     formulation = formulation_config(
         config,
-        defaults={"bar_load_mode": "indicator", "server_symmetry": "used_and_powered_slots"},
+        defaults={"bar_load_mode": "indicator", "server_symmetry": "powered_slots"},
     )
-    solver = solver_config(config, defaults={"mip_gap": 0.001, "method": 2})
+    solver = solver_config(config, defaults={"mip_gap": 0.001, "method": 2, "node_method": 2, "crossover": 0})
 
     data = load_data(instance_path)
     model = build_model(data, formulation=formulation)
