@@ -159,6 +159,28 @@ baseline solve는 시작하지 않았고,
 `--num-scenarios 2 --on-demand-count 2 --spot-count 2 --batch-job-count 4
 --num-servers 2 --threads 1` 축소형 solve를 사용했다.
 
+장시간 solve에서 새 incumbent를 즉시 확인하려면
+`--save-incumbent-snapshot`을 추가한다. Gurobi의 `MIPSOL` callback이 실행될 때마다
+run directory의 `incumbent_latest.sol`을 원자적으로 덮어쓴다. 따라서 solve와 동시에
+파일을 읽어도 이전 또는 새 incumbent의 완전한 내용만 보이며 부분 파일은 노출되지 않는다.
+파일 상단에는 runtime, solver objective, total profit, best bound, gap이 있고, 그 아래에는
+모든 변수 값이 Gurobi solution 형식으로 기록된다.
+
+```bash
+.venv/bin/python experiments/2607-notion-server-min-vmp/run_experiment.py \
+  --config configs/baseline.yaml \
+  --run-dir runs/baseline_48h \
+  --time-limit 172800 \
+  --save-incumbent-snapshot
+
+watch -n 30 'head -n 18 experiments/2607-notion-server-min-vmp/runs/baseline_48h/incumbent_latest.sol'
+```
+
+YAML에서 항상 켜려면 `solver.incumbent_snapshot.enabled: true`로 두며, 같은 mapping의
+`filename`으로 run directory 안의 `.sol` 파일명을 바꿀 수 있다.
+이 파일은 재시작·별도 분석에 쓸 수 있는 원시 incumbent checkpoint다. 기존 시각화용
+CSV와 `summary.json`은 현재와 마찬가지로 solve가 종료된 뒤 생성된다.
+
 [plans/sweep_plan.yaml](./plans/sweep_plan.yaml)은 sensitivity의 declarative 설계다.
 `run_sweep.py`는 선택한 stage의 immutable derived YAML을 생성하고, baseline 중복을 제거한
 뒤 단일-run interface를 서로 다른 run directory와 CPU affinity로 병렬 실행한다.
