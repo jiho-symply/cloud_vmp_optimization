@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 from .data import build_instance, load_config
+from .incumbent import IncumbentSnapshotWriter, snapshot_destination
 from .model import build_model, configure_solver
 from .reporting import (
     write_instance_artifacts,
@@ -39,6 +40,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--on-demand-count", type=int)
     parser.add_argument("--spot-count", type=int)
     parser.add_argument("--batch-job-count", type=int)
+    parser.add_argument(
+        "--save-incumbent-snapshot",
+        action="store_true",
+        help=(
+            "Atomically overwrite incumbent_latest.sol whenever Gurobi finds "
+            "a new incumbent"
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -60,6 +69,14 @@ def _apply_overrides(config: dict, args: argparse.Namespace) -> dict:
     solver.setdefault("presolve", 2)
     solver.setdefault("write_lp", True)
     solver.setdefault("write_mps", False)
+    incumbent_snapshot = solver.get("incumbent_snapshot")
+    if incumbent_snapshot is None:
+        incumbent_snapshot = {}
+        solver["incumbent_snapshot"] = incumbent_snapshot
+    if not isinstance(incumbent_snapshot, dict):
+        raise TypeError("solver.incumbent_snapshot must be a mapping")
+    incumbent_snapshot.setdefault("enabled", False)
+    incumbent_snapshot.setdefault("filename", "incumbent_latest.sol")
 
     if args.time_limit is not None:
         solver["time_limit_seconds"] = args.time_limit
@@ -78,6 +95,8 @@ def _apply_overrides(config: dict, args: argparse.Namespace) -> dict:
     if args.batch_job_count is not None:
         class_counts.pop("batch_candidate", None)
         class_counts["batch_jobs"] = args.batch_job_count
+    if getattr(args, "save_incumbent_snapshot", False):
+        incumbent_snapshot["enabled"] = True
     return resolved
 
 
@@ -148,8 +167,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     print("[3/4] Starting Gurobi optimization", flush=True)
-    model.optimize()
+    snapshot_path = snapshot_destination(solver_config, run_dir)
+    snapshot_writer = None
+    if snapshot_path is not None:
+        snapshot_writer = IncumbentSnapshotWriter(
+            model,
+            snapshot_path,
+            constant_revenue_offset=sum(artifacts.objective_constants.values()),
+        )
+        print(
+            "Incumbent snapshots will atomically overwrite "
+            f"{snapshot_path}",
+            flush=True,
+        )
+        model.optimize(snapshot_writer)
+    else:
+        model.optimize()
     if model.SolCount > 0:
+        if snapshot_writer is not None:
+            snapshot_writer.finalize(model)
         print("[4/4] Writing solution and fidelity audits", flush=True)
         solution_summary = write_solution_reports(artifacts, run_dir)
         print(json.dumps(solution_summary, indent=2, ensure_ascii=False), flush=True)
@@ -161,7 +197,10 @@ def main(argv: list[str] | None = None) -> int:
 
         if model.Status == GRB.INF_OR_UNBD:
             model.Params.DualReductions = 0
-            model.optimize()
+            if snapshot_writer is not None:
+                model.optimize(snapshot_writer)
+            else:
+                model.optimize()
         if model.Status == GRB.INFEASIBLE:
             model.computeIIS()
             model.write(str(run_dir / "iis.ilp"))

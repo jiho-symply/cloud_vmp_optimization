@@ -1,0 +1,1572 @@
+<div id="cpu-excess-focused-scale-v6">
+  <div class="provenance" id="cei-provenance"></div>
+
+  <div class="section-label">실험 설정</div>
+  <div class="table-responsive">
+    <table class="table table-sm text-small" aria-label="Experiment settings">
+      <tbody id="cei-settings"></tbody>
+    </table>
+  </div>
+
+  <div class="section-label">시나리오별 자원 압력과 2nd-stage 대응</div>
+  <div class="chart-description">
+    행은 시나리오, 열은 30분 슬롯이며 각 칸은 세 서버 중 최대값이다.
+    CPU·메모리는 Spot preemption 이후 값이고, hover하면 preemption 전후와 제외된 Spot 부하가 표시된다.
+    <span id="cei-pressure-scale-note"></span>
+    Batch 비율은 해당 슬롯에 처리한 작업량이 하루 전체 필요 작업량에서 차지하는 비율이다.
+  </div>
+  <div class="legend" aria-label="Atlas legend">
+    <span><i class="swatch offered-cpu"></i>Spot preemption 후 최대 CPU 수요</span>
+    <span><i class="swatch offered-mem"></i>Spot preemption 후 최대 메모리 부하</span>
+    <span><i class="swatch excess"></i>한 서버의 최대 On-demand CPU 초과 부하</span>
+    <span><i class="swatch batch"></i>해당 30분에 처리한 Batch 작업 비율</span>
+    <span><i class="event-mark"></i>Spot preemption 시작</span>
+  </div>
+  <svg id="cei-atlas" role="img" aria-label="Scenario by time recourse atlas"></svg>
+
+  <div class="section-label">1st-stage에 배치한 VM 크기와 서버 용량 비교</div>
+  <div class="chart-description">
+    시나리오가 정해지기 전에 각 서버에 배치한 On-demand VM과 admission된 Spot VM의 configured
+    CPU·메모리 크기를 더한 값이다. 100%는 서버 한 대의 물리용량이며 100%를 넘으면
+    configured size 기준 overcommit이다. 실제 usage와 Batch allocation은 포함하지 않는다.
+    이 incumbent의 최대값이 218%라 막대를 자르지 않도록 그래프는 220%까지 확보하되,
+    눈금은 0%, 100%, 200%만 표시한다.
+  </div>
+  <div class="legend" aria-label="First-stage configured VM size legend">
+    <span><i class="swatch od"></i>배치된 On-demand VM 크기 합계</span>
+    <span><i class="swatch spot"></i>admission된 Spot VM 크기 합계</span>
+    <span><i class="capacity-mark"></i>서버 물리용량 100%</span>
+    <span><i class="off-mark"></i>server OFF</span>
+  </div>
+  <svg id="cei-configured" role="img" aria-label="First-stage configured CPU and memory size by server"></svg>
+
+  <div class="detail-toolbar">
+    <label for="cei-scenario">선택 시나리오의 실제 부하와 CPU 초과 부하</label>
+    <select id="cei-scenario" class="form-select" aria-label="Scenario detail"></select>
+    <span id="cei-detail-summary" class="selected-summary"></span>
+  </div>
+  <div class="chart-description">
+    서버별 실제 On-demand served, Spot served, Batch allocation은 100% 물리용량 안에 쌓아 표시한다.
+    그 위의 진홍색 막대는 On-demand CPU 초과 부하이며, 막대 높이가 초과율에 비례한다.
+    이는 물리용량을 넘겨 배치한 부하가 아니라 2nd-stage recourse다.
+  </div>
+  <div class="legend" aria-label="Resource stack legend">
+    <span><i class="swatch od"></i>On-demand served</span>
+    <span><i class="swatch spot"></i>Spot served</span>
+    <span><i class="swatch batch"></i>Batch</span>
+    <span><i class="swatch excess"></i>On-demand CPU 초과 부하 · 막대 높이=초과율</span>
+    <span><i class="off-mark"></i>server OFF</span>
+  </div>
+  <svg id="cei-resources" role="img" aria-label="Selected scenario server CPU and memory lanes"></svg>
+
+  <div class="section-label">1st-stage / 2nd-stage Operations</div>
+  <div class="detail-toolbar recourse-toolbar">
+    <label for="cei-raster-scenario">Scenario</label>
+    <select id="cei-raster-scenario" class="form-select" aria-label="Placement and recourse scenario"></select>
+    <span id="cei-raster-summary" class="selected-summary" aria-live="polite"></span>
+  </div>
+  <div class="operation-heading">On-demand</div>
+  <div class="legend" aria-label="On-demand server colors">
+    <span><i class="swatch server-0"></i>s000</span>
+    <span><i class="swatch server-1"></i>s001</span>
+    <span><i class="swatch server-2"></i>s002</span>
+  </div>
+  <svg id="cei-operations-od" role="img" aria-label="On-demand VM placement over time"></svg>
+
+  <div class="operation-heading">Spot</div>
+  <div class="legend" aria-label="Spot state legend">
+    <span><i class="swatch server-0"></i>s000</span>
+    <span><i class="swatch server-1"></i>s001</span>
+    <span><i class="swatch server-2"></i>s002</span>
+    <span><i class="swatch rejected"></i>Spot rejected · 원래 lifecycle</span>
+    <span><i class="swatch preempted"></i>Spot preempted</span>
+    <span><i class="event-mark"></i>preemption 시작</span>
+  </div>
+  <svg id="cei-operations-spot" role="img" aria-label="Spot admission, service, and preemption over time"></svg>
+
+  <div class="operation-heading">Batch</div>
+  <div class="legend" aria-label="Batch state legend">
+    <span><i class="swatch prepared"></i>Batch prepared</span>
+    <span><i class="swatch batch-work"></i>선택 시나리오의 실제 work · 높이=양</span>
+  </div>
+  <svg id="cei-operations-batch" role="img" aria-label="Batch family preparation and selected-scenario work over time"></svg>
+
+  <div id="cei-tooltip" class="cei-tooltip" role="status" aria-live="polite" hidden></div>
+</div>
+
+<style>
+  #cpu-excess-focused-scale-v6 {
+    color: var(--foreground);
+    background: transparent;
+    width: 100%;
+    font-size: var(--font-size-base);
+  }
+  #cpu-excess-focused-scale-v6 .provenance,
+  #cpu-excess-focused-scale-v6 .legend,
+  #cpu-excess-focused-scale-v6 .detail-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+  }
+  #cpu-excess-focused-scale-v6 .provenance {
+    color: var(--muted-foreground);
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  #cpu-excess-focused-scale-v6 .section-label {
+    font-weight: 500;
+    margin: 14px 0 6px;
+  }
+  #cpu-excess-focused-scale-v6 .secondary,
+  #cpu-excess-focused-scale-v6 .footnote {
+    color: var(--muted-foreground);
+    font-weight: 400;
+    font-size: 11px;
+  }
+  #cpu-excess-focused-scale-v6 .legend {
+    color: var(--muted-foreground);
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+  #cpu-excess-focused-scale-v6 .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  #cpu-excess-focused-scale-v6 .swatch,
+  #cpu-excess-focused-scale-v6 .off-mark {
+    display: inline-block;
+    width: 12px;
+    height: 8px;
+  }
+  #cpu-excess-focused-scale-v6 .swatch.offered { background: var(--foreground); opacity: 0.55; }
+  #cpu-excess-focused-scale-v6 .swatch.od { background: var(--viz-series-1); }
+  #cpu-excess-focused-scale-v6 .swatch.spot { background: var(--viz-series-2); }
+  #cpu-excess-focused-scale-v6 .swatch.batch { background: var(--viz-series-3); }
+  #cpu-excess-focused-scale-v6 .swatch.excess { background: var(--destructive); }
+  #cpu-excess-focused-scale-v6 .swatch.server-0 { background: var(--viz-series-4); }
+  #cpu-excess-focused-scale-v6 .swatch.server-1 { background: var(--viz-series-5); }
+  #cpu-excess-focused-scale-v6 .swatch.server-2 { background: var(--viz-series-6); }
+  #cpu-excess-focused-scale-v6 .swatch.preempted { background: var(--muted); }
+  #cpu-excess-focused-scale-v6 .swatch.rejected {
+    background: repeating-linear-gradient(
+      135deg,
+      transparent 0 3px,
+      var(--viz-series-2) 3px 5px
+    );
+    border: 1px solid var(--viz-series-2);
+  }
+  #cpu-excess-focused-scale-v6 .swatch.prepared {
+    background: transparent;
+    border: 1px solid var(--viz-series-3);
+  }
+  #cpu-excess-focused-scale-v6 .swatch.batch-work {
+    height: 9px;
+    background: linear-gradient(
+      to top,
+      var(--viz-series-3) 0 65%,
+      transparent 65% 100%
+    );
+    border: 1px solid var(--viz-series-3);
+  }
+  #cpu-excess-focused-scale-v6 .off-mark {
+    background: repeating-linear-gradient(135deg, transparent 0 3px, var(--border) 3px 4px);
+    border: 1px solid var(--border);
+  }
+  #cpu-excess-focused-scale-v6 .event-mark {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid var(--foreground);
+  }
+  #cpu-excess-focused-scale-v6 svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  #cpu-excess-focused-scale-v6 svg text {
+    fill: var(--foreground);
+    font-size: 11px;
+    font-weight: 400;
+  }
+  #cpu-excess-focused-scale-v6 svg .secondary-text {
+    fill: var(--muted-foreground);
+  }
+  #cpu-excess-focused-scale-v6 svg .grid-line {
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+  #cpu-excess-focused-scale-v6 svg .capacity-line {
+    stroke: var(--foreground);
+    stroke-width: 1;
+  }
+  #cpu-excess-focused-scale-v6 svg .selected-outline {
+    fill: none;
+    stroke: var(--foreground);
+    stroke-width: 1.5;
+    pointer-events: none;
+  }
+  #cpu-excess-focused-scale-v6 svg .clickable {
+    cursor: pointer;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar {
+    margin: 16px 0 8px;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar label {
+    font-weight: 500;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar select {
+    max-width: 150px;
+  }
+  #cpu-excess-focused-scale-v6 .selected-summary {
+    color: var(--muted-foreground);
+    font-size: 11px;
+  }
+  #cpu-excess-focused-scale-v6 .footnote {
+    margin-top: 8px;
+  }
+  @media (max-width: 520px) {
+    #cpu-excess-focused-scale-v6 .detail-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #cpu-excess-focused-scale-v6 .detail-toolbar select {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+</style>
+
+<style>
+  #cpu-excess-focused-scale-v6 {
+    --background: #ffffff;
+    --foreground: #172033;
+    --muted-foreground: #667085;
+    --muted: #d9e0e8;
+    --border: #d8dee8;
+    --destructive: #e11d48;
+    --viz-series-1: #3b82f6;
+    --viz-series-2: #f59e0b;
+    --viz-series-3: #22c55e;
+    --viz-series-4: #3b82f6;
+    --viz-series-5: #d946ef;
+    --viz-series-6: #14b8a6;
+    --cei-cpu: #2563eb;
+    --cei-mem: #0d9488;
+    --cei-tooltip-bg: #172033;
+    color-scheme: light;
+    box-sizing: border-box;
+    position: relative;
+    color: var(--foreground);
+    background: var(--background);
+    padding: 18px 20px 22px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.42;
+  }
+  #cpu-excess-focused-scale-v6 *,
+  #cpu-excess-focused-scale-v6 *::before,
+  #cpu-excess-focused-scale-v6 *::after {
+    box-sizing: border-box;
+  }
+  #cpu-excess-focused-scale-v6 .provenance {
+    color: var(--muted-foreground);
+    font-size: 12.5px;
+    margin-bottom: 12px;
+  }
+  #cpu-excess-focused-scale-v6 .section-label {
+    color: var(--foreground);
+    font-size: 16px;
+    font-weight: 650;
+    margin: 20px 0 4px;
+    letter-spacing: -0.01em;
+  }
+  #cpu-excess-focused-scale-v6 .chart-description {
+    max-width: 94ch;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 8px;
+  }
+  #cpu-excess-focused-scale-v6 #cei-settings th {
+    width: 124px;
+    color: var(--foreground);
+    font-weight: 500;
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+  #cpu-excess-focused-scale-v6 #cei-settings td {
+    color: var(--muted-foreground);
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
+  #cpu-excess-focused-scale-v6 .secondary,
+  #cpu-excess-focused-scale-v6 .footnote {
+    color: var(--muted-foreground);
+    font-size: 12.5px;
+  }
+  #cpu-excess-focused-scale-v6 .legend {
+    color: var(--muted-foreground);
+    font-size: 12px;
+    gap: 7px 16px;
+    margin: 4px 0 7px;
+  }
+  #cpu-excess-focused-scale-v6 .swatch {
+    width: 14px;
+    height: 9px;
+    border-radius: 2px;
+  }
+  #cpu-excess-focused-scale-v6 .swatch.offered-cpu { background: var(--cei-cpu); }
+  #cpu-excess-focused-scale-v6 .swatch.offered-mem { background: var(--cei-mem); }
+  #cpu-excess-focused-scale-v6 .swatch.od { background: var(--viz-series-1); }
+  #cpu-excess-focused-scale-v6 .swatch.spot { background: var(--viz-series-2); }
+  #cpu-excess-focused-scale-v6 .swatch.batch { background: var(--viz-series-3); }
+  #cpu-excess-focused-scale-v6 .swatch.excess {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--destructive) 0 3px,
+      #fb7185 3px 5px
+    );
+    border: 1px solid #be123c;
+  }
+  #cpu-excess-focused-scale-v6 .swatch.server-0 { background: var(--viz-series-4); }
+  #cpu-excess-focused-scale-v6 .swatch.server-1 { background: var(--viz-series-5); }
+  #cpu-excess-focused-scale-v6 .swatch.server-2 { background: var(--viz-series-6); }
+  #cpu-excess-focused-scale-v6 .swatch.preempted { background: var(--muted); }
+  #cpu-excess-focused-scale-v6 .capacity-mark {
+    display: inline-block;
+    width: 15px;
+    height: 7px;
+    border-top: 2px solid var(--foreground);
+  }
+  #cpu-excess-focused-scale-v6 .event-mark {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-bottom: 8.66px solid var(--foreground);
+  }
+  #cpu-excess-focused-scale-v6 svg text {
+    fill: var(--foreground);
+    font-size: 12px;
+  }
+  #cpu-excess-focused-scale-v6 svg .axis-text,
+  #cpu-excess-focused-scale-v6 svg .secondary-text {
+    fill: var(--muted-foreground);
+    font-size: 11.5px;
+  }
+  #cpu-excess-focused-scale-v6 svg .grid-line {
+    stroke: var(--border);
+    stroke-opacity: 0.8;
+  }
+  #cpu-excess-focused-scale-v6 svg .capacity-line {
+    stroke: var(--foreground);
+    stroke-width: 1.25;
+  }
+  #cpu-excess-focused-scale-v6 svg .selected-outline {
+    stroke: #111827;
+    stroke-width: 1.75;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar {
+    margin: 21px 0 5px;
+    gap: 8px 14px;
+  }
+  #cpu-excess-focused-scale-v6 .recourse-toolbar {
+    margin-top: 8px;
+  }
+  #cpu-excess-focused-scale-v6 .operation-heading {
+    margin: 16px 0 3px;
+    color: var(--foreground);
+    font-weight: 500;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar label {
+    font-size: 16px;
+    font-weight: 650;
+  }
+  #cpu-excess-focused-scale-v6 .detail-toolbar select {
+    min-height: 32px;
+    padding: 4px 28px 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--foreground);
+    font-size: 13px;
+  }
+  #cpu-excess-focused-scale-v6 .selected-summary {
+    color: var(--muted-foreground);
+    font-size: 12.5px;
+  }
+  #cpu-excess-focused-scale-v6 .footnote {
+    margin-top: 12px;
+    padding-top: 9px;
+    border-top: 1px solid var(--border);
+  }
+  #cpu-excess-focused-scale-v6 .cei-tooltip {
+    position: absolute;
+    z-index: 30;
+    max-width: min(340px, calc(100% - 24px));
+    padding: 8px 10px;
+    color: #ffffff;
+    background: var(--cei-tooltip-bg);
+    border: 1px solid #334155;
+    border-radius: 7px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+    font-size: 12px;
+    line-height: 1.38;
+    white-space: pre-line;
+    pointer-events: none;
+  }
+  @media (max-width: 520px) {
+    #cpu-excess-focused-scale-v6 {
+      padding: 14px 10px 18px;
+      font-size: 14px;
+    }
+    #cpu-excess-focused-scale-v6 .section-label,
+    #cpu-excess-focused-scale-v6 .detail-toolbar label {
+      font-size: 15px;
+    }
+    #cpu-excess-focused-scale-v6 .chart-description {
+      font-size: 12.5px;
+    }
+    #cpu-excess-focused-scale-v6 .legend {
+      gap: 6px 12px;
+    }
+    #cpu-excess-focused-scale-v6 #cei-settings th {
+      width: 88px;
+      white-space: normal;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  const DATA = __CPU_EXCESS_DATA__;
+  const root = document.getElementById("cpu-excess-focused-scale-v6");
+  if (!root) return;
+
+  const NS = "http://www.w3.org/2000/svg";
+  const tooltip = document.getElementById("cei-tooltip");
+  const serverColors = ["var(--viz-series-4)", "var(--viz-series-5)", "var(--viz-series-6)"];
+  const classColors = {
+    od: "var(--viz-series-1)",
+    spot: "var(--viz-series-2)",
+    batch: "var(--viz-series-3)",
+  };
+  const classLabels = {
+    od: "On-demand",
+    spot: "Spot",
+    batch: "Batch",
+  };
+  const heatColors = {
+    cpu: "var(--cei-cpu)",
+    mem: "var(--cei-mem)",
+    excess: "var(--destructive)",
+    batch: "var(--viz-series-3)",
+  };
+
+  function positionTooltip(event) {
+    if (!tooltip || tooltip.hidden) return;
+    const bounds = root.getBoundingClientRect();
+    const pad = 8;
+    let x = event.clientX - bounds.left + 13;
+    let y = event.clientY - bounds.top + 13;
+    const maxX = root.clientWidth - tooltip.offsetWidth - pad;
+    if (x > maxX) x = event.clientX - bounds.left - tooltip.offsetWidth - 13;
+    x = clamp(x, pad, Math.max(pad, maxX));
+    y = clamp(y, pad, Math.max(pad, root.scrollHeight - tooltip.offsetHeight - pad));
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+  }
+
+  function bindTooltip(node, text) {
+    node.addEventListener("pointerenter", (event) => {
+      tooltip.textContent = text;
+      tooltip.hidden = false;
+      positionTooltip(event);
+    });
+    node.addEventListener("pointermove", positionTooltip);
+    node.addEventListener("pointerleave", () => {
+      tooltip.hidden = true;
+    });
+  }
+
+  function svgNode(tag, attrs = {}, parent = null, titleText = null) {
+    const node = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
+    if (titleText !== null) {
+      const title = document.createElementNS(NS, "title");
+      title.textContent = titleText;
+      node.appendChild(title);
+      bindTooltip(node, titleText);
+    }
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+
+  function svgText(parent, x, y, value, attrs = {}) {
+    const node = svgNode("text", {x, y, ...attrs}, parent);
+    node.textContent = value;
+    return node;
+  }
+
+  function clearSvg(id, width, height) {
+    const svg = document.getElementById(id);
+    svg.replaceChildren();
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("preserveAspectRatio", "xMidYMin meet");
+    return svg;
+  }
+
+  function clamp(value, low, high) {
+    return Math.max(low, Math.min(high, value));
+  }
+
+  function opacity(value, low, high) {
+    return 0.04 + 0.92 * clamp((value - low) / Math.max(high - low, 1e-9), 0, 1);
+  }
+
+  function timeLabel(t) {
+    const minutes = t * DATA.meta.slotMinutes;
+    const hour = Math.floor(minutes / 60);
+    const minute = minutes % 60;
+    return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+  }
+
+  function chartWidth() {
+    return Math.max(288, Math.min(960, Math.floor(root.clientWidth || 960)));
+  }
+
+  function ensureDefs(svg) {
+    let defs = svg.querySelector("defs");
+    if (!defs) defs = svgNode("defs", {}, svg);
+    return defs;
+  }
+
+  function addPattern(svg, id) {
+    const defs = ensureDefs(svg);
+    const pattern = svgNode("pattern", {
+      id,
+      width: 6,
+      height: 6,
+      patternUnits: "userSpaceOnUse",
+      patternTransform: "rotate(35)",
+    }, defs);
+    svgNode("line", {
+      x1: 0, y1: 0, x2: 0, y2: 6,
+      stroke: "var(--border)",
+      "stroke-width": 2,
+    }, pattern);
+  }
+
+  function addRejectedPattern(svg, id) {
+    const defs = ensureDefs(svg);
+    const pattern = svgNode("pattern", {
+      id,
+      width: 7,
+      height: 7,
+      patternUnits: "userSpaceOnUse",
+      patternTransform: "rotate(35)",
+    }, defs);
+    svgNode("rect", {
+      x: 0,
+      y: 0,
+      width: 7,
+      height: 7,
+      fill: "var(--background)",
+    }, pattern);
+    svgNode("line", {
+      x1: 0,
+      y1: 0,
+      x2: 0,
+      y2: 7,
+      stroke: "var(--viz-series-2)",
+      "stroke-width": 2,
+    }, pattern);
+  }
+
+  function addGradient(svg, id, color) {
+    const defs = ensureDefs(svg);
+    const gradient = svgNode("linearGradient", {
+      id,
+      x1: 0,
+      y1: 1,
+      x2: 0,
+      y2: 0,
+    }, defs);
+    svgNode("stop", {
+      offset: "0%",
+      "stop-color": color,
+      "stop-opacity": 0.04,
+    }, gradient);
+    svgNode("stop", {
+      offset: "100%",
+      "stop-color": color,
+      "stop-opacity": 0.96,
+    }, gradient);
+  }
+
+  function addColorBar(
+    svg,
+    {id, x, y, height, color, low = 0, high, formatter, capacity = null, ticks = null},
+  ) {
+    addGradient(svg, id, color);
+    const barWidth = 10;
+    svgNode("rect", {
+      x,
+      y,
+      width: barWidth,
+      height,
+      rx: 2,
+      fill: `url(#${id})`,
+      stroke: "var(--border)",
+      "stroke-width": 0.8,
+    }, svg, `Color scale: ${formatter(low)} to ${formatter(high)}`);
+    const tickValues = ticks ? [...ticks] : [low, (low + high) / 2, high];
+    if (capacity !== null && capacity > low && capacity < high) tickValues.push(capacity);
+    [...new Set(tickValues.map((value) => Number(value.toFixed(8))))]
+      .sort((a, b) => a - b)
+      .forEach((value) => {
+        const tickY = y + height * (1 - (value - low) / Math.max(high - low, 1e-9));
+        svgNode("line", {
+          x1: x + barWidth,
+          x2: x + barWidth + 4,
+          y1: tickY,
+          y2: tickY,
+          stroke: "var(--muted-foreground)",
+          "stroke-width": 0.8,
+        }, svg);
+        svgText(svg, x + barWidth + 7, tickY + 3.5, formatter(value), {
+          class: "axis-text",
+        });
+      });
+  }
+
+  function drawPreemptionTriangle(svg, x, centerY, cellWidth, titleText, clickable = false) {
+    const halfWidth = Math.max(2.6, Math.min(4.8, cellWidth * 0.42));
+    const triangleHeight = Math.sqrt(3) * halfWidth;
+    const points = [
+      `${x},${centerY - triangleHeight / 2}`,
+      `${x - halfWidth},${centerY + triangleHeight / 2}`,
+      `${x + halfWidth},${centerY + triangleHeight / 2}`,
+    ].join(" ");
+    return svgNode("polygon", {
+      points,
+      fill: "var(--foreground)",
+      stroke: "var(--background)",
+      "stroke-width": 0.65,
+      "vector-effect": "non-scaling-stroke",
+      class: clickable ? "clickable" : "",
+    }, svg, titleText);
+  }
+
+  function drawTimeGrid(svg, x0, y0, plotWidth, height) {
+    [0, 12, 24, 36, 48].forEach((t) => {
+      const x = x0 + plotWidth * t / 48;
+      svgNode("line", {
+        x1: x, x2: x, y1: y0, y2: y0 + height, class: "grid-line",
+      }, svg);
+    });
+  }
+
+  let selectedScenario = DATA.meta.defaultScenario;
+  let selectedRasterScenario = DATA.meta.defaultScenario;
+
+  function selectScenario(value) {
+    selectedScenario = Number(value);
+    document.getElementById("cei-scenario").value = String(selectedScenario);
+    drawAtlas();
+    drawDetail();
+  }
+
+  function selectRasterScenario(value) {
+    selectedRasterScenario = Number(value);
+    document.getElementById("cei-raster-scenario").value =
+      String(selectedRasterScenario);
+    drawOperations(DATA.detail[String(selectedRasterScenario)]);
+  }
+
+  function drawAtlas() {
+    const width = chartWidth();
+    const narrow = width < 820;
+    const left = narrow ? 36 : 68;
+    const right = narrow ? 54 : 190;
+    const plotWidth = width - left - right;
+    const cellWidth = plotWidth / 48;
+    const rowHeight = 15;
+    const rowGap = 2;
+    const panelRowsHeight = DATA.scenarios.length * (rowHeight + rowGap);
+    const panelGap = 38;
+    const panelStart = 27;
+    const pressureLow = Math.max(
+      0,
+      Math.floor(Math.min(DATA.meta.postCpuMin, DATA.meta.postMemMin) * 20) / 20,
+    );
+    const cpuPressureHigh = Math.ceil(DATA.meta.postCpuMax * 10) / 10;
+    const memPressureHigh = Math.ceil(DATA.meta.postMemMax * 20) / 20;
+    const excessHigh = Math.ceil(DATA.meta.excessMax * 20) / 20;
+    const batchHigh = Math.ceil(DATA.meta.batchShareMax * 50) / 50;
+    const panels = [
+      {
+        key: "postCpu",
+        serverKey: "postCpuServer",
+        label: "Spot preemption 후 최대 CPU 수요",
+        color: heatColors.cpu,
+        low: pressureLow,
+        high: cpuPressureHigh,
+        format: (value) => `${(value * 100).toFixed(value ? 1 : 0)}%`,
+        capacity: 1,
+        ticks: [pressureLow, 0.9, 1, 1.1, cpuPressureHigh],
+      },
+      {
+        key: "postMem",
+        serverKey: "postMemServer",
+        label: "Spot preemption 후 최대 메모리 부하",
+        color: heatColors.mem,
+        low: pressureLow,
+        high: memPressureHigh,
+        format: (value) => `${(value * 100).toFixed(value ? 1 : 0)}%`,
+        capacity: 1,
+        ticks: [pressureLow, 0.85, 0.9, 0.95, memPressureHigh],
+      },
+      {
+        key: "excess",
+        serverKey: "excessServer",
+        label: "최대 On-demand CPU 초과 부하",
+        color: heatColors.excess,
+        low: 0,
+        high: Math.max(0.05, excessHigh),
+        format: (value) => `${(value * 100).toFixed(value ? 1 : 0)}%`,
+        capacity: null,
+        ticks: [0, 0.05, 0.1, 0.15, Math.max(0.05, excessHigh)],
+      },
+      {
+        key: "batchShare",
+        serverKey: null,
+        label: "30분 Batch 처리 비율",
+        color: heatColors.batch,
+        low: 0,
+        high: Math.max(0.01, batchHigh),
+        format: (value) => `${(value * 100).toFixed(1)}%`,
+        capacity: null,
+        ticks: [0, 0.05, 0.1, Math.max(0.01, batchHigh)],
+      },
+    ];
+    const eventsY = panelStart + panels.length * (panelRowsHeight + panelGap);
+    const height = eventsY + panelRowsHeight + 43;
+    const svg = clearSvg("cei-atlas", width, height);
+    drawTimeGrid(svg, left, panelStart, plotWidth, height - panelStart - 31);
+    if (!narrow) {
+      svgText(svg, left + plotWidth + 9, 15, "CPU 초과율 · 시작 · profit", {
+        class: "secondary-text",
+      });
+    }
+
+    panels.forEach((panel, panelIndex) => {
+      const y0 = panelStart + panelIndex * (panelRowsHeight + panelGap);
+      svgText(svg, left, y0 - 9, panel.label, {"font-weight": 600});
+      svgText(svg, width - 49, y0 - 9, "범위", {class: "secondary-text"});
+      addColorBar(svg, {
+        id: `cei-atlas-scale-${panelIndex}`,
+        x: width - 48,
+        y: y0,
+        height: panelRowsHeight - rowGap,
+        color: panel.color,
+        low: panel.low,
+        high: panel.high,
+        formatter: panel.format,
+        capacity: panel.capacity,
+        ticks: panel.ticks,
+      });
+      DATA.scenarios.forEach((scenario, rowIndex) => {
+        const y = y0 + rowIndex * (rowHeight + rowGap);
+        if (panelIndex === 0) {
+          svgText(svg, left - 9, y + 10.5, narrow ? String(scenario.id) : `Scenario ${scenario.id}`, {
+            "text-anchor": "end",
+            class: "secondary-text",
+          });
+          if (!narrow) {
+            const metric = `${(scenario.excessRate * 100).toFixed(1)}% · 시작 ${scenario.preemptionEvents} · $${scenario.profit.toFixed(2)}`;
+            svgText(svg, left + plotWidth + 9, y + 10.5, metric, {class: "secondary-text"});
+          }
+        }
+        scenario[panel.key].forEach((value, t) => {
+          const maxServer = panel.serverKey ? scenario[panel.serverKey][t] : null;
+          const titleLines = [
+            `시나리오 ${scenario.id} · ${timeLabel(t)}`,
+            `${panel.label}: ${panel.format(value)}`,
+            maxServer ? `이 값이 가장 큰 서버: ${maxServer}` : "세 서버의 Batch 처리량 합계",
+            panel.key === "batchShare"
+              ? "전체 필요 Batch 작업량을 기준으로 한 이 슬롯의 처리 비율"
+              : "100%는 서버 한 대의 해당 자원 용량",
+          ];
+          if (panel.key === "postCpu") {
+            titleLines.push(
+              `Preemption 전 최대 CPU 수요: ${(scenario.preCpu[t] * 100).toFixed(1)}% (${scenario.preCpuServer[t]})`,
+              `그 서버의 preemption 후 CPU 수요: ${(scenario.postCpuAtPrePeak[t] * 100).toFixed(1)}%`,
+              `그 서버에서 제외된 Spot CPU: ${(scenario.preemptedSpotCpuAtPrePeak[t] * 100).toFixed(1)}%`,
+              `Preemption 후 최대 서버(${maxServer})의 실제 제공 CPU: ${(scenario.servedCpuAtPostPeak[t] * 100).toFixed(1)}%`,
+              `Preemption 후 최대 서버(${maxServer})의 On-demand CPU 초과 부하: ${(scenario.excessAtPostPeak[t] * 100).toFixed(1)}%`,
+              "최대 CPU 수요 = 실제 제공 CPU + On-demand CPU 초과 부하",
+            );
+          } else if (panel.key === "postMem") {
+            titleLines.push(
+              `Preemption 전 최대 메모리 부하: ${(scenario.preMem[t] * 100).toFixed(1)}% (${scenario.preMemServer[t]})`,
+              `그 서버의 preemption 후 메모리 부하: ${(scenario.postMemAtPrePeak[t] * 100).toFixed(1)}%`,
+              `그 서버에서 제외된 Spot 메모리: ${(scenario.preemptedSpotMemAtPrePeak[t] * 100).toFixed(1)}%`,
+              "Spot preemption을 적용한 뒤의 실제 제공 메모리 부하",
+            );
+          }
+          titleLines.push(
+            `시나리오 전체 On-demand CPU 초과율: ${(scenario.excessRate * 100).toFixed(2)}%`,
+          );
+          const title = titleLines.join("\n");
+          const rect = svgNode("rect", {
+            x: left + t * cellWidth,
+            y,
+            width: Math.max(0.5, cellWidth - 0.4),
+            height: rowHeight,
+            fill: panel.color,
+            "fill-opacity": opacity(value, panel.low, panel.high),
+            class: "clickable",
+          }, svg, title);
+          rect.addEventListener("click", () => selectScenario(scenario.id));
+        });
+        if (scenario.id === selectedScenario) {
+          svgNode("rect", {
+            x: left - 2,
+            y: y - 1,
+            width: plotWidth + 4,
+            height: rowHeight + 2,
+            class: "selected-outline",
+          }, svg);
+        }
+      });
+    });
+
+    svgText(svg, left, eventsY - 9, "Spot preemption 시작", {"font-weight": 600});
+    if (!narrow) {
+      svgText(svg, left + plotWidth + 9, eventsY - 9, "삼각형 = preemption 시작", {
+        class: "secondary-text",
+      });
+    }
+    DATA.scenarios.forEach((scenario, rowIndex) => {
+      const y = eventsY + rowIndex * (rowHeight + rowGap);
+      svgText(svg, left - 9, y + 10.5, narrow ? String(scenario.id) : `Scenario ${scenario.id}`, {
+        "text-anchor": "end",
+        class: "secondary-text",
+      });
+      scenario.events.forEach((count, t) => {
+        const eventIds = scenario.eventVmIds[t] || [];
+        const base = svgNode("rect", {
+          x: left + t * cellWidth,
+          y,
+          width: Math.max(0.5, cellWidth - 0.4),
+          height: rowHeight,
+          fill: count ? "#fff7ed" : "#f8fafc",
+          stroke: count ? "#fed7aa" : "var(--border)",
+          "stroke-width": 0.35,
+          class: "clickable",
+        }, svg, [
+          `시나리오 ${scenario.id} · ${timeLabel(t)}`,
+          count ? `Spot preemption 시작 ${count}회` : "이 슬롯에서 시작된 preemption 없음",
+          count ? `대상 VM: ${eventIds.join(", ")}` : "",
+        ].filter(Boolean).join("\n"));
+        base.addEventListener("click", () => selectScenario(scenario.id));
+      });
+      scenario.events.forEach((count, t) => {
+        if (!count) return;
+        const x = left + (t + 0.5) * cellWidth;
+        const eventIds = scenario.eventVmIds[t] || [];
+        const triangle = drawPreemptionTriangle(
+          svg,
+          x,
+          y + rowHeight / 2,
+          cellWidth,
+          `시나리오 ${scenario.id} · ${timeLabel(t)}\nSpot preemption 시작 ${count}회\n대상 VM: ${eventIds.join(", ")}`,
+          true,
+        );
+        triangle.addEventListener("click", () => selectScenario(scenario.id));
+      });
+      if (scenario.id === selectedScenario) {
+        svgNode("rect", {
+          x: left - 2,
+          y: y - 1,
+          width: plotWidth + 4,
+          height: rowHeight + 2,
+          class: "selected-outline",
+        }, svg);
+      }
+    });
+    [0, 12, 24, 36, 48].forEach((t) => {
+      const x = left + plotWidth * t / 48;
+      svgText(svg, x, height - 8, t === 48 ? "24:00" : timeLabel(t), {
+        "text-anchor": t === 0 ? "start" : t === 48 ? "end" : "middle",
+        class: "secondary-text",
+      });
+    });
+  }
+
+  function drawConfigured() {
+    const width = chartWidth();
+    const narrow = width < 620;
+    const left = narrow ? 54 : 76;
+    const right = 18;
+    const plotWidth = width - left - right;
+    const cellWidth = plotWidth / 48;
+    const laneHeight = 52;
+    const laneGap = 16;
+    const groupGap = 36;
+    const yMax = Math.max(2.2, Math.ceil(DATA.meta.configuredMax * 10) / 10);
+    const groupHeight = 2 * laneHeight + laneGap + groupGap;
+    const height = 25 + DATA.servers.length * groupHeight + 27;
+    const svg = clearSvg("cei-configured", width, height);
+    addPattern(svg, "cei-config-off");
+    drawTimeGrid(svg, left, 20, plotWidth, height - 48);
+
+    DATA.servers.forEach((server, serverIndex) => {
+      const groupY = 25 + serverIndex * groupHeight;
+      const peak = Math.max(
+        ...DATA.configured[server].cpu.total,
+        ...DATA.configured[server].mem.total,
+      );
+      svgText(svg, left, groupY - 9, `${server} · 배치된 VM 크기 합계 최대 ${(peak * 100).toFixed(0)}%`, {
+        "font-weight": 600,
+      });
+      ["cpu", "mem"].forEach((resource, resourceIndex) => {
+        const y = groupY + resourceIndex * (laneHeight + laneGap);
+        svgText(svg, 4, y + laneHeight / 2 + 4, resource.toUpperCase(), {
+          class: "secondary-text",
+        });
+        const capacityY = y + laneHeight * (1 - 1 / yMax);
+        [0, 1, 2].forEach((tick) => {
+          const tickY = y + laneHeight * (1 - tick / yMax);
+          svgText(svg, left - 6, tickY + 3.5, `${Math.round(tick * 100)}%`, {
+            "text-anchor": "end",
+            class: "axis-text",
+          });
+          if (tick === 2) {
+            svgNode("line", {
+              x1: left,
+              x2: left + plotWidth,
+              y1: tickY,
+              y2: tickY,
+              class: "grid-line",
+            }, svg);
+          }
+        });
+        svgNode("line", {
+          x1: left, x2: left + plotWidth, y1: capacityY, y2: capacityY,
+          class: "capacity-line",
+        }, svg);
+        DATA.configured[server][resource].total.forEach((value, t) => {
+          if (!DATA.configured[server].on[t]) {
+            svgNode("rect", {
+              x: left + t * cellWidth,
+              y,
+              width: cellWidth,
+              height: laneHeight,
+              fill: "url(#cei-config-off)",
+            }, svg);
+          }
+          const odValue = DATA.configured[server][resource].od[t];
+          const spotValue = DATA.configured[server][resource].spot[t];
+          const odHeight = laneHeight * Math.min(odValue, yMax) / yMax;
+          const spotHeight = laneHeight * Math.min(
+            spotValue,
+            Math.max(0, yMax - odValue),
+          ) / yMax;
+          const title = [
+            `${server} · ${resource.toUpperCase()} · ${timeLabel(t)}`,
+            `On-demand VM configured size 합계: ${(odValue * 100).toFixed(1)}%`,
+            `admission된 Spot VM configured size 합계: ${(spotValue * 100).toFixed(1)}%`,
+            `배치된 VM configured size 합계: ${(value * 100).toFixed(1)}% (서버 용량 대비)`,
+            `서버 상태: ${DATA.configured[server].on[t] ? "ON" : "OFF"}`,
+          ].join("\n");
+          svgNode("rect", {
+            x: left + t * cellWidth + 0.3,
+            y: y + laneHeight - odHeight,
+            width: Math.max(0.5, cellWidth - 0.6),
+            height: odHeight,
+            fill: classColors.od,
+            "fill-opacity": 0.83,
+          }, svg, title);
+          svgNode("rect", {
+            x: left + t * cellWidth + 0.3,
+            y: y + laneHeight - odHeight - spotHeight,
+            width: Math.max(0.5, cellWidth - 0.6),
+            height: spotHeight,
+            fill: classColors.spot,
+            "fill-opacity": 0.9,
+          }, svg, title);
+          const totalHeight = laneHeight * Math.min(value, yMax) / yMax;
+          svgNode("rect", {
+            x: left + t * cellWidth + 0.3,
+            y: y + laneHeight - totalHeight,
+            width: Math.max(0.5, cellWidth - 0.6),
+            height: totalHeight,
+            fill: "none",
+            stroke: "#334155",
+            "stroke-width": 0.55,
+          }, svg, title);
+        });
+        svgText(svg, left + plotWidth - 3, capacityY - 4, "서버 용량 100%", {
+          "text-anchor": "end",
+          class: "axis-text",
+        });
+      });
+    });
+    [0, 12, 24, 36, 48].forEach((t) => {
+      const x = left + plotWidth * t / 48;
+      svgText(svg, x, height - 7, t === 48 ? "24:00" : timeLabel(t), {
+        "text-anchor": t === 0 ? "start" : t === 48 ? "end" : "middle",
+        class: "secondary-text",
+      });
+    });
+  }
+
+  function drawResourceLane(svg, x0, y, plotWidth, laneHeight, server, resource, detail) {
+    const cellWidth = plotWidth / 48;
+    const components = detail[resource];
+    const order = ["od", "spot", "batch"];
+    const on = detail.on;
+    svgNode("rect", {
+      x: x0,
+      y,
+      width: plotWidth,
+      height: laneHeight,
+      fill: "#f8fafc",
+      stroke: "var(--border)",
+      "stroke-width": 0.6,
+    }, svg);
+    for (let t = 0; t < 48; t += 1) {
+      if (!on[t]) {
+        svgNode("rect", {
+          x: x0 + t * cellWidth,
+          y,
+          width: cellWidth,
+          height: laneHeight,
+          fill: "url(#cei-resource-off)",
+        }, svg);
+        continue;
+      }
+      let used = 0;
+      const total = order.reduce((sum, key) => sum + components[key][t], 0);
+      order.forEach((key) => {
+        const value = components[key][t];
+        if (value <= 0) return;
+        const h = Math.min(value, 1 - used) * laneHeight;
+        svgNode("rect", {
+          x: x0 + t * cellWidth + 0.25,
+          y: y + laneHeight - used * laneHeight - h,
+          width: Math.max(0.5, cellWidth - 0.5),
+          height: h,
+          fill: classColors[key],
+          "fill-opacity": key === "spot" ? 0.92 : 0.86,
+        }, svg, [
+          `${server} · ${resource.toUpperCase()} · ${timeLabel(t)}`,
+          `${classLabels[key]} served/allocation: ${(value * 100).toFixed(2)}% of server capacity`,
+          `실제 물리부하 합계: ${(total * 100).toFixed(2)}% of server capacity`,
+        ].join("\n"));
+        used += value;
+      });
+    }
+    svgNode("line", {
+      x1: x0, x2: x0 + plotWidth, y1: y, y2: y, class: "capacity-line",
+    }, svg);
+  }
+
+  function drawDetail() {
+    const scenario = DATA.scenarios.find((row) => row.id === selectedScenario);
+    const detail = DATA.detail[String(selectedScenario)];
+    document.getElementById("cei-detail-summary").textContent =
+      `On-demand CPU 초과율 ${(scenario.excessRate * 100).toFixed(2)}% · 한 서버의 최대 CPU 초과 부하 ${(Math.max(...scenario.excess) * 100).toFixed(1)}% · ` +
+      `Spot preemption 시작 ${scenario.preemptionEvents}회 / preempted ${scenario.preemptedSlots} VM-slot · profit $${scenario.profit.toFixed(2)}`;
+
+    const width = chartWidth();
+    const narrow = width < 620;
+    const left = narrow ? 67 : 88;
+    const right = 18;
+    const plotWidth = width - left - right;
+    const laneHeight = 48;
+    const excessLaneHeight = 24;
+    const groupHeight = 192;
+    const height = 21 + DATA.servers.length * groupHeight + 29;
+    const excessHigh = Math.max(0.05, Math.ceil(DATA.meta.excessMax * 20) / 20);
+    const svg = clearSvg("cei-resources", width, height);
+    addPattern(svg, "cei-resource-off");
+    drawTimeGrid(svg, left, 18, plotWidth, height - 45);
+
+    DATA.servers.forEach((server, index) => {
+      const groupY = 22 + index * groupHeight;
+      const serverDetail = detail.servers[server];
+      svgText(svg, left, groupY + 9, server, {"font-weight": 600});
+
+      const excessY = groupY + 28;
+      svgText(svg, left, excessY - 4, "CPU 초과율", {
+        class: "secondary-text",
+      });
+      [0, excessHigh / 2, excessHigh].forEach((tick) => {
+        const tickY = excessY + excessLaneHeight * (1 - tick / excessHigh);
+        svgText(svg, left - 6, tickY + 3.5, `${(tick * 100).toFixed(0)}%`, {
+          "text-anchor": "end",
+          class: "axis-text",
+        });
+      });
+      svgNode("rect", {
+        x: left,
+        y: excessY,
+        width: plotWidth,
+        height: excessLaneHeight,
+        fill: "#fff1f2",
+        stroke: "#fecdd3",
+        "stroke-width": 0.55,
+      }, svg);
+      serverDetail.cpu.excess.forEach((value, t) => {
+        if (value <= 0) return;
+        const cellWidth = plotWidth / 48;
+        const barHeight = excessLaneHeight * value / excessHigh;
+        svgNode("rect", {
+          x: left + t * cellWidth + 0.25,
+          y: excessY + excessLaneHeight - barHeight,
+          width: Math.max(0.5, cellWidth - 0.5),
+          height: barHeight,
+          fill: "var(--destructive)",
+          "fill-opacity": 0.86,
+          stroke: "#be123c",
+          "stroke-width": 0.45,
+        }, svg, [
+          `${server} · CPU · ${timeLabel(t)}`,
+          `On-demand CPU 초과 부하: ${(value * 100).toFixed(2)}% of server capacity`,
+          `막대 높이는 0–${(excessHigh * 100).toFixed(0)}% 축에서 실제 초과율에 비례`,
+        ].join("\n"));
+      });
+
+      const cpuY = groupY + 67;
+      svgText(svg, 4, cpuY + laneHeight / 2 + 4, "CPU", {class: "secondary-text"});
+      [0, 0.5, 1].forEach((tick) => {
+        const tickY = cpuY + laneHeight * (1 - tick);
+        svgText(svg, left - 6, tickY + 3.5, `${Math.round(tick * 100)}%`, {
+          "text-anchor": "end",
+          class: "axis-text",
+        });
+      });
+      drawResourceLane(svg, left, cpuY, plotWidth, laneHeight, server, "cpu", serverDetail);
+
+      const memY = groupY + 130;
+      svgText(svg, 4, memY + laneHeight / 2 + 4, "MEM", {
+        class: "secondary-text",
+      });
+      [0, 0.5, 1].forEach((tick) => {
+        const tickY = memY + laneHeight * (1 - tick);
+        svgText(svg, left - 6, tickY + 3.5, `${Math.round(tick * 100)}%`, {
+          "text-anchor": "end",
+          class: "axis-text",
+        });
+      });
+      drawResourceLane(svg, left, memY, plotWidth, laneHeight, server, "mem", serverDetail);
+    });
+    [0, 12, 24, 36, 48].forEach((t) => {
+      const x = left + plotWidth * t / 48;
+      svgText(svg, x, height - 7, t === 48 ? "24:00" : timeLabel(t), {
+        "text-anchor": t === 0 ? "start" : t === 48 ? "end" : "middle",
+        class: "secondary-text",
+      });
+    });
+  }
+
+  function addOperationFrame(svg, left, top, plotWidth, plotHeight, axisY) {
+    [0, 12, 24, 36, 48].forEach((t) => {
+      const x = left + plotWidth * t / 48;
+      svgNode("line", {
+        x1: x,
+        x2: x,
+        y1: top,
+        y2: top + plotHeight,
+        class: "grid-line",
+      }, svg);
+      svgText(svg, x, axisY, t === 48 ? "24:00" : timeLabel(t), {
+        "text-anchor": t === 0 ? "start" : t === 48 ? "end" : "middle",
+        class: "secondary-text",
+      });
+    });
+  }
+
+  function addOperationSummary(svg, titleText, descriptionText) {
+    const title = svgNode("title", {}, svg);
+    title.textContent = titleText;
+    const description = svgNode("desc", {}, svg);
+    description.textContent = descriptionText;
+    svg.setAttribute("aria-label", descriptionText);
+  }
+
+  function drawOdOperations(detail, width) {
+    const left = 45;
+    const right = 14;
+    const plotWidth = width - left - right;
+    const cellWidth = plotWidth / 48;
+    const rowHeight = 13;
+    const top = 4;
+    const plotHeight = detail.od.length * rowHeight;
+    const axisY = top + plotHeight + 20;
+    const svg = clearSvg("cei-operations-od", width, axisY + 8);
+    addOperationSummary(
+      svg,
+      "On-demand placement",
+      "On-demand VM placement by fixed server over 24 hours. Row labels are OD identifiers.",
+    );
+    addOperationFrame(svg, left, top, plotWidth, plotHeight, axisY);
+    detail.od.forEach((vm, rowIndex) => {
+      const y = top + rowIndex * rowHeight;
+      svgText(svg, left - 7, y + 9.3, vm.id, {
+        "text-anchor": "end",
+        class: "secondary-text",
+      });
+      vm.state.forEach((state, t) => {
+        if (state < 0) return;
+        svgNode("rect", {
+          x: left + t * cellWidth,
+          y,
+          width: Math.max(0.5, cellWidth - 0.25),
+          height: rowHeight - 0.4,
+          fill: serverColors[state],
+          "fill-opacity": 0.9,
+        }, svg, [
+          `${vm.id} (${vm.fullId}) · ${timeLabel(t)}–${timeLabel(t + 1)}`,
+          `Placement: ${DATA.servers[state]}`,
+          `Scenario ${selectedRasterScenario} CPU / memory demand: ${vm.cpu[t].toFixed(4)} / ${vm.mem[t].toFixed(4)}`,
+          `Configured CPU / memory size: ${vm.qCpu} / ${vm.qMem}`,
+        ].join("\n"));
+      });
+    });
+  }
+
+  function drawSpotOperations(detail, width) {
+    const left = 45;
+    const right = 14;
+    const plotWidth = width - left - right;
+    const cellWidth = plotWidth / 48;
+    const rowHeight = 20;
+    const top = 4;
+    const plotHeight = detail.spot.length * rowHeight;
+    const axisY = top + plotHeight + 20;
+    const admittedCount = detail.spot.filter((vm) => vm.accepted).length;
+    const rejectedCount = detail.spot.length - admittedCount;
+    const svg = clearSvg("cei-operations-spot", width, axisY + 8);
+    addOperationSummary(
+      svg,
+      "Spot service and preemption",
+      `Scenario ${selectedRasterScenario}. ${detail.spot.length} Spot candidates: ` +
+        `${admittedCount} admitted and ${rejectedCount} rejected.`,
+    );
+    addRejectedPattern(svg, "cei-spot-rejected");
+    addOperationFrame(svg, left, top, plotWidth, plotHeight, axisY);
+    detail.spot.forEach((vm, rowIndex) => {
+      const y = top + rowIndex * rowHeight;
+      const decision = vm.accepted ? "Admitted" : "Rejected";
+      const lifecycle =
+        `${timeLabel(vm.arrivalT)}–${timeLabel(vm.departureT + 1)} · ${vm.lifespanHours.toFixed(1)} h`;
+      svgText(svg, left - 7, y + rowHeight / 2 + 4, vm.id, {
+        "text-anchor": "end",
+        class: "secondary-text",
+      });
+      vm.state.forEach((state, t) => {
+        if (state === -1) return;
+        const rejected = state === -3;
+        const preempted = state === -2;
+        const fill = rejected
+          ? "url(#cei-spot-rejected)"
+          : preempted
+            ? "var(--muted)"
+            : serverColors[state];
+        const slotState = rejected
+          ? "Rejected; not served"
+          : preempted
+            ? "Preempted"
+            : `Running on ${DATA.servers[state]}`;
+        const demandLabel = rejected ? "Input demand if admitted" : "Demand";
+        const title = [
+          `${vm.id} (${vm.fullId}) · ${timeLabel(t)}–${timeLabel(t + 1)}`,
+          `Admission: ${decision}`,
+          `Host: ${vm.server || "없음"}`,
+          `Lifecycle: ${lifecycle} · slots t${vm.arrivalT}–t${vm.departureT}`,
+          `Scenario ${selectedRasterScenario}: ${slotState}`,
+          `${demandLabel} CPU / memory: ${vm.cpu[t].toFixed(4)} / ${vm.mem[t].toFixed(4)}`,
+          `Configured CPU / memory size: ${vm.qCpu} / ${vm.qMem}`,
+          vm.events[t] ? "Preemption starts in this slot" : "",
+        ].filter(Boolean).join("\n");
+        svgNode("rect", {
+          x: left + t * cellWidth,
+          y: y + 2,
+          width: Math.max(0.5, cellWidth - 0.25),
+          height: rowHeight - 4,
+          fill,
+          "fill-opacity": preempted ? 0.88 : 0.92,
+          stroke: rejected ? "var(--viz-series-2)" : "none",
+          "stroke-width": rejected ? 0.8 : 0,
+        }, svg, title);
+        if (vm.events[t]) {
+          drawPreemptionTriangle(
+            svg,
+            left + (t + 0.5) * cellWidth,
+            y + rowHeight / 2,
+            cellWidth,
+            `${vm.id} (${vm.fullId}) · ${timeLabel(t)}\nScenario ${selectedRasterScenario}: preemption 시작`,
+          );
+        }
+      });
+    });
+  }
+
+  function shortBatchId(family) {
+    return family.replace("batch", "B");
+  }
+
+  function drawBatchOperations(detail, width) {
+    const narrow = width < 620;
+    const left = 45;
+    const right = narrow ? 14 : 50;
+    const plotWidth = width - left - right;
+    const cellWidth = plotWidth / 48;
+    const laneHeight = 28;
+    const laneGap = 2;
+    const familyGap = 14;
+    const top = 4;
+    const groups = [];
+    detail.batch.forEach((row) => {
+      const previous = groups[groups.length - 1];
+      if (!previous || previous.family !== row.family) {
+        groups.push({family: row.family, rows: [row]});
+      } else {
+        previous.rows.push(row);
+      }
+    });
+    let cursor = top;
+    groups.forEach((group, groupIndex) => {
+      const groupTop = cursor;
+      group.rows.forEach((row, rowIndex) => {
+        row.renderY = cursor;
+        cursor += laneHeight;
+        if (rowIndex < group.rows.length - 1) cursor += laneGap;
+      });
+      group.centerY = (groupTop + cursor) / 2;
+      if (groupIndex < groups.length - 1) cursor += familyGap;
+    });
+    const plotHeight = cursor - top;
+    const axisY = top + plotHeight + 20;
+    const svg = clearSvg("cei-operations-batch", width, axisY + 8);
+    addOperationSummary(
+      svg,
+      "Batch preparation and work",
+      `Scenario ${selectedRasterScenario}. Three Batch families in four family-server lanes. ` +
+        "Outlined cells are prepared; bar height is actual work relative to the family slot maximum.",
+    );
+    addOperationFrame(svg, left, top, plotWidth, plotHeight, axisY);
+    groups.forEach((group) => {
+      const first = group.rows[0];
+      const familyLabel = shortBatchId(group.family);
+      svgText(svg, left - 7, group.centerY + 4, familyLabel, {
+        "text-anchor": "end",
+        class: "secondary-text",
+      });
+      group.rows.forEach((row) => {
+        const y = row.renderY;
+        row.prepared.forEach((prepared, t) => {
+          if (!prepared) return;
+          const title = [
+            `${familyLabel} · ${row.server} · ${timeLabel(t)}–${timeLabel(t + 1)}`,
+            `Family: ${row.jobs} source jobs · total required work ${row.totalWork.toFixed(4)}`,
+            "Preparation: prepared",
+            `Scenario ${selectedRasterScenario} actual work: ${row.work[t].toFixed(4)}`,
+            `Per-slot maximum: ${row.slotMaxWork.toFixed(4)}`,
+            `Maximum 대비: ${(row.intensity[t] * 100).toFixed(1)}%`,
+            `Configured CPU / memory size: ${row.qCpu} / ${row.qMem}`,
+            row.start[t] ? "Preparation starts here" : "",
+          ].filter(Boolean).join("\n");
+          svgNode("rect", {
+            x: left + t * cellWidth + 0.4,
+            y: y + 0.5,
+            width: Math.max(0.5, cellWidth - 0.8),
+            height: laneHeight - 1,
+            fill: "var(--viz-series-3)",
+            "fill-opacity": 0.08,
+            stroke: "var(--viz-series-3)",
+            "stroke-width": 0.7,
+          }, svg, title);
+          const workHeight = (laneHeight - 4) * row.intensity[t];
+          if (workHeight > 0) {
+            svgNode("rect", {
+              x: left + t * cellWidth + 1.2,
+              y: y + laneHeight - 2 - workHeight,
+              width: Math.max(0.5, cellWidth - 2.4),
+              height: workHeight,
+              fill: "var(--viz-series-3)",
+              "fill-opacity": 0.9,
+            }, svg, title);
+          }
+          if (row.start[t]) {
+            svgNode("line", {
+              x1: left + t * cellWidth + 1,
+              x2: left + t * cellWidth + 1,
+              y1: y + 1.5,
+              y2: y + laneHeight - 1.5,
+              stroke: "var(--foreground)",
+              "stroke-width": 1.6,
+              "vector-effect": "non-scaling-stroke",
+            }, svg, `${familyLabel} · ${row.server} · ${timeLabel(t)}\nPreparation starts here`);
+          }
+        });
+      });
+    });
+    if (!narrow && groups.length) {
+      const rulerY = groups[0].rows[0].renderY;
+      const rulerX = left + plotWidth + 8;
+      svgNode("line", {
+        x1: rulerX,
+        x2: rulerX,
+        y1: rulerY + 1,
+        y2: rulerY + laneHeight - 1,
+        stroke: "var(--muted-foreground)",
+        "stroke-width": 0.8,
+      }, svg);
+      svgText(svg, rulerX + 4, rulerY + 7, "100%", {class: "axis-text"});
+      svgText(svg, rulerX + 4, rulerY + laneHeight, "0%", {class: "axis-text"});
+    }
+  }
+
+  function drawOperations(detail) {
+    const width = chartWidth();
+    const scenario = DATA.scenarios.find(
+      (row) => row.id === selectedRasterScenario
+    );
+    const batchWork = detail.batch.reduce(
+      (sum, row) => sum + row.work.reduce((rowSum, value) => rowSum + value, 0),
+      0,
+    );
+    document.getElementById("cei-raster-summary").textContent =
+      `Spot preemption ${scenario.preemptionEvents} · Batch work ${batchWork.toFixed(2)}`;
+    drawOdOperations(detail, width);
+    drawSpotOperations(detail, width);
+    drawBatchOperations(detail, width);
+  }
+
+  document.getElementById("cei-provenance").textContent =
+    `Full On-demand + Spot + Batch incumbent · ${DATA.meta.status} · solver gap ${(DATA.meta.gap * 100).toFixed(2)}% · ` +
+    `runtime ${(DATA.meta.runtime / 3600).toFixed(2)}h · total profit $${DATA.meta.totalProfit.toFixed(3)} · ` +
+    `empirical CVaR max ${DATA.meta.empiricalCvarMax.toFixed(4)} / ε=${DATA.meta.epsilon} · ` +
+    `α=${DATA.meta.alpha} · Spot accepted ${DATA.meta.acceptedSpotCount}/${DATA.meta.spotCandidateCount} · migration ${DATA.meta.migration} · ` +
+    `resource-ledger residual ≤ ${Math.max(DATA.meta.cpuResidual, DATA.meta.memResidual).toExponential(1)}`;
+
+  const settingsRows = [
+    [
+      "데이터셋",
+      `${DATA.meta.dataset} · ${DATA.meta.selectionPolicy}`,
+    ],
+    [
+      "문제 규모",
+      `On-demand ${DATA.meta.classCounts.onDemand} · Spot 후보 ${DATA.meta.classCounts.spot} · ` +
+      `Batch job ${DATA.meta.classCounts.batchJobs} → ${DATA.meta.classCounts.batchFamilies} families · ` +
+      `후보 서버 ${DATA.meta.numServers}대`,
+    ],
+    [
+      "시간·시나리오",
+      `${DATA.meta.horizonHours}시간 · ${DATA.meta.periods.length}개 × ${DATA.meta.slotMinutes}분 · ` +
+      `${DATA.meta.numScenarios}개 시나리오(각 10%) · scenario 0 관측값, 나머지 synthetic`,
+    ],
+    [
+      "수요 샘플링",
+      `mean-preserving lognormal · CPU sigma ${DATA.meta.cpuSigma} · memory sigma ${DATA.meta.memorySigma} · ` +
+      `${DATA.meta.syntheticRngMode} · seed ${DATA.meta.seed} · configured size를 넘지 않도록 cap`,
+    ],
+    [
+      "2nd-stage 정책",
+      `On-demand migration ${DATA.meta.migrationFixedZero ? "금지" : "허용"} · ` +
+      `Spot preemption ${DATA.meta.spotPreemptionAllowed ? "허용" : "금지"} · ` +
+      `On-demand CPU 초과 부하 recourse ${DATA.meta.odCpuExcessAllowed ? "허용" : "금지"} · Batch allocation 허용`,
+    ],
+    [
+      "CPU 위험 제한",
+      `CVaR tail level ${DATA.meta.alpha} · 각 서버·시간의 tail 평균 CPU 초과 부하를 ` +
+      `서버 CPU 용량의 ${(DATA.meta.epsilon * 100).toFixed(0)}% 이하로 제한`,
+    ],
+    [
+      "서버·전력",
+      `CPU ${DATA.meta.serverCpuCapacity}, memory ${DATA.meta.serverMemoryCapacity} · 최소 ON/OFF 각 ${DATA.meta.minimumOnSlots} slots · ` +
+      `idle ${DATA.meta.idleEnergyPerSlot} kWh/slot + served CPU 단위당 ${DATA.meta.cpuEnergyPerUnitSlot} kWh/slot`,
+    ],
+    [
+      "경제·가격",
+      `On-demand revenue multiplier ${DATA.meta.kappaOnDemand} · Spot/On-demand 가격 비율 ${(DATA.meta.spotDiscountRatio * 100).toFixed(0)}% · ` +
+      `Batch/On-demand 가격 비율 ${(DATA.meta.batchDiscountRatio * 100).toFixed(0)}% · NYISO ${DATA.meta.electricitySite} · ` +
+      `price floor $${DATA.meta.electricityFloor.toFixed(2)}/kWh`,
+    ],
+    [
+      "Solver",
+      `${DATA.meta.solverThreads} threads · time limit ${(DATA.meta.timeLimitSeconds / 3600).toFixed(0)}h · ` +
+      `target gap ${(DATA.meta.mipGapTarget * 100).toFixed(1)}% · NoRel ${DATA.meta.noRelSeconds}s · ` +
+      `seed ${DATA.meta.seed} · NumericFocus ${DATA.meta.numericFocus} · Presolve ${DATA.meta.presolve}`,
+    ],
+  ];
+  const settingsBody = document.getElementById("cei-settings");
+  settingsRows.forEach(([label, value]) => {
+    const row = document.createElement("tr");
+    const heading = document.createElement("th");
+    heading.scope = "row";
+    heading.textContent = label;
+    const cell = document.createElement("td");
+    cell.textContent = value;
+    row.append(heading, cell);
+    settingsBody.appendChild(row);
+  });
+
+  const pressureScaleLow = Math.max(
+    0,
+    Math.floor(Math.min(DATA.meta.postCpuMin, DATA.meta.postMemMin) * 20) / 20,
+  );
+  const cpuPressureScaleHigh = Math.ceil(DATA.meta.postCpuMax * 10) / 10;
+  const memPressureScaleHigh = Math.ceil(DATA.meta.postMemMax * 20) / 20;
+  document.getElementById("cei-pressure-scale-note").textContent =
+    ` 색상 범위는 편차가 드러나도록 CPU ${(pressureScaleLow * 100).toFixed(0)}–${(cpuPressureScaleHigh * 100).toFixed(0)}%, ` +
+    `메모리 ${(pressureScaleLow * 100).toFixed(0)}–${(memPressureScaleHigh * 100).toFixed(0)}%로 조정했다.`;
+
+  const selector = document.getElementById("cei-scenario");
+  const rasterSelector = document.getElementById("cei-raster-scenario");
+  DATA.scenarios.forEach((scenario) => {
+    const option = document.createElement("option");
+    option.value = String(scenario.id);
+    option.textContent = `Scenario ${scenario.id}`;
+    selector.appendChild(option);
+    const rasterOption = document.createElement("option");
+    rasterOption.value = String(scenario.id);
+    rasterOption.textContent = `Scenario ${scenario.id}`;
+    rasterSelector.appendChild(rasterOption);
+  });
+  selector.value = String(selectedScenario);
+  rasterSelector.value = String(selectedRasterScenario);
+  selector.addEventListener("change", (event) => selectScenario(event.target.value));
+  rasterSelector.addEventListener(
+    "change",
+    (event) => selectRasterScenario(event.target.value),
+  );
+
+  drawAtlas();
+  drawConfigured();
+  drawDetail();
+  drawOperations(DATA.detail[String(selectedRasterScenario)]);
+
+  let resizeTimer = null;
+  const observer = new ResizeObserver(() => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      drawAtlas();
+      drawConfigured();
+      drawDetail();
+      drawOperations(DATA.detail[String(selectedRasterScenario)]);
+    }, 80);
+  });
+  observer.observe(root);
+})();
+</script>

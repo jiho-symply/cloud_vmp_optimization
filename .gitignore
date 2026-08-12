@@ -17,6 +17,10 @@ __pycache__/
 /data/processed/*
 !/data/processed/notion_toy_google2019_micro_stress_v1/
 !/data/processed/notion_toy_google2019_micro_stress_v1/**
+!/data/processed/notion_toy_google2019_micro_top10_unscaled_v1/
+!/data/processed/notion_toy_google2019_micro_top10_unscaled_v1/**
+!/data/processed/notion_toy_google2019_micro_cpu_top20_od_sp10_bj10_unscaled_v1/
+!/data/processed/notion_toy_google2019_micro_cpu_top20_od_sp10_bj10_unscaled_v1/**
 
 # Generated experiment outputs.
 /experiments/**/results/

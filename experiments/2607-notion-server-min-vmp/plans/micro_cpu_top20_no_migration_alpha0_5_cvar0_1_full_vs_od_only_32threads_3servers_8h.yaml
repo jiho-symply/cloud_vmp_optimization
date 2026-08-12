@@ -1,0 +1,76 @@
+schema_version: 1
+status: planned
+suite_name: notion_server_min_micro_cpu_top20_no_migration_alpha0_5_cvar0_1_full_vs_od_only_per_vm_stable_v1_32threads_3servers_8h
+base_config: configs/micro_cpu_top20_no_migration_norel0_alpha0_5_cvar0_1_32threads_3servers_full.yaml
+output_root: runs/notion_server_min_micro_cpu_top20_no_migration_alpha0_5_cvar0_1_full_vs_od_only_per_vm_stable_v1_32threads_3servers_8h
+
+generation:
+  design: one_factor_at_a_time
+  semantics: compare_full_OD20_SP10_BJ10_against_OD20_only
+  forbid_full_cartesian_product: true
+  combine_factors_within_stage: false
+  deduplicate_identical_configs_globally: true
+  exact_unique_candidate_configs:
+    first_stage: 2
+  immutable_configs: true
+  require_common_random_numbers_within_comparison_group: true
+
+stages:
+  first_stage:
+    enabled: true
+    purpose: compare_full_workload_mix_against_on_demand_only
+    design: one_factor_at_a_time
+    anchor: full
+    factors:
+      - id: workload_mix
+        config_path: experiment.class_counts
+        levels:
+          - id: od_only
+            value:
+              on_demand: 20
+              spot: 0
+              batch_jobs: 0
+
+execution_policy:
+  max_parallel_jobs: 2
+  threads_per_job: 32
+  total_thread_limit: 64
+  time_limit_seconds: 28800
+  mip_gap: 0.001
+  soft_mem_limit_gb_per_job: 80
+  nodefile_start_gb: 0.5
+  safety:
+    memory_reserve_gb: 64
+    disk_reserve_gb: 60
+    write_lp: false
+    write_mps: false
+
+validation:
+  formulation_entrypoint: run_experiment_no_migration.py
+  decisions:
+    migration_allowed: false
+    excess_indicator_allowed: true
+    spot_preemption_allowed: true
+  risk:
+    alpha: 0.5
+    epsilon: 0.1
+  solver:
+    no_rel_heur_time_seconds: 0
+    time_limit_seconds: 28800
+    threads_per_job: 32
+  common_parameters:
+    scenarios: 10
+    candidate_servers: 3
+    cpu_lognormal_sigma: 0.24
+    memory_lognormal_sigma: 0.12
+    synthetic_rng_mode: per_vm_stable
+    migration_coefficient: 0.05
+  workload_variants:
+    full:
+      on_demand: 20
+      spot: 10
+      batch_jobs: 10
+    od_only:
+      on_demand: 20
+      spot: 0
+      batch_jobs: 0
