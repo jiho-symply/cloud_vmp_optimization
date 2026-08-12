@@ -3,7 +3,8 @@
 `experiments/2607-notion-energy-vmp/src/google2019_toy/build_toy_instance.py`
 (이하 **원본**)의 전처리를 9개 단계로 분해한 설계다. 스타일 계약은
 [AGENTS.md](./AGENTS.md)에, 데이터 용어의 뜻은
-[DATA_GLOSSARY.md](./DATA_GLOSSARY.md)에 있고, 이 문서는 **무엇을 만들지**만
+[DATA_GLOSSARY.md](./DATA_GLOSSARY.md)에, 완성된 코드를 읽는 방법은
+[CODE_WALKTHROUGH.md](./CODE_WALKTHROUGH.md)에 있고, 이 문서는 **무엇을 만들지**만
 정의한다.
 
 원본은 각 단계의 의미론에 대한 유일한 진실 공급원(source of truth)이다. 아래
