@@ -1,0 +1,1952 @@
+{
+  "actual_usage_above_q_row_count": {
+    "cpu": 0,
+    "mem": 0
+  },
+  "batch_source_workload": {
+    "coverage_policy": "W=sum(coverage_us)/30min; resource volume=sum(usage*coverage_us)/30min",
+    "cpu_resource_slot_volume": 9.191886976300765,
+    "memory_resource_slot_volume": 10.5973344868338,
+    "model_loader_family_policy": "configured q_cpu/q_mem pairs are sorted and rank-binned into at most max_families; family q is the componentwise maximum and family rho is total resource volume divided by W",
+    "selected_source_episode_count": 10,
+    "workload_slot_units": 87.44692173277778
+  },
+  "builder_integrity": {
+    "files": {
+      "base_builder_script": "scripts/build_micro_top10_unscaled_dataset.py",
+      "builder_script": "scripts/build_micro_cpu_top20_od_sp10_bj10_unscaled_dataset.py"
+    },
+    "sha256_after": {
+      "base_builder_script": "43337809bd8f80e3e5dc6b0bc1022ba7b1beeb7bfe112d2cf6209dfe3aa34527",
+      "builder_script": "5689b4010d4adaa7351af53794f204fe289cdb62782bd8a2e34a68e24c6b95e7"
+    },
+    "sha256_before": {
+      "base_builder_script": "43337809bd8f80e3e5dc6b0bc1022ba7b1beeb7bfe112d2cf6209dfe3aa34527",
+      "builder_script": "5689b4010d4adaa7351af53794f204fe289cdb62782bd8a2e34a68e24c6b95e7"
+    },
+    "unchanged": true
+  },
+  "canonical_source_integrity": {
+    "sha256_after": {
+      "metadata.json": "cae4245a6b2d3e03bfadcc44ca09e3c4fc6114a78973803793857745c284dd70",
+      "servers.csv": "c2ce2d26fc171f665109d67faacaea54a69d6d58cf46912b473d22bc316f0ca4",
+      "vm_requests.csv": "bc889ab2f7a7e1ca3d76b4625723e6fab0dec6547fa46db9a1b36a07c29ac0ad",
+      "vm_usage_5min_scenarios.csv": "121fcdf155c3b060a3564567a22afbafc2cf845f01d0d0e2d65e7c27c8f69db9"
+    },
+    "sha256_before": {
+      "metadata.json": "cae4245a6b2d3e03bfadcc44ca09e3c4fc6114a78973803793857745c284dd70",
+      "servers.csv": "c2ce2d26fc171f665109d67faacaea54a69d6d58cf46912b473d22bc316f0ca4",
+      "vm_requests.csv": "bc889ab2f7a7e1ca3d76b4625723e6fab0dec6547fa46db9a1b36a07c29ac0ad",
+      "vm_usage_5min_scenarios.csv": "121fcdf155c3b060a3564567a22afbafc2cf845f01d0d0e2d65e7c27c8f69db9"
+    },
+    "unchanged": true
+  },
+  "class_counts": {
+    "batch_candidate": 10,
+    "on_demand": 20,
+    "spot": 10
+  },
+  "configured_q_packing": {
+    "active_service_envelope": {
+      "on_demand": {
+        "maximum_active_units": 18,
+        "maximum_aggregate_lower_bound_servers": 6,
+        "maximum_exact_minimum_servers": 6,
+        "maximum_sum_q_cpu": 5.30796204620462,
+        "maximum_sum_q_mem": 2.824990849194729,
+        "slots": [
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 0
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 1
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 2
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 3
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 4
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 5
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 6
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 7
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 8
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 9
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 10
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 11
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 12
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 13
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 14
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 15
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 16
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 17
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 18
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 19
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 20
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 21
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 22
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 23
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 24
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 25
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 26
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 27
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.081889438943894,
+            "sum_q_mem": 2.700173865300146,
+            "t": 28
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.081889438943894,
+            "sum_q_mem": 2.700173865300146,
+            "t": 29
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 30
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 31
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 32
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 33
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 34
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 35
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 36
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 37
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 38
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 39
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 40
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 41
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 42
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 43
+          },
+          {
+            "active_units": 14,
+            "aggregate_lower_bound_servers": 4,
+            "exact_minimum_servers": 4,
+            "sum_q_cpu": 3.6301567656765674,
+            "sum_q_mem": 1.9520497803806731,
+            "t": 44
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 4,
+            "exact_minimum_servers": 4,
+            "sum_q_cpu": 3.778052805280528,
+            "sum_q_mem": 2.127745241581259,
+            "t": 45
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.041666666666666,
+            "sum_q_mem": 2.2448755490483157,
+            "t": 46
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.041666666666666,
+            "sum_q_mem": 2.2448755490483157,
+            "t": 47
+          }
+        ]
+      },
+      "service": {
+        "maximum_active_units": 21,
+        "maximum_aggregate_lower_bound_servers": 7,
+        "maximum_exact_minimum_servers": 7,
+        "maximum_sum_q_cpu": 6.5480610561056105,
+        "maximum_sum_q_mem": 2.9286237188872613,
+        "slots": [
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 0
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 1
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.7378300330033,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 2
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.7378300330033,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 3
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.7378300330033,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 4
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 5
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 6
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 7
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.723803630363037,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 8
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.723803630363037,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 9
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.723803630363037,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 10
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.714315181518152,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 11
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.714315181518152,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 12
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.714315181518152,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 13
+          },
+          {
+            "active_units": 21,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.5480610561056105,
+            "sum_q_mem": 2.9286237188872613,
+            "t": 14
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.141707920792079,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 15
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.123556105610561,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 16
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.71720297029703,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 17
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.129744224422442,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 18
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.1408828382838285,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 19
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.1408828382838285,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 20
+          },
+          {
+            "active_units": 20,
+            "aggregate_lower_bound_servers": 7,
+            "exact_minimum_servers": 7,
+            "sum_q_cpu": 6.1408828382838285,
+            "sum_q_mem": 2.8940794289897505,
+            "t": 21
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.30796204620462,
+            "sum_q_mem": 2.824990849194729,
+            "t": 22
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.732879537953796,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 23
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.732879537953796,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 24
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.732879537953796,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 25
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.732879537953796,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 26
+          },
+          {
+            "active_units": 19,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.732879537953796,
+            "sum_q_mem": 2.8595351390922397,
+            "t": 27
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.5068069306930685,
+            "sum_q_mem": 2.734718155197657,
+            "t": 28
+          },
+          {
+            "active_units": 18,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.5068069306930685,
+            "sum_q_mem": 2.734718155197657,
+            "t": 29
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.292285478547855,
+            "sum_q_mem": 2.609901171303074,
+            "t": 30
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.292285478547855,
+            "sum_q_mem": 2.609901171303074,
+            "t": 31
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.292285478547855,
+            "sum_q_mem": 2.609901171303074,
+            "t": 32
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 33
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 34
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 35
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.86736798679868,
+            "sum_q_mem": 2.5753568814055634,
+            "t": 36
+          },
+          {
+            "active_units": 17,
+            "aggregate_lower_bound_servers": 6,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 5.295585808580858,
+            "sum_q_mem": 2.609901171303074,
+            "t": 37
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.951113861386138,
+            "sum_q_mem": 2.5854227672035135,
+            "t": 38
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.951113861386138,
+            "sum_q_mem": 2.5854227672035135,
+            "t": 39
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.951113861386138,
+            "sum_q_mem": 2.5854227672035135,
+            "t": 40
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 6,
+            "sum_q_cpu": 4.951113861386138,
+            "sum_q_mem": 2.5854227672035135,
+            "t": 41
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 42
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.5228960396039595,
+            "sum_q_mem": 2.5508784773060027,
+            "t": 43
+          },
+          {
+            "active_units": 14,
+            "aggregate_lower_bound_servers": 4,
+            "exact_minimum_servers": 4,
+            "sum_q_cpu": 3.6301567656765674,
+            "sum_q_mem": 1.9520497803806731,
+            "t": 44
+          },
+          {
+            "active_units": 15,
+            "aggregate_lower_bound_servers": 4,
+            "exact_minimum_servers": 4,
+            "sum_q_cpu": 3.778052805280528,
+            "sum_q_mem": 2.127745241581259,
+            "t": 45
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.041666666666666,
+            "sum_q_mem": 2.2448755490483157,
+            "t": 46
+          },
+          {
+            "active_units": 16,
+            "aggregate_lower_bound_servers": 5,
+            "exact_minimum_servers": 5,
+            "sum_q_cpu": 4.041666666666666,
+            "sum_q_mem": 2.2448755490483157,
+            "t": 47
+          }
+        ]
+      },
+      "spot": {
+        "maximum_active_units": 3,
+        "maximum_aggregate_lower_bound_servers": 2,
+        "maximum_exact_minimum_servers": 2,
+        "maximum_sum_q_cpu": 1.2400990099009899,
+        "maximum_sum_q_mem": 0.10363286969253269,
+        "slots": [
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 0
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 1
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4298679867986799,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 2
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4298679867986799,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 3
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4298679867986799,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 4
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 5
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 6
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 7
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4158415841584158,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 8
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4158415841584158,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 9
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4158415841584158,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 10
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4063531353135313,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 11
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4063531353135313,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 12
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4063531353135313,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 13
+          },
+          {
+            "active_units": 3,
+            "aggregate_lower_bound_servers": 2,
+            "exact_minimum_servers": 2,
+            "sum_q_cpu": 1.2400990099009899,
+            "sum_q_mem": 0.10363286969253269,
+            "t": 14
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8337458745874586,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 15
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8155940594059405,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 16
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4092409240924092,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 17
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8217821782178216,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 18
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8329207920792079,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 19
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8329207920792079,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 20
+          },
+          {
+            "active_units": 2,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.8329207920792079,
+            "sum_q_mem": 0.0690885797950218,
+            "t": 21
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 22
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 23
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 24
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 25
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 26
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 27
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 28
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 29
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 30
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 31
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4249174917491749,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 32
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 33
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 34
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 35
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 36
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4282178217821782,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 37
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4282178217821782,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 38
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4282178217821782,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 39
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4282178217821782,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 40
+          },
+          {
+            "active_units": 1,
+            "aggregate_lower_bound_servers": 1,
+            "exact_minimum_servers": 1,
+            "sum_q_cpu": 0.4282178217821782,
+            "sum_q_mem": 0.0345442898975109,
+            "t": 41
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 42
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 43
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 44
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 45
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 46
+          },
+          {
+            "active_units": 0,
+            "aggregate_lower_bound_servers": 0,
+            "exact_minimum_servers": 0,
+            "sum_q_cpu": 0.0,
+            "sum_q_mem": 0.0,
+            "t": 47
+          }
+        ]
+      }
+    },
+    "interpretation": "Configured q packing is a size-envelope diagnostic. The current service capacity constraints use scenario usage, not q reservation.",
+    "static_all_simultaneous": {
+      "batch_candidate": {
+        "aggregate_lower_bound_servers": 3,
+        "exact_minimum_servers_if_all_simultaneous": 3,
+        "first_fit_decreasing_servers_if_all_simultaneous": 3,
+        "sum_q_cpu": 2.28279702970297,
+        "sum_q_mem": 2.440794289897511,
+        "units": 10
+      },
+      "on_demand": {
+        "aggregate_lower_bound_servers": 6,
+        "exact_minimum_servers_if_all_simultaneous": 6,
+        "first_fit_decreasing_servers_if_all_simultaneous": 6,
+        "sum_q_cpu": 5.7194719471947195,
+        "sum_q_mem": 3.1178166178623714,
+        "units": 20
+      },
+      "service": {
+        "aggregate_lower_bound_servers": 10,
+        "exact_minimum_servers_if_all_simultaneous": null,
+        "first_fit_decreasing_servers_if_all_simultaneous": 11,
+        "sum_q_cpu": 9.900577557755776,
+        "sum_q_mem": 3.46325951683748,
+        "units": 30
+      },
+      "spot": {
+        "aggregate_lower_bound_servers": 5,
+        "exact_minimum_servers_if_all_simultaneous": 5,
+        "first_fit_decreasing_servers_if_all_simultaneous": 5,
+        "sum_q_cpu": 4.181105610561056,
+        "sum_q_mem": 0.345442898975109,
+        "units": 10
+      }
+    }
+  },
+  "invariants": {
+    "batch_ids_and_order_match_reference_exactly": true,
+    "canonical_requests_copied_without_value_changes": true,
+    "canonical_scenario_zero_usage_copied_without_value_changes": true,
+    "exact_class_counts": true,
+    "no_lifecycle_or_provenance_transform": true,
+    "no_memory_pressure_transform": true,
+    "no_resource_scaling": true,
+    "no_usage_rescaling": true,
+    "on_demand_is_eligible_cpu_only_top20": true,
+    "scenario_zero_only": true,
+    "selection_does_not_use_a_specific_time_slot": true,
+    "spot_ids_and_order_match_reference_exactly": true,
+    "unique_usage_keys": true
+  },
+  "reference_fixture_integrity": {
+    "sha256_after": {
+      "selection_manifest.csv": "3eee1f7a71b3f9791b277640b3a1ae1ccb362904fecba1016c818281838e4153",
+      "selection_policy.json": "c7add82a1a42d0c90ab1897c3950bc4847eeb0a1c98cf192ea209a50ef0aa015",
+      "validation_report.json": "3566a64b366fe33f80ddb40e06cbca89c8426018b5ab78205ca153d1da61cabd",
+      "vm_requests.csv": "d851b51e6ceb9d3f567ed17b63c182ebaa81907f02f534211eee675dcc3255b1",
+      "vm_usage_5min_scenarios.csv": "bdad4057b85e9f5e5f4f569dd7e50a95b0f74eac87e9ac356fc452b7afcde9f3"
+    },
+    "sha256_before": {
+      "selection_manifest.csv": "3eee1f7a71b3f9791b277640b3a1ae1ccb362904fecba1016c818281838e4153",
+      "selection_policy.json": "c7add82a1a42d0c90ab1897c3950bc4847eeb0a1c98cf192ea209a50ef0aa015",
+      "validation_report.json": "3566a64b366fe33f80ddb40e06cbca89c8426018b5ab78205ca153d1da61cabd",
+      "vm_requests.csv": "d851b51e6ceb9d3f567ed17b63c182ebaa81907f02f534211eee675dcc3255b1",
+      "vm_usage_5min_scenarios.csv": "bdad4057b85e9f5e5f4f569dd7e50a95b0f74eac87e9ac356fc452b7afcde9f3"
+    },
+    "unchanged": true
+  },
+  "scenario_ids_in_usage_file": [
+    0
+  ],
+  "scenario_zero_usage_rows": 5619,
+  "selected_distribution": {
+    "batch_candidate": {
+      "coverage_weighted_avg_cpu_usage": {
+        "count": 10,
+        "maximum": 0.13708402090209018,
+        "mean": 0.06822013061048653,
+        "median": 0.06839071878244268,
+        "minimum": 0.00517830235695932,
+        "p10": 0.007191531069768283,
+        "p25": 0.009192111874732027,
+        "p75": 0.12279228801668537,
+        "p90": 0.13477502812222023
+      },
+      "coverage_weighted_avg_mem_usage": {
+        "count": 10,
+        "maximum": 0.16051656295754022,
+        "mean": 0.09029031567381442,
+        "median": 0.09812781213097456,
+        "minimum": 0.01601729767217669,
+        "p10": 0.0278327894190737,
+        "p25": 0.03863173787850653,
+        "p75": 0.13637698155651987,
+        "p90": 0.14458385555137065
+      },
+      "q_cpu": {
+        "count": 10,
+        "maximum": 0.4265676567656766,
+        "mean": 0.22827970297029698,
+        "median": 0.1438737623762376,
+        "minimum": 0.1144801980198019,
+        "p10": 0.13564356435643565,
+        "p25": 0.1415016501650165,
+        "p75": 0.3622112211221122,
+        "p90": 0.42582508250825074
+      },
+      "q_mem": {
+        "count": 10,
+        "maximum": 0.4443631039531479,
+        "mean": 0.24407942898975107,
+        "median": 0.1648975109809663,
+        "minimum": 0.0530746705710102,
+        "p10": 0.08181734992679353,
+        "p25": 0.09306368960468515,
+        "p75": 0.4443631039531479,
+        "p90": 0.4443631039531479
+      },
+      "selected_count": 10
+    },
+    "on_demand": {
+      "coverage_weighted_avg_cpu_usage": {
+        "count": 20,
+        "maximum": 0.41919959121303096,
+        "mean": 0.14545581368078372,
+        "median": 0.10814883571690498,
+        "minimum": 0.10489423942394235,
+        "p10": 0.10554671026998529,
+        "p25": 0.10654271807389068,
+        "p75": 0.11752627085625225,
+        "p90": 0.29688762396089147
+      },
+      "coverage_weighted_avg_mem_usage": {
+        "count": 20,
+        "maximum": 0.45593488953619415,
+        "mean": 0.1171640178777051,
+        "median": 0.10203370292419062,
+        "minimum": 0.014776947732579907,
+        "p10": 0.030211447149015733,
+        "p25": 0.0977436684460869,
+        "p75": 0.10242219042548467,
+        "p90": 0.12699726772636813
+      },
+      "eligible_candidate_count": 1723,
+      "eligible_candidate_cpu_distribution": {
+        "count": 1723,
+        "maximum": 0.41919959121303096,
+        "mean": 0.009939848493640251,
+        "median": 0.005166687228076058,
+        "minimum": 8.802757821817061e-05,
+        "p10": 0.00031491746684401425,
+        "p25": 0.0007553055846228742,
+        "p75": 0.01086171432341492,
+        "p90": 0.016524903508969496
+      },
+      "q_cpu": {
+        "count": 20,
+        "maximum": 0.8927392739273927,
+        "mean": 0.285973597359736,
+        "median": 0.22751650165016496,
+        "minimum": 0.1478960396039604,
+        "p10": 0.1865924092409241,
+        "p25": 0.2129744224422442,
+        "p75": 0.2505156765676567,
+        "p90": 0.3823019801980203
+      },
+      "q_mem": {
+        "count": 20,
+        "maximum": 0.5988286969253295,
+        "mean": 0.15589083089311856,
+        "median": 0.1248169838945827,
+        "minimum": 0.0244784040995607,
+        "p10": 0.0530746705710102,
+        "p25": 0.1248169838945827,
+        "p75": 0.1248169838945827,
+        "p90": 0.20541727672035176
+      },
+      "selected_count": 20
+    },
+    "spot": {
+      "coverage_weighted_avg_cpu_usage": {
+        "count": 10,
+        "maximum": 0.28839960263848524,
+        "mean": 0.27941516215917617,
+        "median": 0.27967788356666234,
+        "minimum": 0.2704132201449229,
+        "p10": 0.2711912143386219,
+        "p25": 0.27633833681614417,
+        "p75": 0.2832894451653675,
+        "p90": 0.2858378074669497
+      },
+      "coverage_weighted_avg_mem_usage": {
+        "count": 10,
+        "maximum": 0.025662425320620148,
+        "mean": 0.023338081705313735,
+        "median": 0.023513856014085954,
+        "minimum": 0.021962637419721855,
+        "p10": 0.022014694349050925,
+        "p25": 0.022305815388404704,
+        "p75": 0.023848061982540754,
+        "p90": 0.02446350990689661
+      },
+      "q_cpu": {
+        "count": 10,
+        "maximum": 0.4298679867986799,
+        "mean": 0.41811056105610556,
+        "median": 0.4181105610561056,
+        "minimum": 0.4063531353135313,
+        "p10": 0.4063531353135313,
+        "p25": 0.41006600660066,
+        "p75": 0.4267739273927393,
+        "p90": 0.4283828382838284
+      },
+      "q_mem": {
+        "count": 10,
+        "maximum": 0.0345442898975109,
+        "mean": 0.0345442898975109,
+        "median": 0.0345442898975109,
+        "minimum": 0.0345442898975109,
+        "p10": 0.0345442898975109,
+        "p25": 0.0345442898975109,
+        "p75": 0.0345442898975109,
+        "p90": 0.0345442898975109
+      },
+      "selected_count": 10
+    }
+  },
+  "selected_ids": {
+    "batch_candidate": [
+      "ep_4a2d3385ab17f656ba11",
+      "ep_ccfb8a0f25631004759a",
+      "ep_d57d7f4656422c641ee5",
+      "ep_5d6a776897346bfa7605",
+      "ep_ef41f9e986fe26e2d03b",
+      "ep_0c2e9f159438610d2d11",
+      "ep_82cbe00827435fff0953",
+      "ep_1563b2ca313c71a7361b",
+      "ep_bd249b80fea7ccf4e254",
+      "ep_a0722f22616aabf4ec6d"
+    ],
+    "on_demand": [
+      "ep_d82c51c9583f3cf5c0c7",
+      "ep_463ac0f209f3b54035ba",
+      "ep_4dbe04be0377398e4794",
+      "ep_d31caf8fd9a3714da1a2",
+      "ep_c6c08698565259ae4a2e",
+      "ep_7c70f7c28f519324b5b1",
+      "ep_a2ec8b2ddffdb812576c",
+      "ep_3953918cd0abe3e863ee",
+      "ep_5b110457b2232a6309e0",
+      "ep_42a270de655b077d2e9c",
+      "ep_aa0e2ea87e9f11d208a3",
+      "ep_13e286ccbb1992dee967",
+      "ep_24abcd489982eda36e82",
+      "ep_9ba2882c8df6230dd2dc",
+      "ep_cd6fc3cb9e87f5e3b9c4",
+      "ep_87e46ec8310a3223818a",
+      "ep_dbb30e22e6d8cf68718f",
+      "ep_2009a5703b1ce7e73d90",
+      "ep_8734e8e23a0140428a5f",
+      "ep_eb8222d09ecc3c3ef25a"
+    ],
+    "spot": [
+      "ep_4eba5106e437fa81d3cb",
+      "ep_0b88be7a95f9bb2c39ba",
+      "ep_9737a4971f154b6456c6",
+      "ep_e423a4239f2ca65f2510",
+      "ep_27c14c34e9d530224762",
+      "ep_22ec4975414d1c10cf90",
+      "ep_2622666398e4a6b7bf48",
+      "ep_fb6c185489a7313f0fee",
+      "ep_90a1ad89f94a3702e2c6",
+      "ep_aa651b60d05c2552720b"
+    ]
+  },
+  "selection_manifest_rows": 40,
+  "service_packing": {
+    "maximum_active_vms": 21,
+    "maximum_aggregate_cpu": 3.6395646613663657,
+    "maximum_aggregate_lower_bound_servers": 4,
+    "maximum_aggregate_memory": 2.2917205851821505,
+    "maximum_exact_minimum_servers": 4,
+    "maximum_first_fit_decreasing_servers": 4,
+    "mean_active_vms": 17.854166666666668,
+    "method": "scenario-0 coverage-weighted 30-minute actual usage; two-dimensional first-fit-decreasing is a diagnostic upper bound",
+    "slots": [
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.7597290979097906,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.255753568814055,
+        "t": 0
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.6121401723505673,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.2837283430941913,
+        "t": 1
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.758554522426411,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.269380544510056,
+        "t": 2
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9054421067106704,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.2556696864324053,
+        "t": 3
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.96759547847111,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.2917205851821505,
+        "t": 4
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.542302667766776,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.2376845412396285,
+        "t": 5
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.765728135313531,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.2019773365056117,
+        "t": 6
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.600075632563256,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.074762079062957,
+        "t": 7
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.891287635844673,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.1577603780328807,
+        "t": 8
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.074154290429042,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1501494631527565,
+        "t": 9
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9675618764121316,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.2128277503638074,
+        "t": 10
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9154841724713787,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1373194269500826,
+        "t": 11
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.0038331958195807,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.0452545448999504,
+        "t": 12
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9330823707370732,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.0440039348462657,
+        "t": 13
+      },
+      {
+        "active_vms": 21,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.6395646613663657,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1827702829086326,
+        "t": 14
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.395423521263865,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1373691685452183,
+        "t": 15
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.4259216144581957,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1674119932367,
+        "t": 16
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9458539603960388,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.14408324182528,
+        "t": 17
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.0759526797437866,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1621620874978826,
+        "t": 18
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.082862195114229,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1801937629837753,
+        "t": 19
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.159275302530252,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1983437042459726,
+        "t": 20
+      },
+      {
+        "active_vms": 20,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.1388488454276313,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.2190363044855945,
+        "t": 21
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.64653809130913,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.161260065885797,
+        "t": 22
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.866876936256843,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.1217789371427327,
+        "t": 23
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9690422167216712,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1805758906783788,
+        "t": 24
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.811434268426842,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.1693051488530983,
+        "t": 25
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.807729991749174,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.2090348950707654,
+        "t": 26
+      },
+      {
+        "active_vms": 19,
+        "aggregate_lower_bound_servers": 4,
+        "cpu_sum": 3.0562431243124304,
+        "exact_minimum_servers": 4,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.222490391654465,
+        "t": 27
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.954053217821782,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1373268972669583,
+        "t": 28
+      },
+      {
+        "active_vms": 18,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.9250721947194718,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 4,
+        "mem_sum": 2.1609931673987304,
+        "t": 29
+      },
+      {
+        "active_vms": 17,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.77289603960396,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.099183290629574,
+        "t": 30
+      },
+      {
+        "active_vms": 17,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.736162678767876,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0509966752074176,
+        "t": 31
+      },
+      {
+        "active_vms": 17,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.704807375155184,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0981461914901187,
+        "t": 32
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.4641261001100103,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.059022693997071,
+        "t": 33
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.3852619636963692,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0735648487066856,
+        "t": 34
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.4333745874587454,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.086006131039531,
+        "t": 35
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.409515951595159,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0880116825280615,
+        "t": 36
+      },
+      {
+        "active_vms": 17,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.664923431593863,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.07354638705238,
+        "t": 37
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.3660959845984593,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.065805728404099,
+        "t": 38
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.4221500275027497,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0794366154221566,
+        "t": 39
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.44822607260726,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0517478038067343,
+        "t": 40
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.458407563944332,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0665806631014196,
+        "t": 41
+      },
+      {
+        "active_vms": 15,
+        "aggregate_lower_bound_servers": 3,
+        "cpu_sum": 2.033175192519251,
+        "exact_minimum_servers": 3,
+        "first_fit_decreasing_servers": 3,
+        "mem_sum": 2.0734847791605655,
+        "t": 42
+      },
+      {
+        "active_vms": 15,
+        "aggregate_lower_bound_servers": 2,
+        "cpu_sum": 1.6915733077213966,
+        "exact_minimum_servers": 2,
+        "first_fit_decreasing_servers": 2,
+        "mem_sum": 1.5808130490483154,
+        "t": 43
+      },
+      {
+        "active_vms": 14,
+        "aggregate_lower_bound_servers": 2,
+        "cpu_sum": 1.686004537953795,
+        "exact_minimum_servers": 2,
+        "first_fit_decreasing_servers": 2,
+        "mem_sum": 1.5851558687164466,
+        "t": 44
+      },
+      {
+        "active_vms": 15,
+        "aggregate_lower_bound_servers": 2,
+        "cpu_sum": 1.8908905437957586,
+        "exact_minimum_servers": 2,
+        "first_fit_decreasing_servers": 2,
+        "mem_sum": 1.625079642245586,
+        "t": 45
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 2,
+        "cpu_sum": 1.8939094718459661,
+        "exact_minimum_servers": 2,
+        "first_fit_decreasing_servers": 2,
+        "mem_sum": 1.7073494345593283,
+        "t": 46
+      },
+      {
+        "active_vms": 16,
+        "aggregate_lower_bound_servers": 2,
+        "cpu_sum": 1.930366474147414,
+        "exact_minimum_servers": 2,
+        "first_fit_decreasing_servers": 2,
+        "mem_sum": 1.7612402391410436,
+        "t": 47
+      }
+    ]
+  },
+  "total_selected_vm_ids": 40
+}

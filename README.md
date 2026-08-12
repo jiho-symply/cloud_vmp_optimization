@@ -8,7 +8,15 @@
 
 ## 데이터 다운로드와 재생성
 
-`data/processed/`와 각 실험의 `results/`는 원칙적으로 Git에 올리지 않습니다. 다만 server-min migration 실험 재현에 필요한 작은 `notion_toy_google2019_micro_stress_v1` fixture는 예외로 추적합니다. 새 환경에서는 아래 순서로 원본 Azure trace를 내려받고, 필요한 processed 데이터를 다시 만들면 됩니다.
+`data/processed/`와 각 실험의 `results/`는 원칙적으로 Git에 올리지 않습니다. 다만
+server-min 실험 재현에 필요한 작은 `notion_toy_google2019_micro_stress_v1`과
+`notion_toy_google2019_micro_top10_unscaled_v1`,
+`notion_toy_google2019_micro_cpu_top20_od_sp10_bj10_unscaled_v1` fixture는 예외로
+추적합니다. 첫 번째는 과거 capacity-pressure 변환 실험용이고, 두 번째는 class별 관측
+평균 CPU+MEM 상위 10개, 세 번째는 CPU-only OD 상위 20개와 두 번째 fixture의 SP/BJ
+각 10개를 사용합니다. 두 unscaled fixture 모두 canonical `q`와 scenario-0 usage를
+그대로 보존합니다. 새 환경에서는 아래 순서로 원본 trace를 내려받고 필요한 processed
+데이터를 다시 만들면 됩니다.
 
 ### 1. 환경 준비
 
@@ -57,7 +65,8 @@ python -m venv .venv
 .\.venv\Scripts\python.exe .\experiments\2605-vm-type-modeling-1\prepare_data.py
 ```
 
-생성된 파일들은 `data/processed/` 아래에 저장되며, 위 micro-stress fixture를 제외하면 Git에는 추적되지 않습니다.
+생성된 파일들은 `data/processed/` 아래에 저장되며, 위 세 micro fixture를 제외하면
+Git에는 추적되지 않습니다.
 
 ## Google ClusterData 2019 VM-like toy pipeline
 

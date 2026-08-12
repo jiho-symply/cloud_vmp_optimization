@@ -126,6 +126,7 @@ LP/MPS를 쓰지 않으며 각 후보는 실행 전에 resource 및 구조적 fe
 ```text
 configs/baseline.yaml                 literal baseline configuration
 configs/micro_stress_baseline.yaml    10/10/10 capacity-pressure configuration
+configs/micro_top10_unscaled_baseline.yaml unscaled top-10 configuration
 plans/sweep_plan.yaml                 bounded sensitivity design
 plans/micro_stress_first_stage_symbreak_v2.yaml latest formulation rerun plan
 run_experiment.py                     single-run entry point
@@ -211,6 +212,50 @@ trace 모집단 분포에 대한 주장이 아니라, 적은 VM으로 용량 압
 time limit 3600초, Gurobi `SoftMemLimit=80 GiB`를 사용하고 최대 5개를 병렬 실행한다.
 모든 case는 같은 selected VM과 scenario seed를 사용하므로, v1과 v2의 차이는
 최신 formulation과 solver objective accounting 변경으로 해석한다.
+
+### 무변환 top-10 micro fixture
+
+`notion_toy_google2019_micro_top10_unscaled_v1`은 동일한 service coverage 조건과
+scenario-0 coverage-weighted 평균 `CPU+MEM` 순위를 사용해 각 class의 상위 10개를
+선택한다. 과거 stress fixture와 달리 canonical의 `q_cpu`, `q_mem`, resource request,
+scenario-0 CPU/MEM usage, lifecycle/provenance를 그대로 복사하며 target-q scaling,
+usage rescaling, OD memory transform, minimum-server guarantee를 적용하지 않는다.
+
+```bash
+.venv/bin/python scripts/build_micro_top10_unscaled_dataset.py
+
+.venv/bin/python experiments/2607-notion-server-min-vmp/run_experiment.py \
+  --config configs/micro_top10_unscaled_baseline.yaml \
+  --run-dir runs/micro_top10_unscaled_prepare \
+  --prepare-only
+```
+
+새 config는 관측 scenario 0을 유지하고 OD/SP synthetic scenario 1–9에
+CPU lognormal sigma `0.24`, memory sigma `0.12`를 사용한다. BJ는 scenario-0
+resource volume에서 최대 3개 workload family로 변환되므로 이 sigma의 대상이 아니다.
+선택 분포, configured-q/actual-usage packing, BJ volume, 2대/3대 full-model feasibility
+결과는 [`MICRO_TOP10_UNSCALED_V1_ANALYSIS.md`](./MICRO_TOP10_UNSCALED_V1_ANALYSIS.md)에
+분리해 기록한다.
+
+### CPU-only OD top-20 micro fixture
+
+`notion_toy_google2019_micro_cpu_top20_od_sp10_bj10_unscaled_v1`은 service coverage
+조건을 만족하는 OD를 scenario-0 coverage-weighted 평균 CPU만으로 정렬해 상위 20개를
+선택한다. SP와 BJ는 위 top-10 fixture의 ID와 순서를 그대로 유지한다. 모든 request,
+`q`, lifecycle/provenance, scenario-0 CPU/MEM usage 값은 canonical source에서
+변환 없이 복사한다.
+
+```bash
+.venv/bin/python scripts/build_micro_cpu_top20_od_sp10_bj10_unscaled_dataset.py
+```
+
+이 fixture를 모델에 넣는 config는 loader가 40개를 모두 사용하도록
+`class_counts`를 `on_demand: 20`, `spot: 10`, `batch_jobs: 10`으로 지정해야 한다.
+fixture 내부 행 순서는 loader의 seed 기반 순서로 바뀔 수 있지만, 정확한 개수를
+요청하면 선택 집합은 보존된다.
+여기서 SP 동일성은 저장된 request와 canonical scenario-0 usage 기준이다. 현재 loader는
+선택된 OD+SP 전체에 하나의 RNG stream을 사용하므로 OD 집합이 달라지면 synthetic
+scenario 1–9의 SP draw는 기존 top-10 instance와 달라질 수 있다.
 
 ## 데이터 요약
 
