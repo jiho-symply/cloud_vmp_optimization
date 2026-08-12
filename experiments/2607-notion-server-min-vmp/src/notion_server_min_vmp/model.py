@@ -502,6 +502,10 @@ def configure_solver(model: Any, solver_config: dict[str, Any], run_dir: str | P
         model.Params.MIPFocus = int(solver_config["mip_focus"])
     if solver_config.get("display_interval_seconds") is not None:
         model.Params.DisplayInterval = int(solver_config["display_interval_seconds"])
+    if solver_config.get("no_rel_heur_time_seconds") is not None:
+        model.Params.NoRelHeurTime = float(
+            solver_config["no_rel_heur_time_seconds"]
+        )
     if solver_config.get("time_limit_seconds") is not None:
         model.Params.TimeLimit = float(solver_config["time_limit_seconds"])
     if solver_config.get("soft_mem_limit_gb") is not None:

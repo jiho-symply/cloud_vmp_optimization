@@ -887,6 +887,9 @@ def write_solution_reports(
                 "mip_gap_target": float(model.Params.MIPGap),
                 "threads": int(model.Params.Threads),
                 "time_limit_seconds": float(model.Params.TimeLimit),
+                "no_rel_heur_time_seconds": float(
+                    model.Params.NoRelHeurTime
+                ),
                 "seed": int(model.Params.Seed),
                 "numeric_focus": int(model.Params.NumericFocus),
                 "presolve": int(model.Params.Presolve),
