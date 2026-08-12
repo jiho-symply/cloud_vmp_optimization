@@ -49,13 +49,23 @@ s1과 s2는 서로 독립이라 순서를 바꿔도 되지만, s1이 **단위 �
 
 ```text
 experiments/2608-modeling-exp/
-  s1_machine_capacity.py .. s9_static.py   단계별 스크립트
-  paths.py                          경로 상수만 (로직 없음)
-  raw_tables.py                     raw parquet 로더 (단계 아님)
-  run_all.py                        얇은 드라이버
+  preprocessing/                    전처리 구현 (패키지)
+    s1_machine_capacity.py .. s9_static.py   단계별 모듈
+    paths.py                        경로 상수만 (로직 없음)
+    raw_tables.py                   raw parquet 로더 (단계 아님)
+  build_dataset.py                  단일 진입점 (얇은 드라이버)
   verify_against_canonical.py       기존 데이터셋과 비교 (파이프라인과 분리)
   work/                             중간 산출물 (git 미추적)
   out/                              최종 산출물 (git 미추적)
+```
+
+전처리 구현을 `preprocessing/` 안에 모으는 이유는 이 디렉터리에 최적화 모델
+코드가 함께 들어오기 때문이다. 밖에서는 `build_dataset.py` 하나만 부르면 되고,
+최적화 코드는 `out/`의 산출물만 소비한다.
+
+```bash
+.venv/bin/python experiments/2608-modeling-exp/build_dataset.py
+.venv/bin/python experiments/2608-modeling-exp/build_dataset.py --only s3
 ```
 
 입력은 `data/raw/google2019_cell_a_day0_cpu_distribution/`,

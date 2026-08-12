@@ -9,8 +9,8 @@ import json
 import numpy as np
 import pandas as pd
 
-from paths import S1_MACHINE_INTERVALS_PATH, S1_REPRESENTATIVE_PATH, WORK_DIR
-from raw_tables import load_machine_events
+from .paths import S1_MACHINE_INTERVALS_PATH, S1_REPRESENTATIVE_PATH, WORK_DIR
+from .raw_tables import load_machine_events
 
 
 DAY_START_US = 600_000_000

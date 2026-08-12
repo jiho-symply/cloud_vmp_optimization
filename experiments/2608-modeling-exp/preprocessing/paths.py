@@ -4,7 +4,7 @@
 from pathlib import Path
 
 
-EXPERIMENT_DIR = Path(__file__).resolve().parent
+EXPERIMENT_DIR = Path(__file__).resolve().parents[1]
 REPOSITORY_DIR = EXPERIMENT_DIR.parents[1]
 RAW_DIR = REPOSITORY_DIR / "data/raw/google2019_cell_a_day0_cpu_distribution"
 WORK_DIR = EXPERIMENT_DIR / "work"

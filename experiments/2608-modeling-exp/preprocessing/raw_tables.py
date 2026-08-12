@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from paths import (
+from .paths import (
     RAW_COLLECTION_EVENTS_PATH,
     RAW_INSTANCE_EVENTS_PATH,
     RAW_MACHINE_EVENTS_PATH,

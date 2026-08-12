@@ -9,8 +9,8 @@ import hashlib
 import numpy as np
 import pandas as pd
 
-from paths import WORK_DIR
-from raw_tables import load_collection_events, load_instance_events
+from .paths import WORK_DIR
+from .raw_tables import load_collection_events, load_instance_events
 
 
 S3_PATH = WORK_DIR / "s3_episode_usage.parquet"

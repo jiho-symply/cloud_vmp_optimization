@@ -8,8 +8,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from paths import S1_MACHINE_INTERVALS_PATH, S2_EPISODES_PATH, WORK_DIR
-from raw_tables import load_usage
+from .paths import S1_MACHINE_INTERVALS_PATH, S2_EPISODES_PATH, WORK_DIR
+from .raw_tables import load_usage
 
 
 DAY_START_US = 600_000_000

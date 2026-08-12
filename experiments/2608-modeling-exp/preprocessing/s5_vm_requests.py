@@ -10,9 +10,9 @@ import hashlib
 import numpy as np
 import pandas as pd
 
-from paths import WORK_DIR
-from raw_tables import load_collection_events, load_instance_events
-from s4_select_episodes import _normalize_events, _stable_key_hash, _value_key
+from .paths import WORK_DIR
+from .raw_tables import load_collection_events, load_instance_events
+from .s4_select_episodes import _normalize_events, _stable_key_hash, _value_key
 
 
 S4_PATH = WORK_DIR / "s4_selected_episodes.parquet"

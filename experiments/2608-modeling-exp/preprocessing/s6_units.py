@@ -10,8 +10,8 @@ import json
 import numpy as np
 import pandas as pd
 
-from paths import S1_REPRESENTATIVE_PATH, WORK_DIR
-from s5_vm_requests import VM_COLUMNS
+from .paths import S1_REPRESENTATIVE_PATH, WORK_DIR
+from .s5_vm_requests import VM_COLUMNS
 
 
 EXPERIMENT_DIR = WORK_DIR.parent

@@ -8,8 +8,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from paths import WORK_DIR
-from raw_tables import load_instance_events
+from .paths import WORK_DIR
+from .raw_tables import load_instance_events
 
 
 EXPERIMENT_DIR = WORK_DIR.parent

@@ -1,6 +1,9 @@
 # 코드 해설
 
-코드를 옆에 띄워두고 함께 읽는 문서다. 무엇을 만들지는
+코드를 옆에 띄워두고 함께 읽는 문서다. 아래에서 말하는 단계 파일은 모두
+`preprocessing/` 안에 있고, 밖에서 실행하는 진입점은 `build_dataset.py` 하나다.
+
+무엇을 만들지는
 [PIPELINE_SPEC.md](./PIPELINE_SPEC.md)에, 용어의 뜻은
 [DATA_GLOSSARY.md](./DATA_GLOSSARY.md)에, 코드 스타일 규칙은
 [AGENTS.md](./AGENTS.md)에 있다. 이 문서는 **실제로 짜인 코드를 읽는 방법**과
@@ -259,7 +262,7 @@ fallback 카운터는 모두 0이므로, 그 처리 경로들은 이 데이터�
 로직을 지우거나 바꾼 뒤에는 두 가지를 본다.
 
 ```bash
-.venv/bin/python experiments/2608-modeling-exp/run_all.py
+.venv/bin/python experiments/2608-modeling-exp/build_dataset.py
 ```
 
 각 단계가 자기 검증 수치를 출력하므로, **어느 단계에서 숫자가 달라졌는지 바로
@@ -273,11 +276,11 @@ fallback 카운터는 모두 0이므로, 그 처리 경로들은 이 데이터�
 파이프라인을 고쳐도 검증 기준은 흔들리지 않는다. canonical에만 있고 의도적으로
 만들지 않는 파일 5개는 비교에서 제외되며 그 사실이 출력에 표시된다.
 
-단계 하나만 다시 돌리고 싶으면 그 스크립트를 직접 실행하면 된다. 앞 단계 산출물이
-`work/`에 남아 있으므로 처음부터 다시 돌릴 필요가 없다.
+단계 하나만 다시 돌리고 싶으면 `--only`로 그 단계만 실행하면 된다. 앞 단계
+산출물이 `work/`에 남아 있으므로 처음부터 다시 돌릴 필요가 없다.
 
 ```bash
-.venv/bin/python experiments/2608-modeling-exp/s3_episode_usage.py
+.venv/bin/python experiments/2608-modeling-exp/build_dataset.py --only s3
 ```
 
 전체 완주는 약 3분이다.

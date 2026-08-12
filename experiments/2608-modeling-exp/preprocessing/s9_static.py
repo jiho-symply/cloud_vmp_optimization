@@ -10,7 +10,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from paths import WORK_DIR
+from .paths import WORK_DIR
 
 
 EXPERIMENT_DIR = WORK_DIR.parent
