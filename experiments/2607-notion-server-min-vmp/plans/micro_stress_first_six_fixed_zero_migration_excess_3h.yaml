@@ -1,0 +1,86 @@
+schema_version: 5
+# This value describes the immutable launch-plan contract. Runtime progress and
+# completion belong only in suite_metadata.json, suite_status.*, and suite_summary.json.
+status: immutable_launch_contract
+suite_name: notion_server_min_micro_stress_first_six_fixed_zero_migration_excess_3h
+base_config: configs/micro_stress_fixed_zero_migration_excess.yaml
+output_root: runs/notion_server_min_micro_stress_first_six_fixed_zero_migration_excess_3h
+
+formulation:
+  id: notion_server_min_fixed_zero_migration_excess_v5_20260724
+  # This v5 formulation extends the private migration-v3 specification. Pass
+  # --spec-path to verify a local copy; the v5 delta is pinned separately.
+  spec_path: null
+  spec_sha256: bf2b4dc77d9fd3cf26b6d7f3314113454103bd50767e9f72b9f4dc3d3c2e26d7
+  change_summary_path: FORMULATION_CHANGES_FIXED_ZERO_MIGRATION_EXCESS_V5.md
+
+generation:
+  design: one_factor_at_a_time
+  semantics: copy_baseline_then_override_exactly_one_factor
+  forbid_full_cartesian_product: true
+  combine_factors_within_stage: false
+  deduplicate_identical_configs_globally: true
+  exact_unique_candidate_configs:
+    first_stage: 6
+  immutable_configs: true
+  require_common_random_numbers_within_comparison_group: true
+
+stages:
+  first_stage:
+    enabled: true
+    purpose: rerun_completed_first_wave_with_migration_and_excess_indicators_fixed_zero
+    design: one_factor_at_a_time
+    anchor: baseline
+    factors:
+      - id: spot_discount_ratio
+        config_path: economics.spot_discount_ratio
+        levels:
+          - {id: gamma_0, value: 0.0}
+          - {id: gamma_0_1, value: 0.1}
+          - {id: gamma_0_3, value: 0.3}
+          - {id: gamma_0_5, value: 0.5}
+      - id: migration_coefficient
+        config_path: migration.coefficient
+        levels:
+          - {id: c_mig_0, value: 0.0}
+          - {id: c_mig_0_05, value: 0.05}
+          - {id: c_mig_0_1, value: 0.1}
+
+execution_policy:
+  max_parallel_jobs: 6
+  threads_per_job: 16
+  total_thread_limit: 96
+  time_limit_seconds: 10800
+  mip_gap: 0.001
+  soft_mem_limit_gb_per_job: 64
+  memory_limit_enforcement: gurobi_softmemlimit_plus_aggregate_preflight
+  nodefile_start_gb: 0.5
+  safety:
+    memory_reserve_gb: 64
+    disk_reserve_gb: 60
+    write_lp: false
+    write_mps: false
+    require_disjoint_cpu_affinity: true
+
+validation:
+  expected_dimensions:
+    scenarios: 10
+    on_demand: 10
+    spot: 10
+    batch_jobs: 10
+    max_batch_families: 3
+    servers: 6
+  expected_dataset_selection: descending_mean_resource_usage_with_deterministic_ties
+  require_fresh_suite_root: true
+  require_dynamic_google_dir: true
+  preserve_existing_baseline_and_sweep: true
+  migration_fixed_zero_config_path: migration.fixed_zero
+  excess_load_indicator_fixed_zero_config_path: excess_load_indicator.fixed_zero
+  require_literal_boolean_true: true
+  exact_candidate_run_ids:
+    - baseline
+    - spot_discount_ratio/gamma_0
+    - spot_discount_ratio/gamma_0_1
+    - spot_discount_ratio/gamma_0_5
+    - migration_coefficient/c_mig_0
+    - migration_coefficient/c_mig_0_1
