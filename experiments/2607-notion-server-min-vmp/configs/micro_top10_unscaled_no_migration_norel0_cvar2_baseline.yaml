@@ -1,0 +1,85 @@
+# Migration-prohibited comparison with a relaxed normalized CVaR bound.
+workspace_root: ../../..
+
+experiment:
+  name: notion_server_min_micro_top10_unscaled_no_migration_norel0_cvar2_baseline
+  seed: 42
+  horizon_hours: 24
+  slot_minutes: 30
+  num_scenarios: 10
+  class_counts:
+    on_demand: 10
+    spot: 10
+    batch_jobs: 10
+  num_servers: 6
+
+data:
+  google_dir: data/processed/notion_toy_google2019_micro_top10_unscaled_v1
+  vm_requests: vm_requests.csv
+  usage_5min_scenarios: vm_usage_5min_scenarios.csv
+  usage_sorted_by_scenario: true
+  csv_chunksize: 400000
+  servers: servers.csv
+  nyiso_prices: data/processed/nyiso/electricity_price_nyiso_2019_30min.parquet
+  additional_source_files:
+    - data/raw/google2019_cell_a_day0_cpu_distribution/usage_5min.parquet
+    - data/raw/google2019_cell_a_day0_cpu_distribution/instance_events.parquet
+    - data/raw/google2019_cell_a_day0_cpu_distribution/collection_events.parquet
+    - data/raw/google2019_cell_a_day0_cpu_distribution/machine_events.parquet
+    - data/raw/google2019_cell_a_day0_cpu_distribution/metadata.json
+    - data/raw/nyiso/rt_lbmp_zonal_5min/2019/20190601realtime_zone_csv.zip
+    - data/raw/nyiso/rt_lbmp_zonal_5min/2019/20190701realtime_zone_csv.zip
+
+workload_scenarios:
+  cpu_lognormal_sigma: 0.24
+  memory_lognormal_sigma: 0.12
+
+batch:
+  max_families: 3
+  configured_pair_round_digits: 12
+  base_cpu: 0.0
+  base_mem: 0.05
+  startup_cpu: 0.05
+  startup_mem: 0.0
+
+server:
+  source_energy_interval_minutes: 60
+  min_on_slots: 2
+  min_off_slots: 2
+
+electricity_price:
+  timezone: America/New_York
+  site_id: NYC
+  scenario_start_date: 2019-06-01
+  multiplier: 1.0
+  floor_usd_per_kwh: 0.01
+  known_interpolated_raw_slots:
+    - 2019-06-27T11:20:00-04:00
+    - 2019-06-27T11:30:00-04:00
+
+economics:
+  kappa_on_demand: 10.0
+  spot_discount_ratio: 0.3
+  batch_discount_ratio: 0.5
+
+migration:
+  coefficient: 0.05
+  fixed_zero: true
+
+risk:
+  alpha: 0.95
+  epsilon: 2.0
+
+solver:
+  mip_gap: 0.001
+  threads: 16
+  time_limit_seconds: 10800
+  no_rel_heur_time_seconds: 0
+  seed: 42
+  numeric_focus: 1
+  presolve: 2
+  soft_mem_limit_gb: 80
+  nodefile_start_gb: 0.5
+  nodefile_dir: nodefiles
+  write_lp: false
+  write_mps: false
