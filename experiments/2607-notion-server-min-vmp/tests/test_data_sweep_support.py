@@ -209,6 +209,82 @@ def test_synthetic_service_draws_are_capped_for_every_class_and_scenario_zero_is
     assert metadata["synthetic_caps"] == (
         "all service CPU and memory lognormal draws capped to [0, q] in synthetic scenarios"
     )
+    assert metadata["synthetic_rng_mode"] == "joint_stream"
+
+
+def test_explicit_joint_stream_preserves_the_default_draws() -> None:
+    requests = pd.DataFrame(
+        [{"vm_id": "od0", "class": "on_demand", "arrival_t5": 0, "departure_t5": 2,
+          "q_cpu": 1.0, "q_mem": 1.0}]
+    )
+    usage = pd.DataFrame(
+        {"vm_id": ["od0", "od0"], "t5_day": [0, 1],
+         "cpu_usage": [0.2, 0.3], "mem_usage": [0.4, 0.5],
+         "coverage_us": [T5_US, T5_US]}
+    )
+    args = (requests, usage, ["od0"], [], {"od0": [0]}, [0, 1, 2])
+    default = _build_service_scenarios(
+        *args, t5_per_slot=6, seed=42, cpu_sigma=0.24, mem_sigma=0.12
+    )
+    explicit = _build_service_scenarios(
+        *args, t5_per_slot=6, seed=42, cpu_sigma=0.24, mem_sigma=0.12,
+        synthetic_rng_mode="joint_stream",
+    )
+    assert default[2:4] == explicit[2:4]
+
+
+def test_per_vm_stable_draws_ignore_other_vms_classes_and_csv_order() -> None:
+    requests = pd.DataFrame(
+        [
+            {"vm_id": "target", "class": "on_demand", "arrival_t5": 0,
+             "departure_t5": 12, "q_cpu": 1.0, "q_mem": 1.0},
+            {"vm_id": "other-od", "class": "on_demand", "arrival_t5": 0,
+             "departure_t5": 12, "q_cpu": 1.0, "q_mem": 1.0},
+            {"vm_id": "other-spot", "class": "spot", "arrival_t5": 0,
+             "departure_t5": 12, "q_cpu": 1.0, "q_mem": 1.0},
+        ]
+    )
+    usage = pd.DataFrame(
+        [
+            {"vm_id": vm_id, "t5_day": t5, "cpu_usage": 0.1 + t5 / 100,
+             "mem_usage": 0.2 + t5 / 100, "coverage_us": T5_US}
+            for vm_id in ("target", "other-od", "other-spot")
+            for t5 in range(12)
+        ]
+    )
+    common = dict(
+        Xi=[0, 1, 2, 3], t5_per_slot=6, seed=42,
+        cpu_sigma=0.24, mem_sigma=0.12,
+        synthetic_rng_mode="per_vm_stable",
+    )
+    _, _, target_only, _, metadata = _build_service_scenarios(
+        requests, usage, ["target"], [], {"target": [0, 1]}, **common
+    )
+    _, _, expanded, _, _ = _build_service_scenarios(
+        requests.sample(frac=1, random_state=3),
+        usage.sample(frac=1, random_state=7),
+        ["other-od", "target"],
+        ["other-spot"],
+        {"target": [0, 1], "other-od": [0, 1], "other-spot": [0, 1]},
+        **common,
+    )
+    expanded_target = {
+        key: value for key, value in expanded.items() if key[0] == "target"
+    }
+    assert target_only == expanded_target
+    assert metadata["synthetic_rng_mode"] == "per_vm_stable"
+
+
+@pytest.mark.parametrize("invalid_mode", [None, True, "per_class_stream"])
+def test_invalid_synthetic_rng_mode_is_rejected_by_config(invalid_mode: object) -> None:
+    baseline_path = EXPERIMENT_ROOT / "configs" / "baseline.yaml"
+    config = copy.deepcopy(load_config(baseline_path))
+    config["workload_scenarios"]["synthetic_rng_mode"] = invalid_mode
+
+    with pytest.raises(
+        ValueError, match=r"workload_scenarios\.synthetic_rng_mode must be one of"
+    ):
+        build_instance(config, config_path=baseline_path)
 
 
 def test_scenario_zero_reader_collapses_duplicate_keys_with_coverage_audit(

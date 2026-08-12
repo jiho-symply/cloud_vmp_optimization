@@ -16,6 +16,11 @@ CPU = "CPU"
 MEM = "MEM"
 RESOURCES = (CPU, MEM)
 T5_US = 5 * 60 * 1_000_000
+DEFAULT_SYNTHETIC_RNG_MODE = "joint_stream"
+SYNTHETIC_RNG_MODES = frozenset({DEFAULT_SYNTHETIC_RNG_MODE, "per_vm_stable"})
+PER_VM_SYNTHETIC_RNG_DOMAIN = (
+    "notion_server_min_vmp.service_lognormal.per_vm.v1"
+)
 
 
 @dataclass
@@ -109,6 +114,48 @@ def _stable_order(values: Iterable[str], seed: int) -> list[str]:
         return hashlib.sha256(f"{seed}:{value}".encode("utf-8")).hexdigest()
 
     return sorted((str(value) for value in values), key=key)
+
+
+def _validated_synthetic_rng_mode(value: Any) -> str:
+    if not isinstance(value, str) or value not in SYNTHETIC_RNG_MODES:
+        raise ValueError(
+            "workload_scenarios.synthetic_rng_mode must be one of "
+            f"{sorted(SYNTHETIC_RNG_MODES)}"
+        )
+    return value
+
+
+def _per_vm_stable_lognormal_multipliers(
+    base: pd.DataFrame,
+    *,
+    seed: int,
+    resource: str,
+    scenario_id: int,
+    sigma: float,
+) -> np.ndarray:
+    """Return draws whose stream is unaffected by other selected VMs or row order."""
+
+    multipliers = np.empty(len(base), dtype=float)
+    vm_ids = base["vm_id"].astype(str).to_numpy()
+    t5_values = base["t5_day"].to_numpy(np.int64)
+    for vm_id in sorted(set(vm_ids)):
+        positions = np.flatnonzero(vm_ids == vm_id)
+        unique_t5 = np.unique(t5_values[positions])
+        key = (
+            f"{PER_VM_SYNTHETIC_RNG_DOMAIN}\0{seed}\0{vm_id}\0"
+            f"{resource}\0{scenario_id}"
+        ).encode("utf-8")
+        stable_seed = int.from_bytes(hashlib.sha256(key).digest(), "big")
+        rng = np.random.Generator(np.random.PCG64(stable_seed))
+        draws = rng.lognormal(
+            mean=-0.5 * sigma**2,
+            sigma=sigma,
+            size=len(unique_t5),
+        )
+        multipliers[positions] = draws[
+            np.searchsorted(unique_t5, t5_values[positions])
+        ]
+    return multipliers
 
 
 def _finite_numeric(series: pd.Series, label: str, *, nonnegative: bool = True) -> pd.Series:
@@ -414,6 +461,7 @@ def _build_service_scenarios(
     seed: int,
     cpu_sigma: float,
     mem_sigma: float,
+    synthetic_rng_mode: str = DEFAULT_SYNTHETIC_RNG_MODE,
 ) -> tuple[
     dict[tuple[str, str], float],
     dict[tuple[str, str], float],
@@ -421,6 +469,7 @@ def _build_service_scenarios(
     dict[tuple[str, str, int, int], float],
     dict[str, Any],
 ]:
+    synthetic_rng_mode = _validated_synthetic_rng_mode(synthetic_rng_mode)
     service_ids = I + J
     coverage_audit = dict(usage.attrs.get("coverage_audit", {}))
     selected = _validated_configured_resources(
@@ -437,6 +486,10 @@ def _build_service_scenarios(
         base, "selected service scenario-0 coverage_us"
     )
     base["t_slot"] = (base["t5_day"] // t5_per_slot).astype(int)
+    if synthetic_rng_mode == "per_vm_stable":
+        # Canonical row order also makes coverage-weighted floating-point
+        # aggregation bitwise stable when the source CSV is reordered.
+        base = base.sort_values(["vm_id", "t5_day"]).reset_index(drop=True)
 
     q_cpu: dict[str, float] = {}
     q_mem: dict[str, float] = {}
@@ -461,16 +514,32 @@ def _build_service_scenarios(
         cpu = base_cpu.copy()
         mem = base_mem.copy()
         if xi > 0:
-            cpu *= rng.lognormal(
-                mean=-0.5 * cpu_sigma**2,
-                sigma=cpu_sigma,
-                size=cpu.size,
-            )
-            mem *= rng.lognormal(
-                mean=-0.5 * mem_sigma**2,
-                sigma=mem_sigma,
-                size=mem.size,
-            )
+            if synthetic_rng_mode == "joint_stream":
+                cpu *= rng.lognormal(
+                    mean=-0.5 * cpu_sigma**2,
+                    sigma=cpu_sigma,
+                    size=cpu.size,
+                )
+                mem *= rng.lognormal(
+                    mean=-0.5 * mem_sigma**2,
+                    sigma=mem_sigma,
+                    size=mem.size,
+                )
+            else:
+                cpu *= _per_vm_stable_lognormal_multipliers(
+                    base,
+                    seed=seed,
+                    resource=CPU,
+                    scenario_id=xi,
+                    sigma=cpu_sigma,
+                )
+                mem *= _per_vm_stable_lognormal_multipliers(
+                    base,
+                    seed=seed,
+                    resource=MEM,
+                    scenario_id=xi,
+                    sigma=mem_sigma,
+                )
             # Every synthetic draw is a configured-resource-bounded usage
             # realization, independent of service class. Scenario zero remains
             # the unmodified observed trace.
@@ -545,6 +614,27 @@ def _build_service_scenarios(
         ),
         "synthetic_scenarios": Xi[1:],
         "synthetic_method": "independent mean-preserving lognormal multiplier per 5-minute VM observation",
+        "synthetic_rng_mode": synthetic_rng_mode,
+        "synthetic_rng_provenance": (
+            {
+                "bit_generator": "PCG64",
+                "domain": PER_VM_SYNTHETIC_RNG_DOMAIN,
+                "stream_key_fields": [
+                    "seed",
+                    "vm_id",
+                    "resource",
+                    "scenario_id",
+                ],
+                "within_vm_draw_order": "t5_day ascending",
+            }
+            if synthetic_rng_mode == "per_vm_stable"
+            else {
+                "bit_generator": "PCG64 via numpy.default_rng",
+                "domain": "legacy joint selected-service row stream",
+                "stream_key_fields": ["seed"],
+                "within_vm_draw_order": "source row order",
+            }
+        ),
         "cpu_lognormal_sigma": cpu_sigma,
         "memory_lognormal_sigma": mem_sigma,
         "synthetic_caps": (
@@ -828,6 +918,9 @@ def build_instance(
     experiment = cfg["experiment"]
     data_cfg = cfg["data"]
     scenario_cfg = cfg["workload_scenarios"]
+    synthetic_rng_mode = _validated_synthetic_rng_mode(
+        scenario_cfg.get("synthetic_rng_mode", DEFAULT_SYNTHETIC_RNG_MODE)
+    )
     batch_cfg = cfg["batch"]
     server_cfg = cfg["server"]
     price_cfg = cfg["electricity_price"]
@@ -979,6 +1072,7 @@ def build_instance(
         seed=seed,
         cpu_sigma=float(scenario_cfg["cpu_lognormal_sigma"]),
         mem_sigma=float(scenario_cfg["memory_lognormal_sigma"]),
+        synthetic_rng_mode=synthetic_rng_mode,
     )
     K, q_batch, rho_batch, W, batch_metadata = _build_batch_families(
         requests,
